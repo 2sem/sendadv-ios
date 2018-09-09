@@ -1,0 +1,51 @@
+
+/* Class = "UIBarButtonItem"; title = "Edit"; ObjectID = "0DA-WW-Zvn"; */
+"0DA-WW-Zvn.title" = "편집";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "0pv-aB-xuB"; */
+"0pv-aB-xuB.text" = "제목";
+
+/* Class = "UINavigationItem"; title = "Recipients Creation Rules"; ObjectID = "1CU-vy-DN9"; */
+"1CU-vy-DN9.title" = "수신자 생성 규칙";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "4qi-EW-0RZ"; */
+"4qi-EW-0RZ.text" = "Label";
+
+/* Class = "UITextField"; placeholder = "Rule Title"; ObjectID = "8fC-8a-Ff7"; */
+"8fC-8a-Ff7.placeholder" = "규칙 이름";
+
+/* Class = "UILabel"; text = "ㅌㅌㅌ 외 3 제외"; ObjectID = "BqC-Ue-Q9R"; */
+"BqC-Ue-Q9R.text" = "ㅌㅌㅌ 외 3 제외";
+
+/* Class = "UILabel"; text = "ㅌㅌㅌ 외 3 포함"; ObjectID = "LCm-pV-32F"; */
+"LCm-pV-32F.text" = "ㅌㅌㅌ 외 3 포함";
+
+/* Class = "UILabel"; text = "모두"; ObjectID = "OK4-4c-Bwd"; */
+"OK4-4c-Bwd.text" = "모두";
+
+/* Class = "UILabel"; text = "Dept"; ObjectID = "Opf-jT-HM3"; */
+"Opf-jT-HM3.text" = "부서";
+
+/* Class = "UILabel"; text = "All"; ObjectID = "aqs-7Z-zJA"; */
+"aqs-7Z-zJA.text" = "모두";
+
+/* Class = "UINavigationItem"; title = "Add Recipients Rule"; ObjectID = "gHv-dm-SwE"; */
+"gHv-dm-SwE.title" = "규칙 추가";
+
+/* Class = "UILabel"; text = "Job"; ObjectID = "gtD-vN-Pks"; */
+"gtD-vN-Pks.text" = "직책";
+
+/* Class = "UILabel"; text = "모두"; ObjectID = "l70-ib-bek"; */
+"l70-ib-bek.text" = "모두";
+
+/* Class = "UIBarButtonItem"; title = "siba"; ObjectID = "thj-Dm-JmI"; */
+"thj-Dm-JmI.title" = "siba";
+
+/* Class = "UILabel"; text = "모두"; ObjectID = "u8D-je-hGZ"; */
+"u8D-je-hGZ.text" = "모두";
+
+/* Class = "UINavigationItem"; title = "Rule Setting"; ObjectID = "uTY-rN-of0"; */
+"uTY-rN-of0.title" = "규칙 설정";
+
+/* Class = "UILabel"; text = "Org"; ObjectID = "zb7-gl-YYC"; */
+"zb7-gl-YYC.text" = "회사";

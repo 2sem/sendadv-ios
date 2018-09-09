@@ -2,8 +2,8 @@
 //  sendadvUITests.swift
 //  sendadvUITests
 //
-//  Created by 영준 이 on 2018. 9. 9..
-//  Copyright © 2018년 Y2KLab. All rights reserved.
+//  Created by 영준 이 on 2017. 1. 13..
+//  Copyright © 2017년 leesam. All rights reserved.
 //
 
 import XCTest

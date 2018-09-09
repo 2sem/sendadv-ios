@@ -2,22 +2,47 @@
 //  AppDelegate.swift
 //  sendadv
 //
-//  Created by 영준 이 on 2018. 9. 9..
-//  Copyright © 2018년 Y2KLab. All rights reserved.
+//  Created by 영준 이 on 2017. 1. 13..
+//  Copyright © 2017년 leesam. All rights reserved.
 //
 
 import UIKit
 import CoreData
+import GoogleMobileAds
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, GADInterstialManagerDelegate, ReviewManagerDelegate, GADRewardManagerDelegate {
 
     var window: UIWindow?
-
-
+    var fullAd : GADInterstialManager?;
+    var rewardAd : GADRewardManager?;
+    var reviewManager : ReviewManager?;
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-        return true
+        
+        GADMobileAds.configure(withApplicationID: "ca-app-pub-9684378399371172~3075360846");
+        
+        self.reviewManager = ReviewManager(self.window!, interval: 60.0 * 60 * 24 * 2);
+        self.reviewManager?.delegate = self;
+        //self.reviewManager?.show(true);
+        
+        self.rewardAd = GADRewardManager(self.window!, unitId: GADInterstitial.loadUnitId(name: "RewardAd") ?? "", interval: 60.0 * 60.0 * 24); //
+        self.rewardAd?.delegate = self;
+        self.fullAd = GADInterstialManager(self.window!, unitId: GADInterstitial.loadUnitId(name: "FullAd") ?? "", interval: 60.0 * 60 * 3); //60.0 * 60 * 3
+        self.fullAd?.delegate = self;
+        self.fullAd?.canShowFirstTime = false;
+        
+        if self.rewardAd?.canShow ?? false{
+            self.fullAd?.show();
+        }
+        
+        return true;
+    }
+    
+    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+        //group.com.credif.sendadv
+        
+        return true;
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
@@ -32,6 +57,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
+        //self.fullAd?.show();
+        guard self.reviewManager?.canShow ?? false else{
+            self.fullAd?.show();
+            return;
+        }
+        self.reviewManager?.show(true);
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
@@ -43,7 +74,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Saves changes in the application's managed object context before the application terminates.
         self.saveContext()
     }
-
+    
     // MARK: - Core Data stack
 
     lazy var persistentContainer: NSPersistentContainer = {
@@ -89,5 +120,41 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
+    // MARK: GADInterstialManagerDelegate
+    func GADInterstialGetLastShowTime() -> Date {
+        return SADefaults.LastFullADShown;
+        //Calendar.current.component(<#T##component: Calendar.Component##Calendar.Component#>, from: <#T##Date#>)
+    }
+    
+    func GADInterstialUpdate(showTime: Date) {
+        SADefaults.LastFullADShown = showTime;
+    }
+    
+    func GADInterstialWillLoad() {
+        //SAInfoTableViewController.shared?.needAds = false;
+        //DAFavoriteTableViewController.shared?.needAds = false;
+    }
+    
+    // MARK: ReviewManagerDelegate
+    func reviewGetLastShowTime() -> Date {
+        return SADefaults.LastShareShown;
+    }
+    
+    func reviewUpdate(showTime: Date) {
+        SADefaults.LastShareShown = showTime;
+    }
+    
+    // MARK: GADRewardManagerDelegate
+    func GADRewardGetLastShowTime() -> Date {
+        return SADefaults.LastRewardShown;
+    }
+    
+    func GADRewardUserCompleted() {
+        SADefaults.LastRewardShown = Date();
+    }
+    
+    func GADRewardUpdate(showTime: Date) {
+        
+    }
 }
 
