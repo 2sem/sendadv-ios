@@ -1,0 +1,32 @@
+/* 
+  Localizable.strings
+  sendadv
+
+  Created by 영준 이 on 2017. 2. 10..
+  Copyright © 2017년 leesam. All rights reserved.
+*/
+
+"Recommend '%@'" = "Recommend '%@'";
+"Cancel" = "Cancel";
+"OK" = "OK";
+"Continue" = "Continue";
+"Warning" = "Warning";
+"Setting" = "Setting";
+"Review '%@'" = "Review '%@'";
+"App rating and recommendation" = "App rating and recommendation";
+"Please rate '%@' or recommend it to your friends." = "Please rate '%@' or recommend it to your friends.";
+"There is no activated Rules for Reciepients.\nAll Contacts will receive Message." = "There is no activated Rules for Reciepients.\nAll Contacts will receive Message.";
+"All" = "All";
+"Failed to access contacts" = "Failed to access contacts";
+"Failed to create recipients list" = "Failed to create recipients list";
+"Permission required to acess contacts for creating recipients list" = "Permission required to acess contacts for creating recipients list";
+"There is no contact matched to the enabled rules" = "There is no contact matched to the enabled rules";
+"Creating recipients list" = "Creating recipients list";
+"Getting started to write\nIt will take much longer for many recipients" = "Getting started to write\nIt will take much longer for many recipients";
+"Recipients Creation Rule" = "Recipients Creation Rule";
+"Edit Recipients Rule" = "Edit Recipients Rule";
+"Rule Setting" = "Filter";
+"Job" = "Job";
+"Department" = "Department";
+"Organization" = "Organization";
+" and %@ others" = " and %@ others";
