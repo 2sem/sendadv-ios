@@ -9,6 +9,7 @@
 import UIKit
 import GoogleMobileAds
 import LSExtensions
+import Crashlytics
 
 class MainViewController: UIViewController, GADBannerViewDelegate, GADInterstialManagerDelegate, GADRewardManagerDelegate {
     
@@ -46,6 +47,10 @@ class MainViewController: UIViewController, GADBannerViewDelegate, GADInterstial
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        //Crashlytics.sharedInstance().crash();
     }
     
     @IBAction func onReviewButton(_ sender: UIButton) {

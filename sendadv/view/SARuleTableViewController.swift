@@ -239,7 +239,7 @@ class SARuleTableViewController: UITableViewController {
                     break;
                 case TargetNames.Organization:
                     filterView.list = SAContactController.Default.loadOrganizations();
-                    filterView.navigationItem.title = "\("Orgization".localized()) \("Rule Setting".localized())";
+                    filterView.navigationItem.title = "\("Organization".localized()) \("Rule Setting".localized())";
                     break;
                 default:
                     break;

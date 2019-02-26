@@ -28,7 +28,6 @@
 		2C144428214518D9005D343B /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C144427214518D9005D343B /* ShareViewController.swift */; };
 		2C14442B214518D9005D343B /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C144429214518D9005D343B /* MainInterface.storyboard */; };
 		2C14442F214518D9005D343B /* shareadv.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 2C144425214518D9005D343B /* shareadv.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		2C144437214519A2005D343B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2C144436214519A2005D343B /* GoogleService-Info.plist */; };
 		2C144439214519AE005D343B /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C144438214519AD005D343B /* MainViewController.swift */; };
 		2C144442214519BD005D343B /* SAContactController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C14443B214519BD005D343B /* SAContactController.swift */; };
 		2C144443214519BD005D343B /* SAMobileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C14443C214519BD005D343B /* SAMobileController.swift */; };
@@ -49,6 +48,8 @@
 		2C144461214519E9005D343B /* SARuleTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C14445B214519E8005D343B /* SARuleTableViewController.swift */; };
 		2C144462214519E9005D343B /* SASendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C14445C214519E8005D343B /* SASendViewController.swift */; };
 		2C14446521451B7A005D343B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2C14446321451B79005D343B /* Localizable.strings */; };
+		2C59F88A21719F1100216F33 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2C59F88C21719F1100216F33 /* InfoPlist.strings */; };
+		2C59F88E2171A52300216F33 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2C59F88D2171A52100216F33 /* GoogleService-Info.plist */; };
 		43B483EADEBF7B46BDABA6BD /* Pods_sendadvUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8446075FC04F69EB7A1C7CCD /* Pods_sendadvUITests.framework */; };
 		A2ECBBD8BEA112EEE935ED02 /* Pods_sendadv.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC8069F977C0064B1AD7FBAE /* Pods_sendadv.framework */; };
 /* End PBXBuildFile section */
@@ -108,7 +109,6 @@
 		2C1443D6214516B1005D343B /* sendadv.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = sendadv.xcdatamodel; sourceTree = "<group>"; };
 		2C1443D8214516B7005D343B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2C1443DB214516B7005D343B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		2C1443DD214516B7005D343B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2C1443E2214516B7005D343B /* sendadvTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = sendadvTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C1443E6214516B7005D343B /* sendadvTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sendadvTests.swift; sourceTree = "<group>"; };
 		2C1443E8214516B7005D343B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -125,7 +125,7 @@
 		2C14441621451878005D343B /* GADRewardManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GADRewardManager.swift; sourceTree = "<group>"; };
 		2C14441721451878005D343B /* ReviewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReviewManager.swift; sourceTree = "<group>"; };
 		2C14441821451878005D343B /* UIApplication+KakaoLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIApplication+KakaoLink.swift"; sourceTree = "<group>"; };
-		2C14441F2145188E005D343B /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; };
+		2C14441F2145188E005D343B /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		2C144425214518D9005D343B /* shareadv.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = shareadv.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C144427214518D9005D343B /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		2C14442A214518D9005D343B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
@@ -133,7 +133,6 @@
 		2C14443321451974005D343B /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Main.strings; sourceTree = "<group>"; };
 		2C14443421451974005D343B /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		2C14443521451974005D343B /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/MainInterface.strings; sourceTree = "<group>"; };
-		2C144436214519A2005D343B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		2C144438214519AD005D343B /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		2C14443B214519BD005D343B /* SAContactController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SAContactController.swift; sourceTree = "<group>"; };
 		2C14443C214519BD005D343B /* SAMobileController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SAMobileController.swift; sourceTree = "<group>"; };
@@ -155,6 +154,9 @@
 		2C14445C214519E8005D343B /* SASendViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SASendViewController.swift; sourceTree = "<group>"; };
 		2C14446421451B79005D343B /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2C14446621451B91005D343B /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
+		2C59F88421719BA900216F33 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2C59F88B21719F1100216F33 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		2C59F88D2171A52100216F33 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		462E891DADC3176958D90183 /* Pods-sendadvTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-sendadvTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-sendadvTests/Pods-sendadvTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5376AC87D085E8DAEE7EF09B /* Pods-sendadvUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-sendadvUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-sendadvUITests/Pods-sendadvUITests.release.xcconfig"; sourceTree = "<group>"; };
 		56CC65086C7496156E3AB316 /* Pods-sendadv.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-sendadv.release.xcconfig"; path = "Pods/Target Support Files/Pods-sendadv/Pods-sendadv.release.xcconfig"; sourceTree = "<group>"; };
@@ -246,8 +248,9 @@
 				2C1443D2214516B1005D343B /* Main.storyboard */,
 				2C1443D8214516B7005D343B /* Assets.xcassets */,
 				2C1443DA214516B7005D343B /* LaunchScreen.storyboard */,
-				2C1443DD214516B7005D343B /* Info.plist */,
-				2C144436214519A2005D343B /* GoogleService-Info.plist */,
+				2C59F88D2171A52100216F33 /* GoogleService-Info.plist */,
+				2C59F88421719BA900216F33 /* Info.plist */,
+				2C59F88C21719F1100216F33 /* InfoPlist.strings */,
 				2C144454214519DE005D343B /* Settings.bundle */,
 				2C1443D5214516B1005D343B /* sendadv.xcdatamodeld */,
 				2C14446321451B79005D343B /* Localizable.strings */,
@@ -395,6 +398,8 @@
 				2C1443C9214516B1005D343B /* Resources */,
 				FAA10CB8D7122FD7D6689634 /* [CP] Embed Pods Frameworks */,
 				2C14441121451818005D343B /* Embed App Extensions */,
+				2C0E03B5217192B800C21EAC /* ShellScript */,
+				2C0E03B6217192C400C21EAC /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -536,11 +541,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2C59F88E2171A52300216F33 /* GoogleService-Info.plist in Resources */,
 				2C1443DC214516B7005D343B /* LaunchScreen.storyboard in Resources */,
 				2C14446521451B7A005D343B /* Localizable.strings in Resources */,
 				2C144451214519CC005D343B /* Icons8_.png in Resources */,
+				2C59F88A21719F1100216F33 /* InfoPlist.strings in Resources */,
 				2C1443D9214516B7005D343B /* Assets.xcassets in Resources */,
-				2C144437214519A2005D343B /* GoogleService-Info.plist in Resources */,
 				2C144453214519CC005D343B /* Y2K.PNG in Resources */,
 				2C1444202145188F005D343B /* Podfile in Resources */,
 				2C14444F214519CC005D343B /* credif_.png in Resources */,
@@ -584,6 +590,41 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		2C0E03B5217192B800C21EAC /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "buildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\")\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\"\n";
+		};
+		2C0E03B6217192C400C21EAC /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Fabric/run\"\n";
+		};
 		45B0A3507B24CF2EF975D0AE /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -644,7 +685,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-sendadv/Pods-sendadv-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-sendadv/Pods-sendadv-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
 				"${BUILT_PRODUCTS_DIR}/LSExtensions/LSExtensions.framework",
 				"${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework",
@@ -665,7 +706,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-sendadv/Pods-sendadv-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-sendadv/Pods-sendadv-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -801,6 +842,15 @@
 			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
+		2C59F88C21719F1100216F33 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2C59F88B21719F1100216F33 /* ko */,
+			);
+			name = InfoPlist.strings;
+			path = /Users/LYJ/Projects/leesam/sendadv/src/sendadv/sendadv;
+			sourceTree = "<absolute>";
+		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -927,6 +977,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = M29A6H95KD;
 				INFOPLIST_FILE = sendadv/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -948,6 +999,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = M29A6H95KD;
 				INFOPLIST_FILE = sendadv/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;

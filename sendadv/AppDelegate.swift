@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import GoogleMobileAds
+import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, GADInterstialManagerDelegate, ReviewManagerDelegate, GADRewardManagerDelegate {
@@ -21,6 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GADInterstialManagerDeleg
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         GADMobileAds.configure(withApplicationID: "ca-app-pub-9684378399371172~3075360846");
+        FirebaseApp.configure();
         
         self.reviewManager = ReviewManager(self.window!, interval: 60.0 * 60 * 24 * 2);
         self.reviewManager?.delegate = self;

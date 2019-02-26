@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>en_US</string>
+	<string>ko_KR</string>
 	<key>CFBundleDisplayName</key>
-	<string>Send Multi SMS</string>
+	<string>보내봐 단체문자</string>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
@@ -53,7 +53,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>24</string>
+	<string>6</string>
 	<key>GoogleADUnitID</key>
 	<dict>
 		<key>BottomBanner</key>

@@ -5,4 +5,5 @@
   Created by 영준 이 on 2017. 3. 14..
   Copyright © 2017년 leesam. All rights reserved.
 */
-CFBundleDisplayName = "보내봐 단체문자";
+
+"CFBundleDisplayName" = "보내봐 단체문자";

@@ -12,6 +12,7 @@ import Contacts
 import MBProgressHUD
 import Material
 import LSExtensions
+import Crashlytics
 
 class SARecipientsTableViewController: UITableViewController, MFMessageComposeViewControllerDelegate  {
     let cell_id = "SARecipientsTableViewCell";
@@ -82,6 +83,7 @@ class SARecipientsTableViewController: UITableViewController, MFMessageComposeVi
         self.layoutSendButton();
         
         print("fab button frame[\(self.sendButton.frame)] view[\(self.view.frame)] constraint[\(self.sendButton.constraints)] -- [\(self.view.constraints)]");
+        //Crashlytics.sharedInstance().crash();
     }
 
     override func didReceiveMemoryWarning() {

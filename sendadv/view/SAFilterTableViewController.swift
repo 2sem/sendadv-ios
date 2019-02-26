@@ -58,8 +58,8 @@ class SAFilterTableViewController: UITableViewController {
         if self.filter == nil{
             self.filter = SAModelController.Default.createFilterRule(target: self.target);
             self.filter?.all = true;
-            self.rule?.addToFilters(self.filter);
             self.filter?.owner = self.rule;
+            self.rule?.addToFilters(self.filter);
         }else{
             //Split keyword1, keyword2, keyword3 to [keyword1, keyword2, keyword3]
             self.includes = (self.filter.includes ?? "").components(separatedBy: ",").filter({ (f) -> Bool in
