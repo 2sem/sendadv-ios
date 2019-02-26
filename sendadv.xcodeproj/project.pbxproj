@@ -15,9 +15,6 @@
 		2C1443DC214516B7005D343B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C1443DA214516B7005D343B /* LaunchScreen.storyboard */; };
 		2C1443E7214516B7005D343B /* sendadvTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1443E6214516B7005D343B /* sendadvTests.swift */; };
 		2C1443F2214516B7005D343B /* sendadvUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1443F1214516B7005D343B /* sendadvUITests.swift */; };
-		2C14440621451818005D343B /* ActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C14440521451818005D343B /* ActionViewController.swift */; };
-		2C14440921451818005D343B /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C14440721451818005D343B /* MainInterface.storyboard */; };
-		2C14440D21451818005D343B /* actionadv.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 2C14440321451818005D343B /* actionadv.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		2C14441921451879005D343B /* GADBannerView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C14441321451878005D343B /* GADBannerView+.swift */; };
 		2C14441A21451879005D343B /* GADInterstialManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C14441421451878005D343B /* GADInterstialManager.swift */; };
 		2C14441B21451879005D343B /* GADInterstitial+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C14441521451878005D343B /* GADInterstitial+.swift */; };
@@ -25,9 +22,6 @@
 		2C14441D21451879005D343B /* ReviewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C14441721451878005D343B /* ReviewManager.swift */; };
 		2C14441E21451879005D343B /* UIApplication+KakaoLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C14441821451878005D343B /* UIApplication+KakaoLink.swift */; };
 		2C1444202145188F005D343B /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 2C14441F2145188E005D343B /* Podfile */; };
-		2C144428214518D9005D343B /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C144427214518D9005D343B /* ShareViewController.swift */; };
-		2C14442B214518D9005D343B /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C144429214518D9005D343B /* MainInterface.storyboard */; };
-		2C14442F214518D9005D343B /* shareadv.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 2C144425214518D9005D343B /* shareadv.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		2C144439214519AE005D343B /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C144438214519AD005D343B /* MainViewController.swift */; };
 		2C144442214519BD005D343B /* SAContactController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C14443B214519BD005D343B /* SAContactController.swift */; };
 		2C144443214519BD005D343B /* SAMobileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C14443C214519BD005D343B /* SAMobileController.swift */; };
@@ -69,20 +63,6 @@
 			remoteGlobalIDString = 2C1443CA214516B1005D343B;
 			remoteInfo = sendadv;
 		};
-		2C14440B21451818005D343B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2C1443C3214516B1005D343B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2C14440221451818005D343B;
-			remoteInfo = actionadv;
-		};
-		2C14442D214518D9005D343B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2C1443C3214516B1005D343B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2C144424214518D9005D343B;
-			remoteInfo = shareadv;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -92,8 +72,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				2C14442F214518D9005D343B /* shareadv.appex in Embed App Extensions */,
-				2C14440D21451818005D343B /* actionadv.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -115,7 +93,6 @@
 		2C1443ED214516B7005D343B /* sendadvUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = sendadvUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C1443F1214516B7005D343B /* sendadvUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sendadvUITests.swift; sourceTree = "<group>"; };
 		2C1443F3214516B7005D343B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2C14440321451818005D343B /* actionadv.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = actionadv.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C14440521451818005D343B /* ActionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionViewController.swift; sourceTree = "<group>"; };
 		2C14440821451818005D343B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		2C14440A21451818005D343B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -126,7 +103,6 @@
 		2C14441721451878005D343B /* ReviewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReviewManager.swift; sourceTree = "<group>"; };
 		2C14441821451878005D343B /* UIApplication+KakaoLink.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIApplication+KakaoLink.swift"; sourceTree = "<group>"; };
 		2C14441F2145188E005D343B /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		2C144425214518D9005D343B /* shareadv.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = shareadv.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C144427214518D9005D343B /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		2C14442A214518D9005D343B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		2C14442C214518D9005D343B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -191,20 +167,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		2C14440021451818005D343B /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		2C144422214518D9005D343B /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -229,8 +191,6 @@
 				2C1443CB214516B1005D343B /* sendadv.app */,
 				2C1443E2214516B7005D343B /* sendadvTests.xctest */,
 				2C1443ED214516B7005D343B /* sendadvUITests.xctest */,
-				2C14440321451818005D343B /* actionadv.appex */,
-				2C144425214518D9005D343B /* shareadv.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -404,8 +364,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				2C14440C21451818005D343B /* PBXTargetDependency */,
-				2C14442E214518D9005D343B /* PBXTargetDependency */,
 			);
 			name = sendadv;
 			productName = sendadv;
@@ -450,40 +408,6 @@
 			productReference = 2C1443ED214516B7005D343B /* sendadvUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
-		2C14440221451818005D343B /* actionadv */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 2C14441021451818005D343B /* Build configuration list for PBXNativeTarget "actionadv" */;
-			buildPhases = (
-				2C1443FF21451818005D343B /* Sources */,
-				2C14440021451818005D343B /* Frameworks */,
-				2C14440121451818005D343B /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = actionadv;
-			productName = actionadv;
-			productReference = 2C14440321451818005D343B /* actionadv.appex */;
-			productType = "com.apple.product-type.app-extension";
-		};
-		2C144424214518D9005D343B /* shareadv */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 2C144430214518D9005D343B /* Build configuration list for PBXNativeTarget "shareadv" */;
-			buildPhases = (
-				2C144421214518D9005D343B /* Sources */,
-				2C144422214518D9005D343B /* Frameworks */,
-				2C144423214518D9005D343B /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = shareadv;
-			productName = shareadv;
-			productReference = 2C144425214518D9005D343B /* shareadv.appex */;
-			productType = "com.apple.product-type.app-extension";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -505,12 +429,6 @@
 						CreatedOnToolsVersion = 9.4.1;
 						TestTargetID = 2C1443CA214516B1005D343B;
 					};
-					2C14440221451818005D343B = {
-						CreatedOnToolsVersion = 9.4.1;
-					};
-					2C144424214518D9005D343B = {
-						CreatedOnToolsVersion = 9.4.1;
-					};
 				};
 			};
 			buildConfigurationList = 2C1443C6214516B1005D343B /* Build configuration list for PBXProject "sendadv" */;
@@ -530,8 +448,6 @@
 				2C1443CA214516B1005D343B /* sendadv */,
 				2C1443E1214516B7005D343B /* sendadvTests */,
 				2C1443EC214516B7005D343B /* sendadvUITests */,
-				2C14440221451818005D343B /* actionadv */,
-				2C144424214518D9005D343B /* shareadv */,
 			);
 		};
 /* End PBXProject section */
@@ -568,22 +484,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		2C14440121451818005D343B /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				2C14440921451818005D343B /* MainInterface.storyboard in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		2C144423214518D9005D343B /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				2C14442B214518D9005D343B /* MainInterface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -756,22 +656,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		2C1443FF21451818005D343B /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				2C14440621451818005D343B /* ActionViewController.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		2C144421214518D9005D343B /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				2C144428214518D9005D343B /* ShareViewController.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -784,16 +668,6 @@
 			isa = PBXTargetDependency;
 			target = 2C1443CA214516B1005D343B /* sendadv */;
 			targetProxy = 2C1443EE214516B7005D343B /* PBXContainerItemProxy */;
-		};
-		2C14440C21451818005D343B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2C14440221451818005D343B /* actionadv */;
-			targetProxy = 2C14440B21451818005D343B /* PBXContainerItemProxy */;
-		};
-		2C14442E214518D9005D343B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2C144424214518D9005D343B /* shareadv */;
-			targetProxy = 2C14442D214518D9005D343B /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1100,82 +974,6 @@
 			};
 			name = Release;
 		};
-		2C14440E21451818005D343B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = M29A6H95KD;
-				INFOPLIST_FILE = actionadv/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.credif.sendadv.actionadv;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		2C14440F21451818005D343B /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = M29A6H95KD;
-				INFOPLIST_FILE = actionadv/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.credif.sendadv.actionadv;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		2C144431214518D9005D343B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = M29A6H95KD;
-				INFOPLIST_FILE = shareadv/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.credif.sendadv.shareadv;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		2C144432214518D9005D343B /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = M29A6H95KD;
-				INFOPLIST_FILE = shareadv/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.credif.sendadv.shareadv;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1211,24 +1009,6 @@
 			buildConfigurations = (
 				2C1443FD214516B7005D343B /* Debug */,
 				2C1443FE214516B7005D343B /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		2C14441021451818005D343B /* Build configuration list for PBXNativeTarget "actionadv" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				2C14440E21451818005D343B /* Debug */,
-				2C14440F21451818005D343B /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		2C144430214518D9005D343B /* Build configuration list for PBXNativeTarget "shareadv" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				2C144431214518D9005D343B /* Debug */,
-				2C144432214518D9005D343B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

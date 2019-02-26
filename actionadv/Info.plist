@@ -17,15 +17,27 @@
 	<key>CFBundlePackageType</key>
 	<string>XPC!</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.2.4</string>
+	<string>1.2.5</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>NSExtension</key>
 	<dict>
 		<key>NSExtensionAttributes</key>
 		<dict>
+			<key>NSExtensionActivationDictionaryVersion</key>
+			<string>2</string>
 			<key>NSExtensionActivationRule</key>
 			<string>TRUEPREDICATE</string>
+			<key>NSExtensionActivationSupportsText</key>
+			<true/>
+			<key>NSExtensionActivationSupportsWebURLWithMaxCount</key>
+			<integer>1</integer>
+			<key>NSExtensionActivationSupportsImageWithMaxCount</key>
+			<integer>1</integer>
+			<key>NSExtensionActivationSupportsFileWithMaxCount</key>
+			<integer>1</integer>
+			<key>NSExtensionActivationSupportsMovieWithMaxCount</key>
+			<integer>1</integer>
 		</dict>
 		<key>NSExtensionMainStoryboard</key>
 		<string>MainInterface</string>
