@@ -11,7 +11,7 @@ import GoogleMobileAds
 import LSExtensions
 import Crashlytics
 
-class MainViewController: UIViewController, GADBannerViewDelegate, GADInterstialManagerDelegate, GADRewardManagerDelegate {
+class MainViewController: UIViewController, GADBannerViewDelegate, GADRewardManagerDelegate {
     
     var constraint_bottomBanner_Bottom : NSLayoutConstraint!;
     @IBOutlet weak var constraint_bottomBanner_Top: NSLayoutConstraint!
@@ -32,7 +32,6 @@ class MainViewController: UIViewController, GADBannerViewDelegate, GADInterstial
         
         //self.bottomBannerView.delegate = self;
         
-        GADInterstialManager.shared?.delegate = self;
         GADRewardManager.shared?.delegate = self;
         
         self.bannerView.isAutoloadEnabled = true;
@@ -105,24 +104,13 @@ class MainViewController: UIViewController, GADBannerViewDelegate, GADInterstial
         self.showBanner(visible: false);
     }
     
-    // MARK: GADInterstialManagerDelegate
-    func GADInterstialGetLastShowTime() -> Date {
-        return SADefaults.LastFullADShown;
-        //Calendar.current.component(, from: <#T##Date#>)
-    }
-    
-    func GADInterstialUpdate(showTime: Date) {
-        SADefaults.LastFullADShown = showTime;
-        self.showBanner(visible: false);
-    }
-    
     // MARK: GADRewardManagerDelegate
     func GADRewardGetLastShowTime() -> Date {
-        return SADefaults.LastRewardShown;
+        return LSDefaults.LastRewardShown;
     }
     
     func GADRewardUpdate(showTime: Date) {
-        SADefaults.LastRewardShown = showTime;
+        LSDefaults.LastRewardShown = showTime;
     }
     
     func GADRewardUserCompleted() {

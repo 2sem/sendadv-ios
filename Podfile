@@ -11,9 +11,11 @@ target 'sendadv' do
   pod 'Firebase/AdMob'
   pod 'MBProgressHUD'
   pod 'UITextView+Placeholder'
-  pod 'Material'
+  pod 'Material', '~> 2.16.4'
   pod 'KakaoOpenSDK';
-  pod 'LSExtensions'#, :path => '~/Projects/leesam/pods/LSExtensions/src/LSExtensions'
+  pod 'LSExtensions', :path => '~/Projects/leesam/pods/LSExtensions/src/LSExtensions'
+  pod 'GADManager', :path => '~/Projects/leesam/pods/GADManager/src/GADManager'
+  
   pod 'Fabric'
   pod 'Crashlytics'
 

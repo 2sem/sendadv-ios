@@ -16,7 +16,6 @@
 		2C1443E7214516B7005D343B /* sendadvTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1443E6214516B7005D343B /* sendadvTests.swift */; };
 		2C1443F2214516B7005D343B /* sendadvUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1443F1214516B7005D343B /* sendadvUITests.swift */; };
 		2C14441921451879005D343B /* GADBannerView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C14441321451878005D343B /* GADBannerView+.swift */; };
-		2C14441A21451879005D343B /* GADInterstialManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C14441421451878005D343B /* GADInterstialManager.swift */; };
 		2C14441B21451879005D343B /* GADInterstitial+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C14441521451878005D343B /* GADInterstitial+.swift */; };
 		2C14441C21451879005D343B /* GADRewardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C14441621451878005D343B /* GADRewardManager.swift */; };
 		2C14441D21451879005D343B /* ReviewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C14441721451878005D343B /* ReviewManager.swift */; };
@@ -28,7 +27,7 @@
 		2C144444214519BD005D343B /* SAModelController+SAFilterRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C14443D214519BD005D343B /* SAModelController+SAFilterRule.swift */; };
 		2C144445214519BD005D343B /* SAModelController+SARecipientsRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C14443E214519BD005D343B /* SAModelController+SARecipientsRule.swift */; };
 		2C144446214519BD005D343B /* SAModelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C14443F214519BD005D343B /* SAModelController.swift */; };
-		2C144447214519BD005D343B /* SADefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C144441214519BD005D343B /* SADefaults.swift */; };
+		2C144447214519BD005D343B /* LSDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C144441214519BD005D343B /* LSDefaults.swift */; };
 		2C14444F214519CC005D343B /* credif_.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C144449214519CB005D343B /* credif_.png */; };
 		2C144450214519CC005D343B /* review_white_line@x1.5.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C14444B214519CB005D343B /* review_white_line@x1.5.png */; };
 		2C144451214519CC005D343B /* Icons8_.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C14444C214519CB005D343B /* Icons8_.png */; };
@@ -97,7 +96,6 @@
 		2C14440821451818005D343B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		2C14440A21451818005D343B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2C14441321451878005D343B /* GADBannerView+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "GADBannerView+.swift"; sourceTree = "<group>"; };
-		2C14441421451878005D343B /* GADInterstialManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GADInterstialManager.swift; sourceTree = "<group>"; };
 		2C14441521451878005D343B /* GADInterstitial+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "GADInterstitial+.swift"; sourceTree = "<group>"; };
 		2C14441621451878005D343B /* GADRewardManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GADRewardManager.swift; sourceTree = "<group>"; };
 		2C14441721451878005D343B /* ReviewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReviewManager.swift; sourceTree = "<group>"; };
@@ -115,7 +113,7 @@
 		2C14443D214519BD005D343B /* SAModelController+SAFilterRule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SAModelController+SAFilterRule.swift"; sourceTree = "<group>"; };
 		2C14443E214519BD005D343B /* SAModelController+SARecipientsRule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SAModelController+SARecipientsRule.swift"; sourceTree = "<group>"; };
 		2C14443F214519BD005D343B /* SAModelController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SAModelController.swift; sourceTree = "<group>"; };
-		2C144441214519BD005D343B /* SADefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SADefaults.swift; sourceTree = "<group>"; };
+		2C144441214519BD005D343B /* LSDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LSDefaults.swift; sourceTree = "<group>"; };
 		2C144449214519CB005D343B /* credif_.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = credif_.png; sourceTree = "<group>"; };
 		2C14444B214519CB005D343B /* review_white_line@x1.5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "review_white_line@x1.5.png"; sourceTree = "<group>"; };
 		2C14444C214519CB005D343B /* Icons8_.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icons8_.png; sourceTree = "<group>"; };
@@ -198,7 +196,7 @@
 		2C1443CD214516B1005D343B /* sendadv */ = {
 			isa = PBXGroup;
 			children = (
-				2C14441221451878005D343B /* leesam */,
+				2C14441221451878005D343B /* extensions */,
 				2C144448214519CB005D343B /* image */,
 				2C14443A214519BD005D343B /* controller */,
 				2C144456214519E8005D343B /* view */,
@@ -246,17 +244,16 @@
 			path = actionadv;
 			sourceTree = "<group>";
 		};
-		2C14441221451878005D343B /* leesam */ = {
+		2C14441221451878005D343B /* extensions */ = {
 			isa = PBXGroup;
 			children = (
 				2C14441321451878005D343B /* GADBannerView+.swift */,
-				2C14441421451878005D343B /* GADInterstialManager.swift */,
 				2C14441521451878005D343B /* GADInterstitial+.swift */,
 				2C14441621451878005D343B /* GADRewardManager.swift */,
 				2C14441721451878005D343B /* ReviewManager.swift */,
 				2C14441821451878005D343B /* UIApplication+KakaoLink.swift */,
 			);
-			path = leesam;
+			path = extensions;
 			sourceTree = SOURCE_ROOT;
 		};
 		2C144426214518D9005D343B /* shareadv */ = {
@@ -284,7 +281,7 @@
 		2C144440214519BD005D343B /* data */ = {
 			isa = PBXGroup;
 			children = (
-				2C144441214519BD005D343B /* SADefaults.swift */,
+				2C144441214519BD005D343B /* LSDefaults.swift */,
 			);
 			path = data;
 			sourceTree = "<group>";
@@ -624,7 +621,7 @@
 				2C14441D21451879005D343B /* ReviewManager.swift in Sources */,
 				2C14445F214519E9005D343B /* SARecipientsTableViewCell.swift in Sources */,
 				2C1443CF214516B1005D343B /* AppDelegate.swift in Sources */,
-				2C144447214519BD005D343B /* SADefaults.swift in Sources */,
+				2C144447214519BD005D343B /* LSDefaults.swift in Sources */,
 				2C144461214519E9005D343B /* SARuleTableViewController.swift in Sources */,
 				2C14441921451879005D343B /* GADBannerView+.swift in Sources */,
 				2C14445E214519E9005D343B /* SAFilterTableViewController.swift in Sources */,
@@ -633,7 +630,6 @@
 				2C144443214519BD005D343B /* SAMobileController.swift in Sources */,
 				2C144439214519AE005D343B /* MainViewController.swift in Sources */,
 				2C144462214519E9005D343B /* SASendViewController.swift in Sources */,
-				2C14441A21451879005D343B /* GADInterstialManager.swift in Sources */,
 				2C144442214519BD005D343B /* SAContactController.swift in Sources */,
 				2C14441E21451879005D343B /* UIApplication+KakaoLink.swift in Sources */,
 				2C144445214519BD005D343B /* SAModelController+SARecipientsRule.swift in Sources */,

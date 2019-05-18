@@ -14,7 +14,7 @@ import Material
 import LSExtensions
 import Crashlytics
 
-class SARecipientsTableViewController: UITableViewController, MFMessageComposeViewControllerDelegate  {
+class SARecipientsTableViewController: UITableViewController {
     let cell_id = "SARecipientsTableViewCell";
     var rules : [SARecipientsRule] = [];
     var dataController = SAModelController.Default;
@@ -43,6 +43,8 @@ class SARecipientsTableViewController: UITableViewController, MFMessageComposeVi
             //reload last selected rule
             self.tableView.reloadRows(at: [indexPath], with: .automatic);
         }
+        
+        AppDelegate.sharedGADManager?.show(unit: .full);
     }
     
     override func viewDidLoad() {
@@ -256,6 +258,9 @@ class SARecipientsTableViewController: UITableViewController, MFMessageComposeVi
         let rule = self.rules[indexPath.row];
         rule.enabled = control.isOn;
         self.dataController.saveChanges();
+        if control.isOn{
+            AppDelegate.sharedGADManager?.show(unit: .full);
+        }
     }
     
     // MARK: - Table view data source
@@ -331,16 +336,6 @@ class SARecipientsTableViewController: UITableViewController, MFMessageComposeVi
     }
     */
     
-    // MARK: MFMessageComposeViewControllerDelegate
-    func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
-        NotificationCenter.default.removeObserver(self, name: .UIKeyboardWillShow, object: nil);
-        controller.dismiss(animated: true) {
-            //removes used messaging UI
-            self.messageController = nil;
-            //view next controller
-        }
-    }
-    
     // MARK: UINavigationControllerDelegate
     func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
 //        print("message view didShow. view[\(viewController)] state[\(viewController.is)]");
@@ -383,6 +378,18 @@ class SARecipientsTableViewController: UITableViewController, MFMessageComposeVi
             if self.isEditing{
                 self.setEditing(false, animated: false);
             }
+        }
+    }
+}
+
+extension SARecipientsTableViewController : MFMessageComposeViewControllerDelegate{
+    func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
+        NotificationCenter.default.removeObserver(self, name: .UIKeyboardWillShow, object: nil);
+        controller.dismiss(animated: true) { [unowned self] in
+            //removes used messaging UI
+            self.messageController = nil;
+            AppDelegate.sharedGADManager?.show(unit: .full);
+            //view next controller
         }
     }
 }

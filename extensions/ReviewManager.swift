@@ -96,14 +96,13 @@ class ReviewManager : NSObject{
             }/*,UIAlertAction(title: "제보하기".localized(), style: .default, handler: { (act) in
                 //do not gain today
                 UIApplication.shared.open(URL(string: "https://open.kakao.com/o/g1jk9Xx")!, options: [:], completionHandler: nil);
-            })*/,UIAlertAction(title: "후원하기(전면광고)".localized(), style: .default, handler: { (act) in
+            }),UIAlertAction(title: "후원하기(전면광고)".localized(), style: .default, handler: { (act) in
                 GADInterstialManager.shared?.show(true);
-            }),UIAlertAction(title: "다음에 보기".localized(), style: .default, handler: { (act) in
+            })*/,UIAlertAction(title: "다음에 보기".localized(), style: .default, handler: { (act) in
                 //do not gain today
                 self.delegate?.reviewUpdate(showTime: Date().addingTimeInterval(60 * 60 * 24));
             }),UIAlertAction(title: "후원하기(동영상광고)".localized(), style: .default, handler: { (act) in
                 GADRewardManager.shared?.show(true);
-                
             })]
         self.window.rootViewController?.showAlert(title: "앱 평가 및 추천".localized(), msg: String(format: "'%@'을 평가하거나 친구들에게 추천해보세요.".localized(), name), actions: acts, style: .alert);
         self.delegate?.reviewUpdate(showTime: Date());
