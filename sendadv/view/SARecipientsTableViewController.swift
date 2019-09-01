@@ -43,8 +43,6 @@ class SARecipientsTableViewController: UITableViewController {
             //reload last selected rule
             self.tableView.reloadRows(at: [indexPath], with: .automatic);
         }
-        
-        AppDelegate.sharedGADManager?.show(unit: .full);
     }
     
     override func viewDidLoad() {
@@ -114,7 +112,9 @@ class SARecipientsTableViewController: UITableViewController {
     //var recipientCount = 10;
     var message = "haha ggo text";
     @IBAction func onSendMessage(_ button: Any) {
-        self._onSendMessage(allowAll: false);
+        AppDelegate.sharedGADManager?.show(unit: .full, completion: { [weak self](unit, ads) in
+            self?._onSendMessage(allowAll: false);
+        })
     }
     
     func _onSendMessage(allowAll : Bool) {
@@ -258,9 +258,6 @@ class SARecipientsTableViewController: UITableViewController {
         let rule = self.rules[indexPath.row];
         rule.enabled = control.isOn;
         self.dataController.saveChanges();
-        if control.isOn{
-            AppDelegate.sharedGADManager?.show(unit: .full);
-        }
     }
     
     // MARK: - Table view data source
@@ -344,7 +341,7 @@ class SARecipientsTableViewController: UITableViewController {
     //MARK: - Navigation
 
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        var value = true;
+        //var value = true;
         guard !(self.navigationController?.topViewController is SARuleTableViewController) else{
             return false;
         }
@@ -352,12 +349,15 @@ class SARecipientsTableViewController: UITableViewController {
         if identifier == "edit"{
             guard self.tableView.indexPathForSelectedRow != nil else{
                 assertionFailure("Could not get selected rule and move to view for it.")
-                value = false;
-                return value;
+                return false;
             }
         }
         
-        return value;
+        AppDelegate.sharedGADManager?.show(unit: .full, completion: { [weak self](unit, ads) in
+            self?.performSegue(withIdentifier: identifier, sender: sender);
+        })
+        
+        return false;
     }
     
     //In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -388,7 +388,6 @@ extension SARecipientsTableViewController : MFMessageComposeViewControllerDelega
         controller.dismiss(animated: true) { [unowned self] in
             //removes used messaging UI
             self.messageController = nil;
-            AppDelegate.sharedGADManager?.show(unit: .full);
             //view next controller
         }
     }

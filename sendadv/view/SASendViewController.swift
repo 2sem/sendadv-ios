@@ -26,9 +26,12 @@ class SASendViewController: UIViewController, MFMessageComposeViewControllerDele
     @IBOutlet weak var sendButton: UIButton!
     @IBOutlet weak var resetButton: UIButton!
     
+    override var preferredStatusBarStyle: UIStatusBarStyle{
+        return .lightContent
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        UIApplication.shared.statusBarStyle = .lightContent;
         
         self.messageTextView.delegate = self;
 //        self.view.backgroundColor = UIColor.blue;

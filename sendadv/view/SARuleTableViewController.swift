@@ -211,14 +211,15 @@ class SARuleTableViewController: UITableViewController {
     */
 
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        var value = false;
         guard !(self.navigationController?.topViewController is SAFilterTableViewController) else{
-            return value;
+            return false;
         }
         
-        value = true;
+        AppDelegate.sharedGADManager?.show(unit: .full, completion: { [weak self](unit, ads) in
+            self?.performSegue(withIdentifier: identifier, sender: sender);
+        })
         
-        return value;
+        return false;
     }
     
     // MARK: - Navigation
