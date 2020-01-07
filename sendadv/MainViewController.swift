@@ -10,6 +10,7 @@ import UIKit
 import GoogleMobileAds
 import LSExtensions
 import Crashlytics
+import Material
 
 class MainViewController: UIViewController, GADBannerViewDelegate, GADRewardManagerDelegate {
     
@@ -17,6 +18,7 @@ class MainViewController: UIViewController, GADBannerViewDelegate, GADRewardMana
     @IBOutlet weak var constraint_bottomBanner_Top: NSLayoutConstraint!
     
     @IBOutlet weak var bannerView: GADBannerView!
+    @IBOutlet weak var reviewButton: IconButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,13 +36,17 @@ class MainViewController: UIViewController, GADBannerViewDelegate, GADRewardMana
         
         GADRewardManager.shared?.delegate = self;
         
-        self.bannerView.isAutoloadEnabled = true;
         /*guard (GADRewardManager.shared?.canShow ?? false) && (GADInterstialManager.shared?.canShow ?? false) else{
          return;
          }*/
-        self.bannerView?.load(req);
-        
-        self.bannerView?.adUnitID = "ca-app-pub-9684378399371172/4552094040";
+        #if targetEnvironment(simulator)
+        self.bannerView?.isAutoloadEnabled = false;
+        self.showBanner(visible: false);
+        #else
+        self.bannerView.isAutoloadEnabled = true;
+        //self.bannerView?.load(req);
+        //self.bannerView?.adUnitID = "ca-app-pub-9684378399371172/4552094040";
+        #endif
     }
 
     override func didReceiveMemoryWarning() {
@@ -92,6 +98,7 @@ class MainViewController: UIViewController, GADBannerViewDelegate, GADRewardMana
             print("hide banner. frame[\(self.bannerView.frame)]");
         }
         self.bannerView.isHidden = !visible;
+        self.reviewButton?.isHidden = !visible;
     }
     
     /// MARK: GADBannerViewDelegate
