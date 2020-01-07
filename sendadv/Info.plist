@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>en_US</string>
+	<string>ko_KR</string>
 	<key>CFBundleDisplayName</key>
 	<string>Send Multi SMS</string>
 	<key>CFBundleDocumentTypes</key>
@@ -53,7 +53,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>5</string>
+	<string>10</string>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-9684378399371172~3075360846</string>
 	<key>GADUnitIdentifiers</key>
@@ -99,7 +99,9 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
+	<key>UIUserInterfaceStyle</key>
+	<string>Light</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
+	<true/>
 </dict>
 </plist>
