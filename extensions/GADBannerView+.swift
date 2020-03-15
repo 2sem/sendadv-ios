@@ -11,18 +11,17 @@ import GoogleMobileAds
 
 extension GADBannerView{
     func loadUnitId(name : String){
-        var unitList = Bundle.main.infoDictionary?["GoogleADUnitID"] as? [String : String];
-        guard unitList != nil else{
+        guard let unitList = Bundle.main.infoDictionary?["GoogleADUnitID"] as? [String : String] else{
             print("Add [String : String] Dictionary as 'GoogleADUnitID'");
             return;
         }
         
-        guard !(unitList ?? [:]).isEmpty else{
+        guard !unitList.isEmpty else{
             print("Add Unit into 'GoogleADUnitID'");
             return;
         }
         
-        guard let unit = unitList?[name] else{
+        guard let unit = unitList[name] else{
             print("Add unit \(name) into GoogleADUnitID");
             return;
         }

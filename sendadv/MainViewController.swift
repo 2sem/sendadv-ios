@@ -131,7 +131,7 @@ class MainViewController: UIViewController, GADBannerViewDelegate, GADRewardMana
         if !keyboardEnabled {
             keyboardEnabled = true;
             //            self.viewContainer.frame.origin.y -= 180;
-            let frame = noti.userInfo?[UIKeyboardFrameEndUserInfoKey] as? CGRect;
+            let frame = noti.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect;
             
             // - self.bottomBannerView.frame.height
             if true{ //!self.isIPhone

@@ -69,7 +69,7 @@ class SARuleTableViewController: UITableViewController {
         self.dataController.endTransaction();
         
         //If user goes to back from this view controller not to go to another new view controller
-        guard self.isMovingFromParentViewController else{
+        guard self.isMovingFromParent else{
             return;
         }
         

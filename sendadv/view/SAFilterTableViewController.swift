@@ -137,7 +137,7 @@ class SAFilterTableViewController: UITableViewController {
         switch cell.accessoryType{
             case .checkmark:
                 cell.accessoryType = .none;
-                let idx = self.includes.index(of: cell.textLabel?.text ?? "") ?? -1;
+                let idx = self.includes.firstIndex(of: cell.textLabel?.text ?? "") ?? -1;
                 if idx >= 0 {
                     self.includes.remove(at: idx);
                 }

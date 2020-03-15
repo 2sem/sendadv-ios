@@ -25,28 +25,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ReviewManagerDelegate, GA
     var reviewManager : ReviewManager?;
     let reviewInterval = 30;
     
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        GADMobileAds.configure(withApplicationID: "ca-app-pub-9684378399371172~3075360846");
+        //GADMobileAds.configure(withApplicationID: "ca-app-pub-9684378399371172~3075360846");
         FirebaseApp.configure();
         
-        self.reviewManager = ReviewManager(self.window!, interval: 60.0 * 60 * 24 * 2);
-        self.reviewManager?.delegate = self;
-        //self.reviewManager?.show(true);
-        
-        self.rewardAd = GADRewardManager(self.window!, unitId: GADInterstitial.loadUnitId(name: "RewardAd") ?? "", interval: 60.0 * 60.0 * 24); //
-        self.rewardAd?.delegate = self;
-        
-        let adManager = GADManager<GADUnitName>.init(self.window!);
-        AppDelegate.sharedGADManager = adManager;
-        adManager.delegate = self;
-    #if DEBUG
-        adManager.prepare(interstitialUnit: .full, interval: 60.0);
-    #else
-        adManager.prepare(interstitialUnit: .full, interval: 60.0 * 60.0 * 2);
-    #endif
-        
-        adManager.canShowFirstTime = true;
+        GADMobileAds.sharedInstance().start { [weak self](status) in
+            guard let self = self else{
+                return;
+            }
+            
+            self.reviewManager = ReviewManager(self.window!, interval: 60.0 * 60 * 24 * 2);
+                self.reviewManager?.delegate = self;
+                //self.reviewManager?.show(true);
+                
+                self.rewardAd = GADRewardManager(self.window!, unitId: GADInterstitial.loadUnitId(name: "RewardAd") ?? "", interval: 60.0 * 60.0 * 24); //
+                self.rewardAd?.delegate = self;
+                
+                let adManager = GADManager<GADUnitName>.init(self.window!);
+                AppDelegate.sharedGADManager = adManager;
+                adManager.delegate = self;
+            #if DEBUG
+                adManager.prepare(interstitialUnit: .full, interval: 60.0);
+            #else
+                adManager.prepare(interstitialUnit: .full, interval: 60.0);
+            #endif
+                
+                adManager.canShowFirstTime = true;
+        }
         
         LSDefaults.increaseLaunchCount();
 
@@ -54,7 +60,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ReviewManagerDelegate, GA
         return true;
     }
     
-    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         //group.com.credif.sendadv
         
         return true;

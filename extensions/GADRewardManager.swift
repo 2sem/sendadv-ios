@@ -110,7 +110,7 @@ class GADRewardManager : NSObject, GADRewardBasedVideoAdDelegate{
         self.rewardAd?.delegate = self;
         let req = GADRequest();
         #if DEBUG
-            req.testDevices = ["5fb1f297b8eafe217348a756bdb2de56"];
+            GADMobileAds.sharedInstance().requestConfiguration.testDeviceIdentifiers = ["5fb1f297b8eafe217348a756bdb2de56"];
         #endif
         /*if let alert = UIApplication.shared.keyWindow?.rootViewController?.presentedViewController as? UIAlertController{
          alert.dismiss(animated: false, completion: nil);

@@ -112,9 +112,7 @@ class SARecipientsTableViewController: UITableViewController {
     //var recipientCount = 10;
     var message = "haha ggo text";
     @IBAction func onSendMessage(_ button: Any) {
-        AppDelegate.sharedGADManager?.show(unit: .full, completion: { [weak self](unit, ads) in
-            self?._onSendMessage(allowAll: false);
-        })
+        self._onSendMessage(allowAll: false);
     }
     
     func _onSendMessage(allowAll : Bool) {
@@ -211,15 +209,21 @@ class SARecipientsTableViewController: UITableViewController {
         //hub.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1);
         hub.contentColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1);
         
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(noti:)), name: .UIKeyboardWillShow, object: nil);
-        self.present(self.messageController!, animated: true) {
-            print("Presenting message view controller has been completed");
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(noti:)), name: UIResponder.keyboardWillShowNotification, object: nil);
+        AppDelegate.sharedGADManager?.show(unit: .full, completion: { [weak self](unit, ads) in
+            guard let self = self else{
+                return;
+            }
             
-            self.messageController?.view?.alpha = 1.0;
-            self.messageController?.view?.isHidden = false;
-            self.messageController?.view?.isHidden = false;
-            MBProgressHUD.hide(for: self.view, animated: true);
-        }
+            self.present(self.messageController!, animated: true) {
+                print("Presenting message view controller has been completed");
+                
+                self.messageController?.view?.alpha = 1.0;
+                self.messageController?.view?.isHidden = false;
+                self.messageController?.view?.isHidden = false;
+                MBProgressHUD.hide(for: self.view, animated: true);
+            }
+        })
     }
     
     @objc func keyboardWillShow(noti: Notification){
@@ -304,7 +308,7 @@ class SARecipientsTableViewController: UITableViewController {
     }
 
     // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Deletes the row from the data source
             let rule = self.rules[indexPath.row];
@@ -384,7 +388,7 @@ class SARecipientsTableViewController: UITableViewController {
 
 extension SARecipientsTableViewController : MFMessageComposeViewControllerDelegate{
     func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
-        NotificationCenter.default.removeObserver(self, name: .UIKeyboardWillShow, object: nil);
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil);
         controller.dismiss(animated: true) { [unowned self] in
             //removes used messaging UI
             self.messageController = nil;
