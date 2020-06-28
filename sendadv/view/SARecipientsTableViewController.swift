@@ -403,6 +403,21 @@ extension SARecipientsTableViewController : UITableViewDataSource{
     }
 }
 
+extension SARecipientsTableViewController : UITableViewDelegate{
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("\(#function)");
+        guard indexPath.section == 1 else{
+            return;
+        }
+        
+        guard let url = URL.init(string: "https://apps.apple.com/us/developer/young-jun-lee/id1225480114") else{
+            return;
+        }
+        
+        UIApplication.shared.open(url, options: [.universalLinksOnly : false], completionHandler: nil);
+    }
+}
+
 extension SARecipientsTableViewController : MFMessageComposeViewControllerDelegate{
     func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil);

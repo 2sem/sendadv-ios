@@ -43,7 +43,7 @@ class MainViewController: UIViewController, GADBannerViewDelegate, GADRewardMana
         self.bannerView?.isAutoloadEnabled = false;
         self.showBanner(visible: false);
         #else
-        self.bannerView.isAutoloadEnabled = true;
+        self.bannerView.isAutoloadEnabled = false;
         //self.bannerView?.load(req);
         //self.bannerView?.adUnitID = "ca-app-pub-9684378399371172/4552094040";
         #endif

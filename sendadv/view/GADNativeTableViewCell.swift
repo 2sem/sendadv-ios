@@ -24,7 +24,7 @@ class GADNativeTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        
+        self.loadDeveloper();
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -41,6 +41,33 @@ class GADNativeTableViewCell: UITableViewCell {
         self.gadLoader?.delegate = self;
         
         self.gadLoader?.load(GADRequest());
+    }
+    
+    func loadDeveloper(){
+        if let header = self.nativeAdView?.headlineView as? UILabel{
+            header.text = "ads header".localized();
+            header.isHidden = false;
+        }
+        if let advertiser = self.nativeAdView?.advertiserView as? UILabel{
+            advertiser.text = "advertiser".localized();
+            advertiser.isHidden = false;
+        }
+        //self.nativeAdView?.starRatingView?.isHidden = true;// nativeAd.starRating == nil;
+        if let button = self.nativeAdView?.callToActionView as? UIButton{
+            button.setTitle("ads action".localized(), for: .normal);
+            button.isHidden = false;
+        }
+        if let imageView = self.nativeAdView?.iconView as? UIImageView{
+            imageView.image = #imageLiteral(resourceName: "othreapp");
+        }
+        self.nativeAdView?.iconView?.isHidden = false;
+        if let body = self.nativeAdView?.bodyView as? UILabel{
+            body.text = "ads description".localized();
+            body.isHidden = false;
+        }
+        
+        self.nativeAdView?.isUserInteractionEnabled = false;
+        //self.nativeAdView.isHidden = true;
     }
 }
 
@@ -69,10 +96,12 @@ extension GADNativeTableViewCell : GADUnifiedNativeAdLoaderDelegate{
             body.text = nativeAd.body;
         }
         self.nativeAdView.bodyView?.isHidden = nativeAd.body == nil;
+        self.nativeAdView?.isUserInteractionEnabled = true;
     }
     
     func adLoader(_ adLoader: GADAdLoader, didFailToReceiveAdWithError error: GADRequestError) {
         print("\(#function) \(error)");
+        self.loadDeveloper();
     }
     
     

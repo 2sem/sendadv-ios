@@ -30,3 +30,8 @@
 "Department" = "Department";
 "Organization" = "Organization";
 " and %@ others" = " and %@ others";
+
+"ads header" = "Developer's Awesome Apps";
+"advertiser" = "Developer";
+"ads description" = "See developer's other awesome apps. WhoCallMe, Talk-Translator, WhereWeGo? ...";
+"ads action" = "Install";

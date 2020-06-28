@@ -30,3 +30,8 @@
 "Department" = "부서";
 "Organization" = "회사";
 " and %@ others" = " 외 %@";
+
+"ads header" = "개발자의 놀라운 앱들";
+"advertiser" = "개발자";
+"ads description" = "개발자의 놀라운 다른 앱 보기. 관련주식검색기, 게임도우미, 누군지다알아, 말해봐번역기, 우리어디가? 등 ...";
+"ads action" = "설치하기";
