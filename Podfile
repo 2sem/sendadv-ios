@@ -16,8 +16,11 @@ target 'sendadv' do
   pod 'LSExtensions', :path => '~/Projects/leesam/pods/LSExtensions/src/LSExtensions'
   pod 'GADManager', :path => '~/Projects/leesam/pods/GADManager/src/GADManager'
   
-  pod 'Fabric'
-  pod 'Crashlytics'
+  # Add the pod for Firebase Crashlytics
+  pod 'Firebase/Crashlytics'
+
+  # Recommended: Add the Firebase pod for Google Analytics
+  pod 'Firebase/Analytics'
 
   target 'sendadvTests' do
     inherit! :search_paths

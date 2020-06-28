@@ -9,7 +9,7 @@
 import UIKit
 import GoogleMobileAds
 import LSExtensions
-import Crashlytics
+import FirebaseCrashlytics
 import Material
 
 class MainViewController: UIViewController, GADBannerViewDelegate, GADRewardManagerDelegate {

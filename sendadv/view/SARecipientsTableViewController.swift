@@ -12,18 +12,20 @@ import Contacts
 import MBProgressHUD
 import Material
 import LSExtensions
-import Crashlytics
+import FirebaseCrashlytics
 
-class SARecipientsTableViewController: UITableViewController {
+class SARecipientsTableViewController: UIViewController {
     let cell_id = "SARecipientsTableViewCell";
     var rules : [SARecipientsRule] = [];
     var dataController = SAModelController.Default;
     
-    var sendButton : FABButton!;
+    @IBOutlet weak var editButton: UIBarButtonItem!
+    @IBOutlet weak var sendButton: FABButton!
+    @IBOutlet weak var emptyStackView: UIStackView!
     
     var indexPathForSelectedRow : IndexPath?;
-    weak var sendButtonTrailingConstraint : NSLayoutConstraint!;
-    weak var sendButtonBottomConstraint : NSLayoutConstraint!;
+    
+    @IBOutlet weak var tableView: UITableView!
     
     override func viewWillAppear(_ animated: Bool) {
         let rules = self.dataController.loadRecipientsRules();
@@ -58,18 +60,18 @@ class SARecipientsTableViewController: UITableViewController {
         self.rules = self.dataController.loadRecipientsRules();
         
         // MARK: create send button
-        self.sendButton = FABButton(image: Icon.cm.pen, tintColor: UIColor.black);
-        self.sendButton.addTarget(self, action: #selector(onSendMessage(_:)), for: .touchUpInside);
-        self.sendButton.backgroundColor = UIColor.yellow;
-        self.sendButton.pulseColor = UIColor.yellow;
-        
-        self.view.addSubview(self.sendButton);
-        self.sendButton.translatesAutoresizingMaskIntoConstraints = false;
-        self.sendButton.widthAnchor.constraint(equalToConstant: 44).isActive = true;
-        self.sendButton.heightAnchor.constraint(equalToConstant: 44).isActive = true;
-        //self.sendButton.frame.size = CGSize(width: 44, height: 44);
-        self.sendButton.frame.origin.x = self.view.frame.maxX - self.sendButton.frame.width - 16;
-        self.sendButton.frame.origin.y = self.view.frame.maxY - self.sendButton.frame.width - 16;
+//        self.sendButton = FABButton(image: Icon.cm.pen, tintColor: UIColor.black);
+//        self.sendButton.addTarget(self, action: #selector(onSendMessage(_:)), for: .touchUpInside);
+//        self.sendButton.backgroundColor = UIColor.yellow;
+//        self.sendButton.pulseColor = UIColor.yellow;
+//
+//        self.view.addSubview(self.sendButton);
+//        self.sendButton.translatesAutoresizingMaskIntoConstraints = false;
+//        self.sendButton.widthAnchor.constraint(equalToConstant: 44).isActive = true;
+//        self.sendButton.heightAnchor.constraint(equalToConstant: 44).isActive = true;
+//        //self.sendButton.frame.size = CGSize(width: 44, height: 44);
+//        self.sendButton.frame.origin.x = self.view.frame.maxX - self.sendButton.frame.width - 16;
+//        self.sendButton.frame.origin.y = self.view.frame.maxY - self.sendButton.frame.width - 16;
         
         //self.view.layout(self.sendButton)
         //    .width(44)
@@ -79,9 +81,7 @@ class SARecipientsTableViewController: UITableViewController {
         self.sendButtonTrailingConstraint.isActive = true;
         self.sendButtonBottomConstraint = self.sendButton.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -self.sendButton.bounds.height * 0.5);
         self.sendButtonBottomConstraint.isActive = true;*/
-        
-        self.layoutSendButton();
-        
+                
         print("fab button frame[\(self.sendButton.frame)] view[\(self.view.frame)] constraint[\(self.sendButton.constraints)] -- [\(self.view.constraints)]");
         //Crashlytics.sharedInstance().crash();
     }
@@ -89,21 +89,6 @@ class SARecipientsTableViewController: UITableViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-    }
-    
-    func layoutSendButton(){
-        self.sendButton.frame.origin.x = self.view.bounds.maxX - self.sendButton.bounds.width - 16;
-        self.sendButton.frame.origin.y = self.view.bounds.maxY - self.sendButton.bounds.height * 1.5;
-    }
-    
-    override func viewDidLayoutSubviews() {
-        self.layoutSendButton();
-    }
-    
-    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        self.layoutSendButton();
-        //+ scrollView.contentOffset.y;
-        
     }
     
     //iOS native messaging UI
@@ -169,7 +154,7 @@ class SARecipientsTableViewController: UITableViewController {
         hub.mode = .indeterminate;
         hub.label.text = "Creating recipients list".localized();
         //        hub.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1);
-        hub.contentColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1);
+        hub.contentColor = #colorLiteral(red: 0, green: 0.9914394021, blue: 1, alpha: 1);
         
         self.showMessageView(phones);
     }
@@ -230,23 +215,23 @@ class SARecipientsTableViewController: UITableViewController {
         MBProgressHUD.hide(for: self.messageController!.view, animated: true);
     }
     
-    /*@IBAction func onBeginEdit(_ sender: UIBarButtonItem) {
-        self.setEditing(true, animated: true);
-        let cells = self.tableView.visibleCells;
-        for cell in cells{
-            cell.accessoryType = .disclosureIndicator;
-        }
-    }*/
+//    @IBAction func onBeginEdit(_ sender: UIBarButtonItem) {
+//        self.setEditing(true, animated: true);
+//        print("onBeginEdit");
+//        guard self.editButton?.style == .done else {
+//            return;
+//        }
+//
+//        let cells = self.tableView.visibleCells;
+//        for cell in cells{
+//            cell.accessoryType = .disclosureIndicator;
+//        }
+//    }
     
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated);
-        
-        guard !editing else{
-            return;
-        }
-        
-        let indexPaths = self.tableView.indexPathsForVisibleRows ?? [];
-        self.tableView.reloadRows(at: indexPaths, with: .automatic);
+        self.tableView?.setEditing(editing, animated: animated);
+        self.editButton?.style = editing ? .done : .plain;
     }
 
     @objc func onToggleRuleSwitch(control : UISwitch){
@@ -266,61 +251,6 @@ class SARecipientsTableViewController: UITableViewController {
     
     // MARK: - Table view data source
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 1
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return self.rules.count;
-    }
-
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cell_id, for: indexPath) as? SARecipientsTableViewCell;
-        let rule = self.rules[indexPath.row];
-        
-        // Configure the cell...
-        //Replaces empty rule title to default title
-        cell?.titleLabel.text = (rule.title ?? "").isEmpty ? "Recipients Creation Rule".localized() : rule.title;
-        
-        //Hides rule detail if rule has title
-        if !(cell?.titleLabel.text ?? "").isEmpty{
-            cell?.includeLabel.isHidden = true;
-            cell?.excludeLabel.isHidden = true;
-        }else{
-            //Shows rule detail if rule doesn't have title
-            cell?.includeLabel.isHidden = false;
-            cell?.excludeLabel.isHidden = false;
-        }
-        
-        //Settings the switch to activate
-        cell?.enableSwitch.isOn = rule.enabled;
-        cell?.enableSwitch.addTarget(self, action: #selector(onToggleRuleSwitch(control:)), for: .valueChanged);
-
-        return cell!;
-    }
-
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Deletes the row from the data source
-            let rule = self.rules[indexPath.row];
-            self.dataController.removeRecipientsRule(rule: rule);
-            self.rules.remove(at: indexPath.row);
-            self.dataController.saveChanges();
-            
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
 
     /*
     // Override to support rearranging the table view.
@@ -382,6 +312,68 @@ class SARecipientsTableViewController: UITableViewController {
             if self.isEditing{
                 self.setEditing(false, animated: false);
             }
+        }
+    }
+}
+
+extension SARecipientsTableViewController : UITableViewDataSource{
+    func numberOfSections(in tableView: UITableView) -> Int {
+        // #warning Incomplete implementation, return the number of sections
+        return 1
+    }
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // #warning Incomplete implementation, return the number of rows
+        let value = self.rules.count;
+        self.emptyStackView?.isHidden = value > 0;
+        self.sendButton?.isHidden = value <= 0;
+        
+        return value;
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: cell_id, for: indexPath) as? SARecipientsTableViewCell;
+        let rule = self.rules[indexPath.row];
+        
+        // Configure the cell...
+        //Replaces empty rule title to default title
+        cell?.titleLabel.text = (rule.title ?? "").isEmpty ? "Recipients Creation Rule".localized() : rule.title;
+        
+        //Hides rule detail if rule has title
+        if !(cell?.titleLabel.text ?? "").isEmpty{
+            cell?.includeLabel.isHidden = true;
+            cell?.excludeLabel.isHidden = true;
+        }else{
+            //Shows rule detail if rule doesn't have title
+            cell?.includeLabel.isHidden = false;
+            cell?.excludeLabel.isHidden = false;
+        }
+        
+        //Settings the switch to activate
+        cell?.enableSwitch.isOn = rule.enabled;
+        cell?.enableSwitch.addTarget(self, action: #selector(onToggleRuleSwitch(control:)), for: .valueChanged);
+
+        return cell!;
+    }
+
+    // Override to support conditional editing of the table view.
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        // Return false if you do not want the specified item to be editable.
+        return true
+    }
+
+    // Override to support editing the table view.
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            // Deletes the row from the data source
+            let rule = self.rules[indexPath.row];
+            self.dataController.removeRecipientsRule(rule: rule);
+            self.rules.remove(at: indexPath.row);
+            self.dataController.saveChanges();
+            
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        } else if editingStyle == .insert {
+            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }
     }
 }
