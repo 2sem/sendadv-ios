@@ -15,7 +15,10 @@ import LSExtensions
 import FirebaseCrashlytics
 
 class SARecipientsTableViewController: UIViewController {
-    let cell_id = "SARecipientsTableViewCell";
+    class Cells{
+        static let `default` = "cell";
+        static let ads = "ads";
+    }
     var rules : [SARecipientsRule] = [];
     var dataController = SAModelController.Default;
     
@@ -319,39 +322,61 @@ class SARecipientsTableViewController: UIViewController {
 extension SARecipientsTableViewController : UITableViewDataSource{
     func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 1
+        return 2;
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        let value = self.rules.count;
-        self.emptyStackView?.isHidden = value > 0;
-        self.sendButton?.isHidden = value <= 0;
+        var value = self.rules.count;
+        
+        if section == 0{
+            self.emptyStackView?.isHidden = value > 0;
+            self.sendButton?.isHidden = value <= 0;
+        }else{
+            value = 1;
+        }
         
         return value;
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cell_id, for: indexPath) as? SARecipientsTableViewCell;
-        let rule = self.rules[indexPath.row];
+        let cell : UITableViewCell!;
         
-        // Configure the cell...
-        //Replaces empty rule title to default title
-        cell?.titleLabel.text = (rule.title ?? "").isEmpty ? "Recipients Creation Rule".localized() : rule.title;
-        
-        //Hides rule detail if rule has title
-        if !(cell?.titleLabel.text ?? "").isEmpty{
-            cell?.includeLabel.isHidden = true;
-            cell?.excludeLabel.isHidden = true;
-        }else{
-            //Shows rule detail if rule doesn't have title
-            cell?.includeLabel.isHidden = false;
-            cell?.excludeLabel.isHidden = false;
+        switch indexPath.section {
+        case 1:
+            let adsCell = tableView.dequeueReusableCell(withIdentifier: Cells.ads, for: indexPath) as? GADNativeTableViewCell;
+            adsCell?.rootViewController = self;
+            adsCell?.loadAds();
+            
+            cell = adsCell;
+            break;
+        default:
+            let ruleCell = tableView.dequeueReusableCell(withIdentifier: Cells.default, for: indexPath) as? SARecipientsTableViewCell;
+            let rule = self.rules[indexPath.row];
+            
+            // Configure the cell...
+            //Replaces empty rule title to default title
+            ruleCell?.titleLabel.text = (rule.title ?? "").isEmpty ? "Recipients Creation Rule".localized() : rule.title;
+            
+            //Hides rule detail if rule has title
+            if !(ruleCell?.titleLabel.text ?? "").isEmpty{
+                ruleCell?.includeLabel.isHidden = true;
+                ruleCell?.excludeLabel.isHidden = true;
+            }else{
+                //Shows rule detail if rule doesn't have title
+                ruleCell?.includeLabel.isHidden = false;
+                ruleCell?.excludeLabel.isHidden = false;
+            }
+            
+            //Settings the switch to activate
+            ruleCell?.enableSwitch.isOn = rule.enabled;
+            ruleCell?.enableSwitch.addTarget(self, action: #selector(onToggleRuleSwitch(control:)), for: .valueChanged);
+            
+            cell = ruleCell;
+            break;
         }
+        //GADNativeTableViewCell
         
-        //Settings the switch to activate
-        cell?.enableSwitch.isOn = rule.enabled;
-        cell?.enableSwitch.addTarget(self, action: #selector(onToggleRuleSwitch(control:)), for: .valueChanged);
 
         return cell!;
     }
@@ -359,12 +384,12 @@ extension SARecipientsTableViewController : UITableViewDataSource{
     // Override to support conditional editing of the table view.
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
-        return true
+        return indexPath.section == 0;
     }
 
     // Override to support editing the table view.
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
+        if editingStyle == .delete, indexPath.section == 0 {
             // Deletes the row from the data source
             let rule = self.rules[indexPath.row];
             self.dataController.removeRecipientsRule(rule: rule);
