@@ -47,6 +47,7 @@ extension SAModelController{
         
         rule.title = title;
         rule.enabled = true;
+        print("create new rule. object[\(rule)]");
         
         return rule;
     }

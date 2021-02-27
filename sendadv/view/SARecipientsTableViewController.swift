@@ -198,7 +198,7 @@ class SARecipientsTableViewController: UIViewController {
         hub.contentColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1);
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(noti:)), name: UIResponder.keyboardWillShowNotification, object: nil);
-        AppDelegate.sharedGADManager?.show(unit: .full, completion: { [weak self](unit, ads) in
+        AppDelegate.sharedGADManager?.show(unit: .full, completion: { [weak self](unit, ads, result) in
             guard let self = self else{
                 return;
             }
@@ -290,7 +290,7 @@ class SARecipientsTableViewController: UIViewController {
             }
         }
         
-        AppDelegate.sharedGADManager?.show(unit: .full, completion: { [weak self](unit, ads) in
+        AppDelegate.sharedGADManager?.show(unit: .full, completion: { [weak self](unit, ads, result) in
             self?.performSegue(withIdentifier: identifier, sender: sender);
         })
         
@@ -322,6 +322,8 @@ class SARecipientsTableViewController: UIViewController {
 extension SARecipientsTableViewController : UITableViewDataSource{
     func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
+        //        #if targetEnvironment(simulator)
+
         return 2;
     }
 

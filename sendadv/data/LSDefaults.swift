@@ -19,6 +19,7 @@ class LSDefaults{
         static let LastFullADShown = "LastFullADShown";
         static let LastShareShown = "LastShareShown";
         static let LastRewardShown = "LastRewardShown";
+        static let LastOpeningAdPrepared = "LastOpeningAdPrepared";
         
         static let LaunchCount = "LaunchCount";
     }
@@ -53,6 +54,17 @@ class LSDefaults{
         
         set(value){
             Defaults.set(value.timeIntervalSince1970, forKey: Keys.LastRewardShown);
+        }
+    }
+    
+    static var LastOpeningAdPrepared : Date{
+        get{
+            let seconds = Defaults.double(forKey: Keys.LastOpeningAdPrepared);
+            return Date.init(timeIntervalSince1970: seconds);
+        }
+        
+        set(value){
+            Defaults.set(value.timeIntervalSince1970, forKey: Keys.LastOpeningAdPrepared);
         }
     }
     

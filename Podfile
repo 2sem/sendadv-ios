@@ -7,7 +7,7 @@ target 'sendadv' do
   inhibit_all_warnings!
 
   # Pods for sendadv
-  pod 'Firebase/Core'
+  #pod 'Firebase/Core'
   pod 'Firebase/AdMob'
   pod 'MBProgressHUD'
   pod 'UITextView+Placeholder'

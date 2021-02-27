@@ -41,6 +41,10 @@ class SARuleTableViewController: UITableViewController {
         
         self.updateLabel(target: self.editingTarget);
         
+        guard !self.isMovingToParent else{
+            return;
+        }
+        
         // MARK: Begins databases transaction for rule
         self.dataController.beginTransaction(transactionName: TransactionNames.Rule);
     }
@@ -53,6 +57,7 @@ class SARuleTableViewController: UITableViewController {
         //Shows informations of rule to view
         self.titleTextField.text = self.rule?.title;
         
+        self.dataController.beginTransaction(transactionName: TransactionNames.Rule);
         if self.rule == nil{
             self.rule = self.dataController.createRecipientsRule(title: "");
         }
@@ -65,14 +70,16 @@ class SARuleTableViewController: UITableViewController {
     var originalTitle : String?;
     
     override func viewWillDisappear(_ animated: Bool) {
+        
         // MARK: Ends databases transaction for rule
-        self.dataController.endTransaction();
         
         //If user goes to back from this view controller not to go to another new view controller
         guard self.isMovingFromParent else{
             return;
         }
         
+        self.dataController.endTransaction();
+
         //Save if something is changed
         if needToSave{
             self.dataController.saveChanges();
@@ -215,7 +222,8 @@ class SARuleTableViewController: UITableViewController {
             return false;
         }
         
-        AppDelegate.sharedGADManager?.show(unit: .full, completion: { [weak self](unit, ads) in
+        AppDelegate.sharedGADManager?.show(unit: .full, completion: { [weak self](unit, ads, result) in
+            self?.dataController.endTransaction();
             self?.performSegue(withIdentifier: identifier, sender: sender);
         })
         
@@ -229,6 +237,8 @@ class SARuleTableViewController: UITableViewController {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         if let filterView = segue.destination as? SAFilterTableViewController{
+            //self.dataController.endTransaction();
+
             switch segue.identifier ?? ""{
                 case TargetNames.Job:
                     filterView.list = SAContactController.Default.loadJobTitles();

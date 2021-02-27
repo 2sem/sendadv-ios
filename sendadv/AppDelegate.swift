@@ -19,6 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ReviewManagerDelegate, GA
     var window: UIWindow?
     enum GADUnitName : String{
         case full = "FullAd"
+        case launch = "Launch"
     }
     static var sharedGADManager : GADManager<GADUnitName>?;
     var rewardAd : GADRewardManager?;
@@ -47,8 +48,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ReviewManagerDelegate, GA
                 adManager.delegate = self;
             #if DEBUG
                 adManager.prepare(interstitialUnit: .full, interval: 60.0);
+                adManager.prepare(openingUnit: .launch, isTest: true, interval: 60.0); //
             #else
                 adManager.prepare(interstitialUnit: .full, interval: 60.0);
+                adManager.prepare(openingUnit: .launch, interval: 60.0 * 5); //
             #endif
                 
                 adManager.canShowFirstTime = true;
@@ -95,6 +98,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ReviewManagerDelegate, GA
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        print("app become active");
+        #if DEBUG
+        let test = true;
+        #else
+        let test = false;
+        #endif
+        AppDelegate.sharedGADManager?.show(unit: .launch, isTest: test, completion: { (unit, ad, result) in
+            
+        })
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -126,7 +138,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ReviewManagerDelegate, GA
 }
 
 extension AppDelegate : GADManagerDelegate{
-    func GAD<GADUnitName>(manager: GADManager<GADUnitName>, lastShownTimeForUnit unit: GADUnitName) -> Date{
+    typealias E = GADUnitName
+    func GAD<E>(manager: GADManager<E>, lastPreparedTimeForUnit unit: E) -> Date{
+        let now = Date();
+  //        if RSDefaults.LastOpeningAdPrepared > now{
+  //            RSDefaults.LastOpeningAdPrepared = now;
+  //        }
+
+          return LSDefaults.LastOpeningAdPrepared;
+          //Calendar.current.component(<#T##component: Calendar.Component##Calendar.Component#>, from: <#T##Date#>)
+    }
+    
+    func GAD<E>(manager: GADManager<E>, updateLastPreparedTimeForUnit unit: E, preparedTime time: Date){
+        LSDefaults.LastOpeningAdPrepared = time;
+        
+        //RNInfoTableViewController.shared?.needAds = false;
+        //RNFavoriteTableViewController.shared?.needAds = false;
+    }
+    
+    func GAD<E>(manager: GADManager<E>, lastShownTimeForUnit unit: E) -> Date{
         let now = Date();
         if LSDefaults.LastFullADShown > now{
             LSDefaults.LastFullADShown = now;
@@ -136,7 +166,7 @@ extension AppDelegate : GADManagerDelegate{
         //Calendar.current.component(<#T##component: Calendar.Component##Calendar.Component#>, from: <#T##Date#>)
     }
     
-    func GAD<GADUnitName>(manager: GADManager<GADUnitName>, updatShownTimeForUnit unit: GADUnitName, showTime time: Date){
+    func GAD<E>(manager: GADManager<E>, updatShownTimeForUnit unit: E, showTime time: Date){
         LSDefaults.LastFullADShown = time;
         
         //RNInfoTableViewController.shared?.needAds = false;
