@@ -12,7 +12,7 @@ import LSExtensions
 import FirebaseCrashlytics
 import Material
 
-class MainViewController: UIViewController, GADBannerViewDelegate, GADRewardManagerDelegate {
+class MainViewController: UIViewController {
     
     var constraint_bottomBanner_Bottom : NSLayoutConstraint!;
     @IBOutlet weak var constraint_bottomBanner_Top: NSLayoutConstraint!
@@ -101,29 +101,6 @@ class MainViewController: UIViewController, GADBannerViewDelegate, GADRewardMana
         self.reviewButton?.isHidden = !visible;
     }
     
-    /// MARK: GADBannerViewDelegate
-    func adViewDidReceiveAd(_ bannerView: GADBannerView) {
-//        self.bannerView.layoutIfNeeded();
-        self.showBanner(visible: true);
-    }
-    
-    func adView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: GADRequestError) {
-        self.showBanner(visible: false);
-    }
-    
-    // MARK: GADRewardManagerDelegate
-    func GADRewardGetLastShowTime() -> Date {
-        return LSDefaults.LastRewardShown;
-    }
-    
-    func GADRewardUpdate(showTime: Date) {
-        LSDefaults.LastRewardShown = showTime;
-    }
-    
-    func GADRewardUserCompleted() {
-        self.showBanner(visible: false);
-    }
-    
     var keyboardEnabled = false;
     @objc func keyboardWillShow(noti: Notification){
         print("keyboard will show move view to upper -- \(noti.object.debugDescription)");
@@ -165,3 +142,28 @@ class MainViewController: UIViewController, GADBannerViewDelegate, GADRewardMana
     }
 }
 
+extension MainViewController: GADBannerViewDelegate{
+    func adViewDidReceiveAd(_ bannerView: GADBannerView) {
+//        self.bannerView.layoutIfNeeded();
+        self.showBanner(visible: true);
+    }
+    
+    func adView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: Error) {
+        self.showBanner(visible: false);
+    }
+}
+
+extension MainViewController: GADRewardManagerDelegate{
+    // MARK: GADRewardManagerDelegate
+    func GADRewardGetLastShowTime() -> Date {
+        return LSDefaults.LastRewardShown;
+    }
+    
+    func GADRewardUpdate(showTime: Date) {
+        LSDefaults.LastRewardShown = showTime;
+    }
+    
+    func GADRewardUserCompleted() {
+        self.showBanner(visible: false);
+    }
+}

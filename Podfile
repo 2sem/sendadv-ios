@@ -8,7 +8,7 @@ target 'sendadv' do
 
   # Pods for sendadv
   #pod 'Firebase/Core'
-  pod 'Firebase/AdMob'
+#  pod 'Firebase/AdMob'
   pod 'MBProgressHUD'
   pod 'UITextView+Placeholder'
   pod 'Material', '~> 2.16.4'

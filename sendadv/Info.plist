@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>ko_KR</string>
+	<string>en_US</string>
 	<key>CFBundleDisplayName</key>
 	<string>Send Multi SMS</string>
 	<key>CFBundleDocumentTypes</key>
@@ -53,7 +53,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>124</string>
+	<string>136</string>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-9684378399371172~3075360846</string>
 	<key>GADUnitIdentifiers</key>

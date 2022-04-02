@@ -40,7 +40,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ReviewManagerDelegate, GA
                 self.reviewManager?.delegate = self;
                 //self.reviewManager?.show(true);
                 
-                self.rewardAd = GADRewardManager(self.window!, unitId: GADInterstitial.loadUnitId(name: "RewardAd") ?? "", interval: 60.0 * 60.0 * 24); //
+                self.rewardAd = GADRewardManager(self.window!, unitId: GADInterstitialAd.loadUnitId(name: "RewardAd") ?? "", interval: 60.0 * 60.0 * 24); //
                 self.rewardAd?.delegate = self;
                 
                 let adManager = GADManager<GADUnitName>.init(self.window!);
