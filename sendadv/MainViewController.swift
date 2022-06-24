@@ -14,7 +14,8 @@ import Material
 
 class MainViewController: UIViewController {
     
-    var constraint_bottomBanner_Bottom : NSLayoutConstraint!;
+//    var constraint_bottomBanner_Bottom : NSLayoutConstraint!;
+    @IBOutlet weak var constraint_bottomBanner_Bottom: NSLayoutConstraint!
     @IBOutlet weak var constraint_bottomBanner_Top: NSLayoutConstraint!
     
     @IBOutlet weak var bannerView: GADBannerView!
@@ -23,12 +24,6 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if #available(iOS 11.0, *){
-            self.constraint_bottomBanner_Bottom = self.bannerView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor);
-        }else{
-            self.constraint_bottomBanner_Bottom = self.bannerView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor);
-        }
-        self.constraint_bottomBanner_Bottom.isActive = false;
         let req = GADRequest();
         //req.testDevices = ["5fb1f297b8eafe217348a756bdb2de56"];
         
@@ -44,7 +39,7 @@ class MainViewController: UIViewController {
         self.showBanner(visible: false);
         #else
         self.bannerView.isAutoloadEnabled = false;
-        //self.bannerView?.load(req);
+        self.bannerView?.load(req);
         //self.bannerView?.adUnitID = "ca-app-pub-9684378399371172/4552094040";
         #endif
     }
@@ -143,12 +138,12 @@ class MainViewController: UIViewController {
 }
 
 extension MainViewController: GADBannerViewDelegate{
-    func adViewDidReceiveAd(_ bannerView: GADBannerView) {
-//        self.bannerView.layoutIfNeeded();
+    func bannerViewDidReceiveAd(_ bannerView: GADBannerView) {
+        //        self.bannerView.layoutIfNeeded();
         self.showBanner(visible: true);
     }
     
-    func adView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: Error) {
+    func bannerView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: Error) {
         self.showBanner(visible: false);
     }
 }
