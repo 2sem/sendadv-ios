@@ -1,81 +1,84 @@
 PODS:
-  - Firebase/Analytics (8.14.0):
+  - Firebase/Analytics (9.2.0):
     - Firebase/Core
-  - Firebase/Core (8.14.0):
+  - Firebase/Core (9.2.0):
     - Firebase/CoreOnly
-    - FirebaseAnalytics (~> 8.14.0)
-  - Firebase/CoreOnly (8.14.0):
-    - FirebaseCore (= 8.14.0)
-  - Firebase/Crashlytics (8.14.0):
+    - FirebaseAnalytics (~> 9.2.0)
+  - Firebase/CoreOnly (9.2.0):
+    - FirebaseCore (= 9.2.0)
+  - Firebase/Crashlytics (9.2.0):
     - Firebase/CoreOnly
-    - FirebaseCrashlytics (~> 8.14.0)
-  - FirebaseAnalytics (8.14.0):
-    - FirebaseAnalytics/AdIdSupport (= 8.14.0)
-    - FirebaseCore (~> 8.0)
-    - FirebaseInstallations (~> 8.0)
+    - FirebaseCrashlytics (~> 9.2.0)
+  - FirebaseAnalytics (9.2.0):
+    - FirebaseAnalytics/AdIdSupport (= 9.2.0)
+    - FirebaseCore (~> 9.0)
+    - FirebaseInstallations (~> 9.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.7)
     - GoogleUtilities/MethodSwizzler (~> 7.7)
     - GoogleUtilities/Network (~> 7.7)
     - "GoogleUtilities/NSData+zlib (~> 7.7)"
-    - nanopb (~> 2.30908.0)
-  - FirebaseAnalytics/AdIdSupport (8.14.0):
-    - FirebaseCore (~> 8.0)
-    - FirebaseInstallations (~> 8.0)
-    - GoogleAppMeasurement (= 8.14.0)
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+  - FirebaseAnalytics/AdIdSupport (9.2.0):
+    - FirebaseCore (~> 9.0)
+    - FirebaseInstallations (~> 9.0)
+    - GoogleAppMeasurement (= 9.2.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.7)
     - GoogleUtilities/MethodSwizzler (~> 7.7)
     - GoogleUtilities/Network (~> 7.7)
     - "GoogleUtilities/NSData+zlib (~> 7.7)"
-    - nanopb (~> 2.30908.0)
-  - FirebaseCore (8.14.0):
-    - FirebaseCoreDiagnostics (~> 8.0)
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+  - FirebaseCore (9.2.0):
+    - FirebaseCoreDiagnostics (~> 9.0)
+    - FirebaseCoreInternal (~> 9.0)
     - GoogleUtilities/Environment (~> 7.7)
     - GoogleUtilities/Logger (~> 7.7)
-  - FirebaseCoreDiagnostics (8.14.0):
-    - GoogleDataTransport (~> 9.1)
+  - FirebaseCoreDiagnostics (9.2.0):
+    - GoogleDataTransport (< 10.0.0, >= 9.1.4)
     - GoogleUtilities/Environment (~> 7.7)
     - GoogleUtilities/Logger (~> 7.7)
-    - nanopb (~> 2.30908.0)
-  - FirebaseCrashlytics (8.14.0):
-    - FirebaseCore (~> 8.0)
-    - FirebaseInstallations (~> 8.0)
-    - GoogleDataTransport (~> 9.1)
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+  - FirebaseCoreInternal (9.2.0):
+    - "GoogleUtilities/NSData+zlib (~> 7.7)"
+  - FirebaseCrashlytics (9.2.0):
+    - FirebaseCore (~> 9.0)
+    - FirebaseInstallations (~> 9.0)
+    - GoogleDataTransport (< 10.0.0, >= 9.1.4)
     - GoogleUtilities/Environment (~> 7.7)
-    - nanopb (~> 2.30908.0)
-    - PromisesObjC (< 3.0, >= 1.2)
-  - FirebaseInstallations (8.14.0):
-    - FirebaseCore (~> 8.0)
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+    - PromisesObjC (~> 2.1)
+  - FirebaseInstallations (9.2.0):
+    - FirebaseCore (~> 9.0)
     - GoogleUtilities/Environment (~> 7.7)
     - GoogleUtilities/UserDefaults (~> 7.7)
-    - PromisesObjC (< 3.0, >= 1.2)
+    - PromisesObjC (~> 2.1)
   - GADManager (1.2.24):
     - Google-Mobile-Ads-SDK
-  - Google-Mobile-Ads-SDK (9.2.0):
-    - GoogleAppMeasurement (< 9.0, >= 7.0)
+  - Google-Mobile-Ads-SDK (9.6.0):
+    - GoogleAppMeasurement (< 10.0, >= 7.0)
     - GoogleUserMessagingPlatform (>= 1.1)
-  - GoogleAppMeasurement (8.14.0):
-    - GoogleAppMeasurement/AdIdSupport (= 8.14.0)
+  - GoogleAppMeasurement (9.2.0):
+    - GoogleAppMeasurement/AdIdSupport (= 9.2.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.7)
     - GoogleUtilities/MethodSwizzler (~> 7.7)
     - GoogleUtilities/Network (~> 7.7)
     - "GoogleUtilities/NSData+zlib (~> 7.7)"
-    - nanopb (~> 2.30908.0)
-  - GoogleAppMeasurement/AdIdSupport (8.14.0):
-    - GoogleAppMeasurement/WithoutAdIdSupport (= 8.14.0)
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+  - GoogleAppMeasurement/AdIdSupport (9.2.0):
+    - GoogleAppMeasurement/WithoutAdIdSupport (= 9.2.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.7)
     - GoogleUtilities/MethodSwizzler (~> 7.7)
     - GoogleUtilities/Network (~> 7.7)
     - "GoogleUtilities/NSData+zlib (~> 7.7)"
-    - nanopb (~> 2.30908.0)
-  - GoogleAppMeasurement/WithoutAdIdSupport (8.14.0):
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+  - GoogleAppMeasurement/WithoutAdIdSupport (9.2.0):
     - GoogleUtilities/AppDelegateSwizzler (~> 7.7)
     - GoogleUtilities/MethodSwizzler (~> 7.7)
     - GoogleUtilities/Network (~> 7.7)
     - "GoogleUtilities/NSData+zlib (~> 7.7)"
-    - nanopb (~> 2.30908.0)
-  - GoogleDataTransport (9.1.2):
-    - GoogleUtilities/Environment (~> 7.2)
-    - nanopb (~> 2.30908.0)
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+  - GoogleDataTransport (9.1.4):
+    - GoogleUtilities/Environment (~> 7.7)
+    - nanopb (< 2.30910.0, >= 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
   - GoogleUserMessagingPlatform (2.0.0)
   - GoogleUtilities/AppDelegateSwizzler (7.7.0):
@@ -116,29 +119,29 @@ PODS:
   - KakaoOpenSDK/KakaoPlusFriend (1.23.10):
     - KakaoOpenSDK/KakaoCommon
   - LSExtensions (0.1.18)
-  - Material (2.16.4):
-    - Material/Core (= 2.16.4)
-  - Material/Core (2.16.4):
-    - Motion (~> 1.4.3)
+  - Material (3.1.8):
+    - Material/Core (= 3.1.8)
+  - Material/Core (3.1.8):
+    - Motion (~> 3.1.1)
   - MBProgressHUD (1.2.0)
-  - Motion (1.4.3):
-    - Motion/Core (= 1.4.3)
-  - Motion/Core (1.4.3)
-  - nanopb (2.30908.0):
-    - nanopb/decode (= 2.30908.0)
-    - nanopb/encode (= 2.30908.0)
-  - nanopb/decode (2.30908.0)
-  - nanopb/encode (2.30908.0)
-  - PromisesObjC (2.0.0)
+  - Motion (3.1.3):
+    - Motion/Core (= 3.1.3)
+  - Motion/Core (3.1.3)
+  - nanopb (2.30909.0):
+    - nanopb/decode (= 2.30909.0)
+    - nanopb/encode (= 2.30909.0)
+  - nanopb/decode (2.30909.0)
+  - nanopb/encode (2.30909.0)
+  - PromisesObjC (2.1.1)
   - "UITextView+Placeholder (1.4.0)"
 
 DEPENDENCIES:
   - Firebase/Analytics
   - Firebase/Crashlytics
-  - GADManager (from `~/Projects/leesam/pods/GADManager/src/GADManager`)
+  - GADManager
   - KakaoOpenSDK
-  - LSExtensions (from `~/Projects/leesam/pods/LSExtensions/src/LSExtensions`)
-  - Material (~> 2.16.4)
+  - LSExtensions
+  - Material
   - MBProgressHUD
   - "UITextView+Placeholder"
 
@@ -148,14 +151,17 @@ SPEC REPOS:
     - FirebaseAnalytics
     - FirebaseCore
     - FirebaseCoreDiagnostics
+    - FirebaseCoreInternal
     - FirebaseCrashlytics
     - FirebaseInstallations
+    - GADManager
     - Google-Mobile-Ads-SDK
     - GoogleAppMeasurement
     - GoogleDataTransport
     - GoogleUserMessagingPlatform
     - GoogleUtilities
     - KakaoOpenSDK
+    - LSExtensions
     - Material
     - MBProgressHUD
     - Motion
@@ -163,34 +169,29 @@ SPEC REPOS:
     - PromisesObjC
     - "UITextView+Placeholder"
 
-EXTERNAL SOURCES:
-  GADManager:
-    :path: "~/Projects/leesam/pods/GADManager/src/GADManager"
-  LSExtensions:
-    :path: "~/Projects/leesam/pods/LSExtensions/src/LSExtensions"
-
 SPEC CHECKSUMS:
-  Firebase: 7e8fe528c161b9271d365217a74c16aaf834578e
-  FirebaseAnalytics: 2fc3876e2eb347673ad2f35e249ae7b15d6c88f5
-  FirebaseCore: b84a44ee7ba999e0f9f76d198a9c7f60a797b848
-  FirebaseCoreDiagnostics: fd0c8490f34287229c1d6c103d3a55f81ec85712
-  FirebaseCrashlytics: 079ef36f5c4b7161188928faec40fa276ebefd84
-  FirebaseInstallations: 7d1d967a307c12f1aadd76844fc321cef699b1ce
+  Firebase: 4ba896cb8e5105d4b9e247e1c1b6222b548df55a
+  FirebaseAnalytics: af5a03a8dff7648c7b8486f6a78b1368e0268dd3
+  FirebaseCore: 0e27f2a15d8f7b7ef11e7d93e23b1cbab55d748c
+  FirebaseCoreDiagnostics: ad3f6c68b7c5b63b7cf15b0785d7137f05f32268
+  FirebaseCoreInternal: cb966328b6985dbd6f535e1461291063e1c4a00f
+  FirebaseCrashlytics: 9fff819edb2bfc9d3eff612225b207d41945a935
+  FirebaseInstallations: 21186f0ca7849f90f4a3219fa31a5eca2e30f113
   GADManager: c9f11906c6416df1dec58c7ec96d544d5899e3e5
-  Google-Mobile-Ads-SDK: 0badb67224b63f7947428eb07039ba37e47ba405
-  GoogleAppMeasurement: 71156240babd3cc6ced03e0d54816f01a880c730
-  GoogleDataTransport: 629c20a4d363167143f30ea78320d5a7eb8bd940
+  Google-Mobile-Ads-SDK: bdf13d37aa77e368510687b5305d4972b4f9e9c7
+  GoogleAppMeasurement: 7a33224321f975d58c166657260526775d9c6b1a
+  GoogleDataTransport: 5fffe35792f8b96ec8d6775f5eccd83c998d5a3b
   GoogleUserMessagingPlatform: ab890ce5f6620f293a21b6bdd82e416a2c73aeca
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
   KakaoOpenSDK: 4ca85d4c8a50dd42d4713981dd249af9080d7563
   LSExtensions: ef29edd723b1edbaa9d011c8b88bd7f7baed794f
-  Material: 4ed78690b09ffd148b5ffab6b4367fb1d8da1cd3
+  Material: a2a3f400a3b549d53ef89e56c58c4535b29db387
   MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
-  Motion: 153ba49692997888556c7a95207278a8b1f8be95
-  nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
-  PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
+  Motion: cf1e060e489f6661126374d5c60dbd2ed991605c
+  nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
+  PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
   "UITextView+Placeholder": d7b0c400921f66523f3a85d74f774512e14f6502
 
-PODFILE CHECKSUM: 4d219ca6d47d631c809f75ede03a6d51caf6f030
+PODFILE CHECKSUM: 4db9276a95294342ecf7f037da8a591786bb26cf
 
 COCOAPODS: 1.11.3
