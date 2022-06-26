@@ -99,7 +99,7 @@ jobs:
           
       - name: Build/Upload app
         env:
-          PACKAGE_NAME: 'com.credif.talktrans'
+          PACKAGE_NAME: 'com.credif.sendadv'
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
           IOS_CERT_PWD: '${{ secrets.IOS_CERT_P12_PWD }}'
           IOS_KEYCHAIN: ${{ secrets.IOS_KEYCHAIN }}
