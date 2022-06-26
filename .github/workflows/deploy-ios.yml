@@ -97,19 +97,6 @@ jobs:
           base64 --decode $API_KEY_PATH_BASE64 -o $IOS_KEY_PATH
           rm $API_KEY_PATH_BASE64
           
-      - name: Import Secret Key
-        run: |
-          echo ${{ secrets.GPG_PRIVATE_KEY }} | base64 -d -o $GPG_PRIVATE_KEY_PATH
-          gpg --batch --no-tty --yes --import $GPG_PRIVATE_KEY_PATH
-          
-      - name: Install Encrypter
-        run: |
-            brew install git-secret
-      
-      - name: Decrypt Secret Data
-        run: |
-          git secret reveal -p '${{ secrets.GPG_PRIVATE_PWD }}'
-          
       - name: Build/Upload app
         env:
           PACKAGE_NAME: 'com.credif.talktrans'
