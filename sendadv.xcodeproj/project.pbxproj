@@ -730,8 +730,7 @@
 				2C59F88B21719F1100216F33 /* ko */,
 			);
 			name = InfoPlist.strings;
-			path = /Users/LYJ/Projects/leesam/sendadv/src/sendadv/sendadv;
-			sourceTree = "<absolute>";
+			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
 
