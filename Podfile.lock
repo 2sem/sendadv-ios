@@ -1,4 +1,5 @@
 PODS:
+  - Alamofire (5.7.1)
   - Firebase/Analytics (10.11.0):
     - Firebase/Core
   - Firebase/Core (10.11.0):
@@ -105,24 +106,18 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (7.11.1):
     - GoogleUtilities/Logger
-  - KakaoOpenSDK (1.23.10):
-    - KakaoOpenSDK/KakaoCommon (= 1.23.10)
-    - KakaoOpenSDK/KakaoLink (= 1.23.10)
-    - KakaoOpenSDK/KakaoMessageTemplate (= 1.23.10)
-    - KakaoOpenSDK/KakaoNavi (= 1.23.10)
-    - KakaoOpenSDK/KakaoOpenSDK (= 1.23.10)
-    - KakaoOpenSDK/KakaoPlusFriend (= 1.23.10)
-  - KakaoOpenSDK/KakaoCommon (1.23.10)
-  - KakaoOpenSDK/KakaoLink (1.23.10):
-    - KakaoOpenSDK/KakaoCommon
-    - KakaoOpenSDK/KakaoMessageTemplate
-  - KakaoOpenSDK/KakaoMessageTemplate (1.23.10)
-  - KakaoOpenSDK/KakaoNavi (1.23.10):
-    - KakaoOpenSDK/KakaoCommon
-  - KakaoOpenSDK/KakaoOpenSDK (1.23.10):
-    - KakaoOpenSDK/KakaoMessageTemplate
-  - KakaoOpenSDK/KakaoPlusFriend (1.23.10):
-    - KakaoOpenSDK/KakaoCommon
+  - KakaoSDKCommon (2.15.0):
+    - KakaoSDKCommon/Common (= 2.15.0)
+    - KakaoSDKCommon/Network (= 2.15.0)
+  - KakaoSDKCommon/Common (2.15.0)
+  - KakaoSDKCommon/Network (2.15.0):
+    - Alamofire (~> 5.1)
+    - KakaoSDKCommon/Common (= 2.15.0)
+  - KakaoSDKShare (2.15.0):
+    - KakaoSDKCommon (= 2.15.0)
+    - KakaoSDKTemplate (= 2.15.0)
+  - KakaoSDKTemplate (2.15.0):
+    - KakaoSDKCommon/Common (= 2.15.0)
   - LSExtensions (0.1.20)
   - Material (3.1.8):
     - Material/Core (= 3.1.8)
@@ -146,7 +141,7 @@ DEPENDENCIES:
   - Firebase/Analytics
   - Firebase/Crashlytics
   - GADManager
-  - KakaoOpenSDK
+  - KakaoSDKShare
   - LSExtensions
   - Material
   - MBProgressHUD
@@ -154,6 +149,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - Alamofire
     - Firebase
     - FirebaseAnalytics
     - FirebaseCore
@@ -168,7 +164,9 @@ SPEC REPOS:
     - GoogleDataTransport
     - GoogleUserMessagingPlatform
     - GoogleUtilities
-    - KakaoOpenSDK
+    - KakaoSDKCommon
+    - KakaoSDKShare
+    - KakaoSDKTemplate
     - LSExtensions
     - Material
     - MBProgressHUD
@@ -179,6 +177,7 @@ SPEC REPOS:
     - "UITextView+Placeholder"
 
 SPEC CHECKSUMS:
+  Alamofire: 0123a34370cb170936ae79a8df46cc62b2edeb88
   Firebase: 31d9575c124839fb5abc0db6d39511cc1dab1b85
   FirebaseAnalytics: 6c6bf99e8854475bf1fa342028841be8ecd236da
   FirebaseCore: 62fd4d549f5e3f3bd52b7998721c5fa0557fb355
@@ -193,7 +192,9 @@ SPEC CHECKSUMS:
   GoogleDataTransport: f0308f5905a745f94fb91fea9c6cbaf3831cb1bd
   GoogleUserMessagingPlatform: 5f8b30daf181805317b6b985bb51c1ff3beca054
   GoogleUtilities: 9aa0ad5a7bc171f8bae016300bfcfa3fb8425749
-  KakaoOpenSDK: 4ca85d4c8a50dd42d4713981dd249af9080d7563
+  KakaoSDKCommon: 89d863b7f34398e6fb93a0acb28a204908551a39
+  KakaoSDKShare: f9a7dc7baa8ad9eb7b6b6a3b99802407ab3c81a2
+  KakaoSDKTemplate: c9cbc64b0248c7a33c211a56dada7e38c1210751
   LSExtensions: 6149f08a8970a5b38d05450b5eef570c6564fd8d
   Material: a2a3f400a3b549d53ef89e56c58c4535b29db387
   MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
@@ -203,6 +204,6 @@ SPEC CHECKSUMS:
   PromisesSwift: cf9eb58666a43bbe007302226e510b16c1e10959
   "UITextView+Placeholder": d7b0c400921f66523f3a85d74f774512e14f6502
 
-PODFILE CHECKSUM: 37ff11997f5451ed0e77260d83f22bad33c24480
+PODFILE CHECKSUM: 43fa2c1670613e8c923eae5eb5996b33d7171597
 
 COCOAPODS: 1.12.1
