@@ -28,6 +28,8 @@ target 'sendadv' do
           config.build_settings['EXPANDED_CODE_SIGN_IDENTITY'] = ''
           config.build_settings['CODE_SIGNING_REQUIRED'] = 'NO'
           config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
+          
+          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
         end
       end
   end
