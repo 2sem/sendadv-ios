@@ -72,6 +72,8 @@
 		<key>RewardAd</key>
 		<string>ca-app-pub-9684378399371172/9518758146</string>
 	</dict>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>Itunes App Id</key>
 	<string>1195349333</string>
 	<key>KAKAO_APP_KEY</key>
