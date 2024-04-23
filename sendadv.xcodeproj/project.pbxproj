@@ -521,7 +521,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		2C0E03B6217192C400C21EAC /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 8;
 			files = (
 			);
 			inputFileListPaths = (
@@ -532,7 +532,7 @@
 			);
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
 			shellScript = "${PODS_ROOT}/FirebaseCrashlytics/run -gsp \"${PROJECT_DIR}/sendadv/GoogleService-Info.plist\"\n";
 		};
