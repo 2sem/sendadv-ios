@@ -47,6 +47,7 @@
 		2CB716C024A8511400FCD187 /* GADNativeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CB716BF24A8511400FCD187 /* GADNativeTableViewCell.swift */; };
 		2CC016A328682D05005E42C2 /* Fastfile in Resources */ = {isa = PBXBuildFile; fileRef = 2CC016A228682D05005E42C2 /* Fastfile */; };
 		2CC016A628682D2B005E42C2 /* .github in Resources */ = {isa = PBXBuildFile; fileRef = 2CC016A528682D2A005E42C2 /* .github */; };
+		2CCC0AE42BD7D18A00D931C4 /* LSExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 2CCC0AE32BD7D18A00D931C4 /* LSExtensions */; };
 		43B483EADEBF7B46BDABA6BD /* Pods_sendadvUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8446075FC04F69EB7A1C7CCD /* Pods_sendadvUITests.framework */; };
 		A2ECBBD8BEA112EEE935ED02 /* Pods_sendadv.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC8069F977C0064B1AD7FBAE /* Pods_sendadv.framework */; };
 /* End PBXBuildFile section */
@@ -154,6 +155,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A2ECBBD8BEA112EEE935ED02 /* Pods_sendadv.framework in Frameworks */,
+				2CCC0AE42BD7D18A00D931C4 /* LSExtensions in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -383,6 +385,9 @@
 			dependencies = (
 			);
 			name = sendadv;
+			packageProductDependencies = (
+				2CCC0AE32BD7D18A00D931C4 /* LSExtensions */,
+			);
 			productName = sendadv;
 			productReference = 2C1443CB214516B1005D343B /* sendadv.app */;
 			productType = "com.apple.product-type.application";
@@ -460,6 +465,9 @@
 				ko,
 			);
 			mainGroup = 2C1443C2214516B1005D343B;
+			packageReferences = (
+				2CCC0AE22BD7D18A00D931C4 /* XCRemoteSwiftPackageReference "LSExtensions" */,
+			);
 			productRefGroup = 2C1443CC214516B1005D343B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -1040,6 +1048,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		2CCC0AE22BD7D18A00D931C4 /* XCRemoteSwiftPackageReference "LSExtensions" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/2sem/LSExtensions";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.22;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		2CCC0AE32BD7D18A00D931C4 /* LSExtensions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2CCC0AE22BD7D18A00D931C4 /* XCRemoteSwiftPackageReference "LSExtensions" */;
+			productName = LSExtensions;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		2C1443D5214516B1005D343B /* sendadv.xcdatamodeld */ = {

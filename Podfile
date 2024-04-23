@@ -13,7 +13,7 @@ target 'sendadv' do
   pod 'UITextView+Placeholder'
   pod 'Material'#, '~> 2.16.4'
   pod 'KakaoSDKShare'
-  pod 'LSExtensions'#, :path => '~/Projects/leesam/pods/LSExtensions/src/LSExtensions'
+  #pod 'LSExtensions'#, :path => '~/Projects/leesam/pods/LSExtensions/src/LSExtensions'
   pod 'GADManager'#, :path => '~/Projects/leesam/pods/GADManager/src/GADManager'
   
   # Add the pod for Firebase Crashlytics
