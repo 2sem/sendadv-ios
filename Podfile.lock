@@ -128,7 +128,6 @@ PODS:
     - KakaoSDKTemplate (= 2.22.1)
   - KakaoSDKTemplate (2.22.1):
     - KakaoSDKCommon/Common (= 2.22.1)
-  - LSExtensions (0.1.22)
   - Material (3.1.8):
     - Material/Core (= 3.1.8)
   - Material/Core (3.1.8):
@@ -152,7 +151,6 @@ DEPENDENCIES:
   - Firebase/Crashlytics
   - GADManager
   - KakaoSDKShare
-  - LSExtensions
   - Material
   - MBProgressHUD
   - "UITextView+Placeholder"
@@ -178,7 +176,6 @@ SPEC REPOS:
     - KakaoSDKCommon
     - KakaoSDKShare
     - KakaoSDKTemplate
-    - LSExtensions
     - Material
     - MBProgressHUD
     - Motion
@@ -207,7 +204,6 @@ SPEC CHECKSUMS:
   KakaoSDKCommon: 596436353cec3865eb1475ecea1a7259d881c5ac
   KakaoSDKShare: 7974de774f696cca1439e128178293d880064d96
   KakaoSDKTemplate: 0fc1cfad5b099def077be91aa9a535e77fd76bb4
-  LSExtensions: 1dd9722a0c0dfe67dd7dc3450c0244b7e2dfff0e
   Material: a2a3f400a3b549d53ef89e56c58c4535b29db387
   MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
   Motion: cf1e060e489f6661126374d5c60dbd2ed991605c
@@ -216,6 +212,6 @@ SPEC CHECKSUMS:
   PromisesSwift: 9d77319bbe72ebf6d872900551f7eeba9bce2851
   "UITextView+Placeholder": d7b0c400921f66523f3a85d74f774512e14f6502
 
-PODFILE CHECKSUM: 5545baf5b98cf20fa6da90cf660fabcc7ce1122e
+PODFILE CHECKSUM: 7597161c4e65dd4693ff42cdfcffd439e950501c
 
 COCOAPODS: 1.15.2
