@@ -88,6 +88,8 @@
 	<true/>
 	<key>NSContactsUsageDescription</key>
 	<string>수신자 목록 생성을 위해 연락처 접근 권한이 필요합니다</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>This app uses user information to provide suitable Ads and to report crash</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

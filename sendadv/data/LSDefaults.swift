@@ -22,6 +22,9 @@ class LSDefaults{
         static let LastOpeningAdPrepared = "LastOpeningAdPrepared";
         
         static let LaunchCount = "LaunchCount";
+        
+        static let AdsShownCount = "AdsShownCount";
+        static let AdsTrackingRequested = "AdsTrackingRequested";
     }
     
     static var LastFullADShown : Date{
@@ -83,3 +86,60 @@ class LSDefaults{
         }
     }
 }
+
+extension LSDefaults{
+    static var AdsShownCount : Int{
+        get{
+            return Defaults.integer(forKey: Keys.AdsShownCount);
+        }
+        
+        set{
+            Defaults.set(newValue, forKey: Keys.AdsShownCount);
+        }
+    }
+    
+    static func increateAdsShownCount(){
+        guard AdsShownCount < 3 else {
+            return
+        }
+        
+        AdsShownCount += 1;
+        debugPrint("Ads Shown Count[\(AdsShownCount)]")
+    }
+    
+    static var AdsTrackingRequested : Bool{
+        get{
+            return Defaults.bool(forKey: Keys.AdsTrackingRequested);
+        }
+        
+        set{
+            Defaults.set(newValue, forKey: Keys.AdsTrackingRequested);
+        }
+    }
+    
+    static func requestAppTrackingIfNeed() -> Bool{
+        guard !AdsTrackingRequested else{
+            debugPrint(#function, "Already requested")
+            return false;
+        }
+        
+        guard LaunchCount > 1 else{
+//            AdsShownCount += 1;
+            debugPrint(#function, "GAD requestPermission", "LaunchCount", LaunchCount)
+            return false;
+        }
+        
+        guard #available(iOS 14.0, *) else{
+            debugPrint(#function, "OS Under 14")
+            return false;
+        }
+        
+        
+        AppDelegate.sharedGADManager?.requestPermission(completion: { (result) in
+            AdsTrackingRequested = true;
+        })
+        
+        return true;
+    }
+}
+
