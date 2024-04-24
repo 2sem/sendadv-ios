@@ -25,6 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ReviewManagerDelegate, GA
     var rewardAd : GADRewardManager?;
     var reviewManager : ReviewManager?;
     let reviewInterval = 30;
+    var appPermissionRequested = false
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
@@ -58,7 +59,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ReviewManagerDelegate, GA
         }
         
         LSDefaults.increaseLaunchCount();
-
         
         return true;
     }
@@ -99,11 +99,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ReviewManagerDelegate, GA
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         print("app become active");
+        
+        defer {
+            LSDefaults.increaseLaunchCount();
+        }
+        
+        guard LSDefaults.LaunchCount % reviewInterval > 0 else{
+            if #available(iOS 10.3, *) {
+                SKStoreReviewController.requestReview()
+            }else{
+                self.reviewManager?.show();
+            }
+            return;
+        }
+        
         #if DEBUG
         let test = true;
         #else
         let test = false;
         #endif
+        
+        appPermissionRequested = appPermissionRequested || LSDefaults.requestAppTrackingIfNeed()
+        guard appPermissionRequested else{
+            debugPrint("App doesn't allow launching Ads. appPermissionRequested[\(appPermissionRequested)]")
+            return;
+        }
+        
         AppDelegate.sharedGADManager?.show(unit: .launch, isTest: test, completion: { (unit, ad, result) in
             
         })
