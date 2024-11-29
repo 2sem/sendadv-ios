@@ -15,6 +15,12 @@ import LSExtensions
 import FirebaseCrashlytics
 
 class SARecipientsTableViewController: UIViewController {
+    
+    enum Section: Int, CaseIterable {
+        case ads = 0
+        case rule
+    }
+    
     class Cells{
         static let `default` = "cell";
         static let ads = "ads";
@@ -324,28 +330,39 @@ extension SARecipientsTableViewController : UITableViewDataSource{
         // #warning Incomplete implementation, return the number of sections
         //        #if targetEnvironment(simulator)
 
-        return 2;
+        return Section.allCases.count
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         var value = self.rules.count;
         
-        if section == 0{
-            self.emptyStackView?.isHidden = value > 0;
-            self.sendButton?.isHidden = value <= 0;
-        }else{
-            value = 1;
+        guard let section = Section(rawValue: section) else {
+            return value
+        }
+        
+        switch section {
+            case .ads:
+                return 1
+            case .rule:
+                self.emptyStackView?.isHidden = value > 0;
+                self.sendButton?.isHidden = value <= 0;
+                break
         }
         
         return value;
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell : UITableViewCell!;
+        var cell : UITableViewCell! = nil;
         
-        switch indexPath.section {
-        case 1:
+        guard let section = Section(rawValue: indexPath.section) else {
+            assertionFailure("Invalid Table Section")
+            return cell!
+        }
+        
+        switch section {
+        case .ads:
             let adsCell = tableView.dequeueReusableCell(withIdentifier: Cells.ads, for: indexPath) as? GADNativeTableViewCell;
             adsCell?.rootViewController = self;
             adsCell?.loadAds();
@@ -385,13 +402,20 @@ extension SARecipientsTableViewController : UITableViewDataSource{
 
     // Override to support conditional editing of the table view.
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return indexPath.section == 0;
+        guard let section = Section(rawValue: indexPath.section) else {
+            return false
+        }
+        
+        return section == .rule;
     }
 
     // Override to support editing the table view.
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete, indexPath.section == 0 {
+        guard let section = Section(rawValue: indexPath.section) else {
+            return
+        }
+        
+        if editingStyle == .delete, section == .rule {
             // Deletes the row from the data source
             let rule = self.rules[indexPath.row];
             self.dataController.removeRecipientsRule(rule: rule);
@@ -407,8 +431,12 @@ extension SARecipientsTableViewController : UITableViewDataSource{
 
 extension SARecipientsTableViewController : UITableViewDelegate{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let section = Section(rawValue: indexPath.section) else {
+            return
+        }
+        
         print("\(#function)");
-        guard indexPath.section == 1 else{
+        guard section == .ads else{
             return;
         }
         
