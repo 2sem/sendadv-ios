@@ -43,7 +43,7 @@ class SARecipientsTableViewController: UIViewController {
         //If count of rule was changed
         if rules.count > self.rules.count{
             //Considers new rule is appended
-            let indexPath = IndexPath(row: rules.count - 1, section: 0);
+            let indexPath = IndexPath(row: rules.count - 1, section: Section.rule.rawValue);
             self.rules = rules;
             //show new rule
             self.tableView.insertRows(at: [indexPath], with: .automatic);
