@@ -18,33 +18,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  install-pods:
-    runs-on: macos-13
-    steps:
-      - name: Checkout project
-        uses: actions/checkout@v4
-
-      - name: Create pods cache key
-        id: pods-cache-hash
-        run: echo "hash=${{ runner.os }}-pods-cache-hash-${{ hashFiles('./Podfile.lock') }}" >> $GITHUB_OUTPUT
-
-      - name: Cache pods
-        uses: actions/cache@v4
-        id: cache-pods
-        with:
-          path: ./Pods
-          key: ${{ steps.pods-cache-hash.outputs.hash }}
-
-      - name: Install CocoaPods
-        if: steps.cache-pods.outputs.cache-hit == ''
-        run: |
-          pod install
-
-    outputs:
-      pods-cache-key: ${{ steps.pods-cache-hash.outputs.hash }}
-      
   deploy:
-    needs: install-pods
     runs-on: macos-15
     env:
         PRODUCT_NAME: 'sendadv'
@@ -59,16 +33,6 @@ jobs:
       - name: Select Xcode
         run: |
           sudo xcode-select -s /Applications/Xcode_16.2.app
-
-      - name: Load cached pods
-        uses: actions/cache@v4
-        with:
-          path: ./Pods
-          key: ${{ needs.install-pods.outputs.pods-cache-key }}
-
-      - name: Install CocoaPods
-        run: |
-          pod install
 
       - name: Import signing certificate
         env:
