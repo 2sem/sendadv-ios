@@ -6,7 +6,7 @@ let project = Project(
     packages: [.remote(url: "https://github.com/SDWebImage/SDWebImage.git",
                        requirement: .upToNextMajor(from: "5.1.0")),
                .remote(url: "https://github.com/firebase/firebase-ios-sdk",
-                       requirement: .upToNextMajor(from: "10.4.0")),
+                       requirement: .upToNextMajor(from: "11.8.1")),
     ],
     targets: [
         .target(
