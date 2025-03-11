@@ -34,6 +34,22 @@ jobs:
         run: |
           sudo xcode-select -s /Applications/Xcode_16.2.app
 
+      - name: Install Mise
+        run: |
+            brew install mise
+  
+      - name: Install Tuist
+        run: |
+          mise install tuist
+
+      - name: Install Dependencies
+        run: |
+          mise x -- tuist install
+
+      - name: Build Tuist
+        run: |
+            mise x -- tuist build
+
       - name: Import signing certificate
         env:
           IOS_CERT_BASE64: $IOS_CERT_PATH.base64
