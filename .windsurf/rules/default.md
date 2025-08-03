@@ -44,3 +44,7 @@ trigger: always_on
 - Unit Test 작성 권장
 - UI Test 필요시 작성
 - 테스트 가능한 코드 구조 설계
+
+## 이름
+- ViewController에 해당하는 전체 View는 Screen으로 끝냄
+- Screen내 하위 View는 View로 끝냄
