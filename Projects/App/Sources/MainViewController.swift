@@ -18,13 +18,13 @@ class MainViewController: UIViewController {
     @IBOutlet weak var constraint_bottomBanner_Bottom: NSLayoutConstraint!
     @IBOutlet weak var constraint_bottomBanner_Top: NSLayoutConstraint!
     
-    @IBOutlet weak var bannerView: GADBannerView!
+    @IBOutlet weak var bannerView: BannerView!
     @IBOutlet weak var reviewButton: IconButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let req = GADRequest();
+        let req = Request();
         //req.testDevices = ["5fb1f297b8eafe217348a756bdb2de56"];
         
         //self.bottomBannerView.delegate = self;
@@ -137,13 +137,13 @@ class MainViewController: UIViewController {
     }
 }
 
-extension MainViewController: GADBannerViewDelegate{
-    func bannerViewDidReceiveAd(_ bannerView: GADBannerView) {
+extension MainViewController: BannerViewDelegate{
+    func bannerViewDidReceiveAd(_ bannerView: BannerView) {
         //        self.bannerView.layoutIfNeeded();
         self.showBanner(visible: true);
     }
     
-    func bannerView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: Error) {
+    func bannerView(_ bannerView: BannerView, didFailToReceiveAdWithError error: Error) {
         self.showBanner(visible: false);
     }
 }

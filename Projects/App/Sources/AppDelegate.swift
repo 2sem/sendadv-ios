@@ -32,7 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ReviewManagerDelegate, GA
         //GADMobileAds.configure(withApplicationID: "ca-app-pub-9684378399371172~3075360846");
         FirebaseApp.configure();
         
-        GADMobileAds.sharedInstance().start { [weak self](status) in
+        MobileAds.shared.start { [weak self](status) in
             guard let self = self else{
                 return;
             }
@@ -41,7 +41,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ReviewManagerDelegate, GA
                 self.reviewManager?.delegate = self;
                 //self.reviewManager?.show(true);
                 
-                self.rewardAd = GADRewardManager(self.window!, unitId: GADInterstitialAd.loadUnitId(name: "RewardAd") ?? "", interval: 60.0 * 60.0 * 24); //
+            self.rewardAd = GADRewardManager(self.window!, unitId: InterstitialAd.loadUnitId(name: "RewardAd") ?? "", interval: 60.0 * 60.0 * 24); //
                 self.rewardAd?.delegate = self;
                 
                 let adManager = GADManager<GADUnitName>.init(self.window!);
