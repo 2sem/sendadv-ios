@@ -17,9 +17,9 @@ class GADNativeTableViewCell: UITableViewCell {
     #endif
     
     var rootViewController : UIViewController?;
-    var gadLoader : GADAdLoader?;
+    var gadLoader : AdLoader?;
     
-    @IBOutlet weak var nativeAdView: GADNativeAdView!
+    @IBOutlet weak var nativeAdView: NativeAdView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -34,13 +34,13 @@ class GADNativeTableViewCell: UITableViewCell {
     }
     
     func loadAds(){
-        self.gadLoader = GADAdLoader(adUnitID: self.gadUnit,
+        self.gadLoader = AdLoader(adUnitID: self.gadUnit,
                                      rootViewController: self.rootViewController,
                                      adTypes: [ .native ],
                                      options: []);
         self.gadLoader?.delegate = self;
         
-        self.gadLoader?.load(GADRequest());
+        self.gadLoader?.load(Request());
     }
     
     func loadDeveloper(){
@@ -71,8 +71,8 @@ class GADNativeTableViewCell: UITableViewCell {
     }
 }
 
-extension GADNativeTableViewCell : GADNativeAdLoaderDelegate{
-    func adLoader(_ adLoader: GADAdLoader, didReceive nativeAd: GADNativeAd) {
+extension GADNativeTableViewCell : NativeAdLoaderDelegate{
+    func adLoader(_ adLoader: AdLoader, didReceive nativeAd: NativeAd) {
         print("\(#function)");
         self.nativeAdView?.nativeAd = nativeAd;
         
@@ -99,7 +99,7 @@ extension GADNativeTableViewCell : GADNativeAdLoaderDelegate{
         self.nativeAdView?.isUserInteractionEnabled = true;
     }
     
-    func adLoader(_ adLoader: GADAdLoader, didFailToReceiveAdWithError error: Error) {
+    func adLoader(_ adLoader: AdLoader, didFailToReceiveAdWithError error: Error) {
         print("\(#function) \(error)");
         self.loadDeveloper();
     }

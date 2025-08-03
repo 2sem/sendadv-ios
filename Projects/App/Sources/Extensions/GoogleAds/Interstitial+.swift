@@ -12,7 +12,7 @@ import GoogleMobileAds
 /**
  GoogleADUnitID/{name}
  */
-extension GADInterstitialAd {
+extension InterstitialAd {
     static func loadUnitId(name : String) -> String?{
         var value : String?;
         guard let unitList = Bundle.main.infoDictionary?["GoogleADUnitID"] as? [String : String] else{
@@ -37,7 +37,7 @@ extension GADInterstitialAd {
     func isReady(for viewController: UIViewController? = nil) -> Bool{
         do{
             if let viewController = viewController ?? UIApplication.shared.windows.first?.rootViewController{
-                try self.canPresent(fromRootViewController: viewController);
+                try self.canPresent(from: viewController);
                 return true;
             }
             return false
