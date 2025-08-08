@@ -13,7 +13,6 @@ import Firebase
 import StoreKit
 import GADManager
 
-@UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, ReviewManagerDelegate, GADRewardManagerDelegate {
 
     var window: UIWindow?

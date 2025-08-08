@@ -127,9 +127,10 @@ class SARecipientsTableViewController: UIViewController {
         }
         
         //Gets phone numbers from contracts filtered by rules
-        let phones : [String]! = SAContactController.Default.loadContacts(rules: self.rules.filter({ (rule) -> Bool in
-            return rule.enabled;
-        }));
+        let phones : [String]! = []
+//        let phones : [String]! = SAContactController.Default.loadContacts(rules: self.rules.filter({ (rule) -> Bool in
+//            return rule.enabled;
+//        }));
         
         guard phones != nil else{
             self.openSettingsOrCancel(title: "Failed to access contacts".localized(), msg: "Permission required to access contacts for creating recipients list", style: .alert, titleForOK: "OK".localized(), titleForSettings: "Setting".localized());

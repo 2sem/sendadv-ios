@@ -5,4 +5,23 @@
 //  Created by 영준 이 on 8/3/25.
 //
 
-import Foundation
+import SwiftUI
+import SwiftData
+
+struct ContentView: View {
+	var body: some View {
+		ZStack {
+			Color.background
+				.ignoresSafeArea()
+				
+			NavigationStack {
+                SARecipientRuleListScreen()
+			}
+        }
+	}
+}
+
+#Preview {
+    ContentView()
+        .modelContainer(for: [RecipientsRule.self, FilterRule.self], inMemory: true)
+}

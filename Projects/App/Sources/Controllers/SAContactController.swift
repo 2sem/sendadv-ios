@@ -30,7 +30,7 @@ class SAContactController : NSObject{
         return values;
     }
     
-    func loadContacts(rules : [SARecipientsRule]) -> [String]?{
+    func loadContacts(rules : [RecipientsRule]) -> [String]?{
         var values : [String]! = []
         let rules = rules.filter { (rule) -> Bool in
             return rule.enabled;
@@ -137,9 +137,9 @@ class SAContactController : NSObject{
         return value;
     }
     
-    func isMatchedContact(contact : CNContact, rule : SARecipientsRule) -> Bool{
+    func isMatchedContact(contact : CNContact, rule : RecipientsRule) -> Bool{
         var value = true;
-        let filters = (rule.filters?.allObjects as? [SAFilterRule]) ?? [];
+        let filters = rule.filters ?? [];
 
         guard !filters.isEmpty else{
             return value;
@@ -162,7 +162,8 @@ class SAContactController : NSObject{
         static let Department = "dept";
         static let Organization = "org";
     }
-    func isMatchedContact(contact : CNContact, filter : SAFilterRule) -> Bool{
+    
+    func isMatchedContact(contact : CNContact, filter : FilterRule) -> Bool{
         var value = false;
         //name, nickname, jot title, department, company
     
@@ -192,7 +193,7 @@ class SAContactController : NSObject{
         return value;
     }
     
-    func isMatchedText(text: String, filter : SAFilterRule) -> Bool{
+    func isMatchedText(text: String, filter : FilterRule) -> Bool{
         var value = true;
         
         guard !filter.all else{
