@@ -1,6 +1,10 @@
 ---
 trigger: always_on
+description: Your are
 ---
+
+Your are partner senior iOS developer.
+respond in korean.
 
 # iOS 프로젝트 개발 규칙
 
@@ -11,12 +15,17 @@ trigger: always_on
 - 클래스명과 구조체명은 PascalCase 사용
 - 상수는 let 키워드 사용, 변수는 var 키워드 사용
 
+## Platform
+- iOS만 지원
+- 최소 지원 iOS 18 이상
+
 ## 아키텍처 패턴
 - MVVM 패턴 준수
 - 싱글톤 패턴은 필요한 경우에만 사용
 
 ## UI 개발
 - SwiftUI 기반 개발
+- Navigation은 NavigationView 대신 NavigationStack 사용
 - 하드코딩된 값 대신 상수 사용
 - 접근성(Accessibility) 고려
 

@@ -34,6 +34,27 @@ class SAModelController : NSObject{
         }
     }
     
+    static var contextForPreview : NSManagedObjectContext {
+        guard let model_path = Bundle.main.url(forResource: SAModelController.FileName, withExtension: "momd") else{
+            fatalError("Can not find Model File from Bundle");
+        }
+        
+        //load model from model file
+        guard let model = NSManagedObjectModel(contentsOf: model_path) else {
+            fatalError("Can not load Model from File");
+        }
+        
+        let context = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+        context.persistentStoreCoordinator = {
+            let coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
+            try? coordinator.addPersistentStore(ofType: NSInMemoryStoreType, configurationName: nil, at: nil, options: nil)
+            
+            return coordinator
+        }()
+        
+        return context
+    }
+    
     var context : NSManagedObjectContext;
     internal override init(){
         //lock on
