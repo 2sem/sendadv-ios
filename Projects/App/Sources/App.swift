@@ -18,8 +18,10 @@ struct SendadvApp: App {
 	
 	var body: some Scene {
 		WindowGroup {
-			ContentView()
-				.modelContainer(for: [RecipientsRule.self, FilterRule.self], inMemory: false)
+            ZStack{
+                ContentView()
+                    .modelContainer(for: [RecipientsRule.self, FilterRule.self], inMemory: false)
+            }
 		}
 	}
 }
