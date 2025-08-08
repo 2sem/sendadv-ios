@@ -78,7 +78,19 @@ let project = Project(
                     "NSAppTransportSecurity": [
                         "NSAllowsArbitraryLoads": true
                     ],
-                    "KAKAO_APP_KEY": "c7ebdb09664b7c7bd73eeab5ccd48589"
+                    "KAKAO_APP_KEY": "c7ebdb09664b7c7bd73eeab5ccd48589",
+                    "UIApplicationSceneManifest": [
+                        "UIApplicationSupportsMultipleScenes": false,
+                        "UISceneConfigurations": [
+                            "UIWindowSceneSessionRoleApplication": [
+                                [
+                                    "UISceneConfigurationName": "Default Configuration",
+                                    "UISceneDelegateClassName": "$(PRODUCT_MODULE_NAME).SceneDelegate"
+                                    // storyboard를 사용하지 않으므로 "UISceneStoryboardFile" 생략
+                                ]
+                            ]
+                        ]
+                    ]
                 ]
             ),
             sources: ["Sources/**"],

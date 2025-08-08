@@ -222,7 +222,7 @@ class SARuleTableViewController: UITableViewController {
             return false;
         }
         
-        AppDelegate.sharedGADManager?.show(unit: .full, completion: { [weak self](unit, ads, result) in
+        SceneDelegate.sharedGADManager?.show(unit: .full, completion: { [weak self](unit, ads, result) in
             self?.dataController.endTransaction();
             self?.performSegue(withIdentifier: identifier, sender: sender);
         })
