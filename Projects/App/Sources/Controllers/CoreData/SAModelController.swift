@@ -15,10 +15,28 @@ class SAModelController : NSObject{
         static let SAFilterRule = "SAFilterRule";
         static let SAMessage = "SAMessage";
     }
+    
+    // 마이그레이션을 위한 엔티티 속성 매핑
+    struct EntityAttributes {
+        struct SARecipientsRule {
+            static let title = "title"
+            static let enabled = "enabled"
+            static let filters = "filters"
+        }
+        
+        struct SAFilterRule {
+            static let target = "target"
+            static let includes = "includes"
+            static let excludes = "excludes"
+            static let all = "all"
+            static let owner = "owner"
+        }
+    }
+    
     static let FileName = "sendadv";
     
     internal static let dispatchGroupForInit = DispatchGroup();
-    //    var SingletonQ = DispatchQueue(label: "RSModelController.Default");
+    //    var SingletonQ = DispatchQueue(label: "SAModelController.Default");
     private static var _instance = SAModelController();
     static var Default : SAModelController{
         get{
@@ -58,8 +76,8 @@ class SAModelController : NSObject{
     var context : NSManagedObjectContext;
     internal override init(){
         //lock on
-        //        objc_sync_enter(RSModelController.self)
-        //        print("begin init RSModelController - \(RSModelController.self) - \(Thread.current)");
+        //        objc_sync_enter(SAModelController.self)
+        //        print("begin init SAModelController - \(SAModelController.self) - \(Thread.current)");
         //get path for model file
         //xcdatamodel => momd??
         guard let model_path = Bundle.main.url(forResource: SAModelController.FileName, withExtension: "momd") else{
@@ -79,9 +97,9 @@ class SAModelController : NSObject{
         //set store controller??
         self.context.persistentStoreCoordinator = psc;
         //lazy load??
-        //        var queue = DispatchQueue(label: "RSModelController.init", qos: .background, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil);
+        //        var queue = DispatchQueue(label: "SAModelController.init", qos: .background, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil);
         DispatchQueue.global(qos: .background).async(group: SAModelController.dispatchGroupForInit) {
-            print("begin init RSModelController");
+            print("begin init SAModelController");
             //        DispatchQueue.main.async{
             let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask);
             
@@ -99,9 +117,9 @@ class SAModelController : NSObject{
             }
             
             //lock off
-            //            objc_sync_exit(RSModelController.self);
-            //RSModelController.dispatchGroupForInit.leave();
-            print("end init RSModelController");
+            //            objc_sync_exit(SAModelController.self);
+            //SAModelController.dispatchGroupForInit.leave();
+            print("end init SAModelController");
         }
     }
     

@@ -1,24 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11759" systemVersion="15F34" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23788.4" systemVersion="24F74" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="SAFilterRule" representedClassName="SAFilterRule" syncable="YES" codeGenerationType="class">
-        <attribute name="all" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="excludes" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="includes" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="target" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="owner" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SARecipientsRule" inverseName="filters" inverseEntity="SARecipientsRule" syncable="YES"/>
+        <attribute name="all" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="excludes" optional="YES" attributeType="String"/>
+        <attribute name="includes" optional="YES" attributeType="String"/>
+        <attribute name="target" optional="YES" attributeType="String"/>
+        <relationship name="owner" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="SARecipientsRule" inverseName="filters" inverseEntity="SARecipientsRule"/>
     </entity>
     <entity name="SAMessage" representedClassName="SAMessage" syncable="YES" codeGenerationType="class">
-        <attribute name="msg" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="msg" optional="YES" attributeType="String"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
     </entity>
     <entity name="SARecipientsRule" representedClassName="SARecipientsRule" syncable="YES" codeGenerationType="class">
-        <attribute name="enabled" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="filters" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SAFilterRule" inverseName="owner" inverseEntity="SAFilterRule" syncable="YES"/>
+        <attribute name="enabled" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <relationship name="filters" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SAFilterRule" inverseName="owner" inverseEntity="SAFilterRule"/>
     </entity>
-    <elements>
-        <element name="SAFilterRule" positionX="-36" positionY="18" width="128" height="120"/>
-        <element name="SAMessage" positionX="-54" positionY="-9" width="128" height="75"/>
-        <element name="SARecipientsRule" positionX="-63" positionY="-18" width="128" height="90"/>
-    </elements>
 </model>
