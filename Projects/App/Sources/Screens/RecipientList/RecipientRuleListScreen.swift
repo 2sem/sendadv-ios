@@ -10,7 +10,7 @@ import MessageUI
 import Contacts
 import SwiftData
 
-struct SARecipientRuleListScreen: View {
+struct RecipientRuleListScreen: View {
     @Environment(\.modelContext) private var modelContext
     // 순서(order) 기준 정렬
     @Query(sort: \RecipientsRule.title) private var rules: [RecipientsRule]
@@ -185,7 +185,7 @@ struct SARecipientRuleListScreen: View {
     container.mainContext.insert(rule3)
     
     return NavigationStack {
-        SARecipientRuleListScreen()
+        RecipientRuleListScreen()
     }
     .modelContainer(container)
 }
