@@ -22,7 +22,7 @@ struct SendadvApp: App {
 			ZStack {
 				// 메인 화면 (루트)
 				NavigationStack {
-					SARecipientRuleListScreen()
+					RecipientRuleListScreen()
 				}
 				.modelContainer(for: [RecipientsRule.self, FilterRule.self], inMemory: false)
 //				.opacity(isSplashDone ? 0 : 1)

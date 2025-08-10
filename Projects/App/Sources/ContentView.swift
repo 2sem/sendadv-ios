@@ -15,7 +15,7 @@ struct ContentView: View {
 				.ignoresSafeArea()
 				
 			NavigationStack {
-                SARecipientRuleListScreen()
+                RecipientRuleListScreen()
 			}
         }
 	}
