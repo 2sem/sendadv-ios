@@ -99,7 +99,7 @@ struct SARecipientRuleListScreen: View {
 		.toolbar {
 			ToolbarItem(placement: .navigationBarLeading) {
 				if !rules.isEmpty {
-                    Button(isEditing ? "편집" : "취소") {
+                    Button(isEditing ? "취소" : "편집") {
                         isEditing.toggle()
                     }.tint(Color.accent)
 				}
