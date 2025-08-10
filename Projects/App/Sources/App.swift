@@ -15,26 +15,24 @@ import GADManager
 @main
 struct SendadvApp: App {
 	@UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    @State private var showSplash = true
+	@State private var isSplashDone = false
 
 	var body: some Scene {
 		WindowGroup {
-            ZStack {
-                ContentView()
-                    .modelContainer(for: [RecipientsRule.self, FilterRule.self], inMemory: false)
-                    .opacity(showSplash ? 0 : 1)
-                if showSplash {
-                    SplashScreen()
-                        .transition(.opacity)
-                        .onAppear {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                withAnimation {
-                                    showSplash = false
-                                }
-                            }
-                        }
-                }
-            }
+			ZStack {
+				// 메인 화면 (루트)
+				NavigationStack {
+					SARecipientRuleListScreen()
+				}
+				.modelContainer(for: [RecipientsRule.self, FilterRule.self], inMemory: false)
+//				.opacity(isSplashDone ? 0 : 1)
+				
+				// 스플래시 오버레이
+				if !isSplashDone {
+					SplashScreen(isDone: $isSplashDone)
+						.transition(.opacity)
+				}
+			}
 		}
 	}
 }

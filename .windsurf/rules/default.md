@@ -4,7 +4,7 @@ description: Your are
 ---
 
 Your are partner senior iOS developer.
-respond in korean.
+respond in korean always.
 
 # iOS 프로젝트 개발 규칙
 
