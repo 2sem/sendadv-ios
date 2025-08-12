@@ -1,0 +1,65 @@
+//
+//  RecipientFilterListScreenModel.swift
+//  App
+//
+//  Created by 영준 이 on 8/6/25.
+//
+
+import SwiftUI
+import SwiftData
+
+@Observable
+class RuleDetailScreenModel {
+	var rule: RecipientsRule?
+	var title: String = ""
+	
+	init(rule: RecipientsRule?) {
+		self.rule = rule
+		self.title = rule?.title ?? ""
+	}
+	
+    func save(using context: ModelContext) {
+        try? context.save()
+	}
+	
+	func getFilterText(for target: String) -> String {
+		guard let rule = rule,
+			  let filters = rule.filters else {
+			return "All".localized()
+		}
+		
+		let filter = filters.first { $0.target == target }
+		
+		if filter == nil || filter?.all == true {
+			return "All".localized()
+		}
+		
+		guard let includes = filter?.includes else {
+			return "All".localized()
+		}
+		
+		let keywords = includes.components(separatedBy: ",").filter { !$0.isEmpty }
+		
+		if keywords.isEmpty {
+			return "All".localized()
+		}
+		
+		if keywords.count == 1 {
+			return keywords[0]
+		}
+		
+		return "\(keywords[0]) and \(keywords.count - 1) others".localized()
+	}
+	
+	func getJobFilterText() -> String {
+		return getFilterText(for: "job")
+	}
+	
+	func getDepartmentFilterText() -> String {
+		return getFilterText(for: "dept")
+	}
+	
+	func getOrganizationFilterText() -> String {
+		return getFilterText(for: "org")
+	}
+}
