@@ -107,7 +107,13 @@ struct RecipientRuleListScreen: View {
 			
 			ToolbarItem(placement: .navigationBarTrailing) {
 				Button("추가") {
-					// 새 규칙 추가 로직
+					// 새 규칙 생성
+					let newRule = RecipientsRule(title: "새 규칙", enabled: true)
+					modelContext.insert(newRule)
+					try? modelContext.save()
+					
+					// 새 규칙 편집 화면으로 이동
+					selectedRule = newRule
                 }.tint(Color.accent)
 			}
 		}
@@ -132,8 +138,8 @@ struct RecipientRuleListScreen: View {
 		} message: {
 			Text("연락처에 접근할 권한이 필요합니다.")
 		}
-		.sheet(item: $selectedRule) { rule in
-			RuleEditView(rule: rule)
+		.navigationDestination(item: $selectedRule) { rule in
+			RuleDetailScreen(rule: rule)
 		}
 	}
 	
