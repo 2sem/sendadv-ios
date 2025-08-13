@@ -23,5 +23,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .modelContainer(for: [RecipientsRule.self, FilterRule.self], inMemory: true)
+        .modelContainer(for: [RecipientsRule.self, RecipientsFilter.self], inMemory: true)
 }

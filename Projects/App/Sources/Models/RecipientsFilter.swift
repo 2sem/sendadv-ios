@@ -8,7 +8,7 @@
 import SwiftData
 
 @Model
-final class FilterRule: Identifiable {
+final class RecipientsFilter: Identifiable {
     var id: PersistentIdentifier { persistentModelID }
     var target: String?
     var includes: String?
