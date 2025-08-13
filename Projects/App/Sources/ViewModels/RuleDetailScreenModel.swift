@@ -62,4 +62,21 @@ class RuleDetailScreenModel {
 	func getOrganizationFilterText() -> String {
 		return getFilterText(for: "org")
 	}
+	
+	func getOrCreateFilter(for target: String) -> RecipientsFilter {
+		guard let rule = rule else {
+			let filter = RecipientsFilter(target: target, includes: nil, excludes: nil, all: true)
+			return filter
+		}
+		
+		// Try to find existing filter
+		if let existingFilter = rule.filters?.first(where: { $0.target == target }) {
+			return existingFilter
+		}
+		
+		// Create new filter if not found
+		let newFilter = RecipientsFilter(target: target, includes: nil, excludes: nil, all: true)
+		rule.filters?.append(newFilter)
+		return newFilter
+	}
 }

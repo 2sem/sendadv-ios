@@ -14,9 +14,7 @@ struct RuleDetailScreen: View {
 	@Environment(\.dismiss) private var dismiss
 	
 	@State private var viewModel: RuleDetailScreenModel
-	@State private var showingJobFilter = false
-	@State private var showingDepartmentFilter = false
-	@State private var showingOrganizationFilter = false
+	@State private var selectedFilter: RecipientsFilter?
 	
 	init(rule: RecipientsRule?) {
 		_viewModel = State(initialValue: RuleDetailScreenModel(rule: rule))
@@ -48,7 +46,7 @@ struct RuleDetailScreen: View {
 						subtitle: viewModel.getJobFilterText(),
 						icon: "person.2.fill"
 					) {
-						showingJobFilter = true
+						selectedFilter = viewModel.getOrCreateFilter(for: "job")
 					}
 					
 					FilterRowView(
@@ -56,7 +54,7 @@ struct RuleDetailScreen: View {
 						subtitle: viewModel.getDepartmentFilterText(),
 						icon: "building.2.fill"
 					) {
-						showingDepartmentFilter = true
+						selectedFilter = viewModel.getOrCreateFilter(for: "dept")
 					}
 					
 					FilterRowView(
@@ -64,7 +62,7 @@ struct RuleDetailScreen: View {
 						subtitle: viewModel.getOrganizationFilterText(),
 						icon: "building.fill"
 					) {
-						showingOrganizationFilter = true
+						selectedFilter = viewModel.getOrCreateFilter(for: "org")
 					}
 				}
 				.padding(.horizontal, 20)
@@ -83,27 +81,19 @@ struct RuleDetailScreen: View {
 				.tint(.accent)
 			}
 		}
-//		.navigationDestination(isPresented: $showingJobFilter) {
-//			FilterSelectionScreen(
-//				rule: viewModel.rule,
-//				target: "job",
-//				title: "직책 규칙 설정"
-//			)
-//		}
-//		.navigationDestination(isPresented: $showingDepartmentFilter) {
-//			FilterSelectionScreen(
-//				rule: viewModel.rule,
-//				target: "dept",
-//				title: "부서 규칙 설정"
-//			)
-//		}
-//		.navigationDestination(isPresented: $showingOrganizationFilter) {
-//			FilterSelectionScreen(
-//				rule: viewModel.rule,
-//				target: "org",
-//				title: "조직 규칙 설정"
-//			)
-//		}
+		.navigationDestination(item: $selectedFilter) { filter in
+//			let title: String
+//			switch filter.target {
+//			case "job": title = "직책 필터"
+//			case "dept": title = "부서 필터"
+//			case "org": title = "조직 필터"
+//			default: title = "필터"
+//			}
+			
+            let filterViewModel = RuleFilterScreenModel(filter: filter)
+            
+            RuleFilterScreen(viewModel: filterViewModel)
+		}
 	}
 }
 

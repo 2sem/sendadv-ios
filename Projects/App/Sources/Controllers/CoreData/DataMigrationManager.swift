@@ -139,7 +139,7 @@ class DataMigrationManager: ObservableObject {
     
     private func convertAndSaveToSwiftData(recipientsRules: [NSManagedObject], filterRules: [NSManagedObject]) async throws {
         // ModelContainer 가져오기
-        guard let modelContainer = try? ModelContainer(for: RecipientsRule.self, FilterRule.self) else {
+        guard let modelContainer = try? ModelContainer(for: RecipientsRule.self, RecipientsFilter.self) else {
             throw MigrationError.modelContainerCreationFailed
         }
         
@@ -160,7 +160,7 @@ class DataMigrationManager: ObservableObject {
         
         // FilterRule 변환 및 관계 설정
         for coreDataFilter in filterRules {
-            let swiftDataFilter = FilterRule(
+            let swiftDataFilter = RecipientsFilter(
                 target: coreDataFilter.value(forKey: SAModelController.EntityAttributes.SAFilterRule.target) as? String,
                 includes: coreDataFilter.value(forKey: SAModelController.EntityAttributes.SAFilterRule.includes) as? String,
                 excludes: coreDataFilter.value(forKey: SAModelController.EntityAttributes.SAFilterRule.excludes) as? String,

@@ -163,7 +163,7 @@ class SAContactController : NSObject{
         static let Organization = "org";
     }
     
-    func isMatchedContact(contact : CNContact, filter : FilterRule) -> Bool{
+    func isMatchedContact(contact : CNContact, filter : RecipientsFilter) -> Bool{
         var value = false;
         //name, nickname, jot title, department, company
     
@@ -193,7 +193,7 @@ class SAContactController : NSObject{
         return value;
     }
     
-    func isMatchedText(text: String, filter : FilterRule) -> Bool{
+    func isMatchedText(text: String, filter : RecipientsFilter) -> Bool{
         var value = true;
         
         guard !filter.all else{
