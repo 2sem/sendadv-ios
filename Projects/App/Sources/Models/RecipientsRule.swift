@@ -13,7 +13,7 @@ final class RecipientsRule: Identifiable {
 	var id: PersistentIdentifier { persistentModelID }
 	var title: String?
 	var enabled: Bool
-	@Relationship(deleteRule: .cascade) var filters: [RecipientsFilter]?
+    @Relationship(deleteRule: .cascade) var filters: [RecipientsFilter]?
 	@Attribute var order: Int
 
 	init(title: String? = nil, enabled: Bool = true, order: Int? = nil) {
