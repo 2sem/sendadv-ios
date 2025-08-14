@@ -96,24 +96,25 @@ class DataMigrationManager: ObservableObject {
         currentStep = "필터 규칙 마이그레이션 중..."
         migrationProgress = 0.5
         
-        let filterRules = try await fetchCoreDataFilterRules()
+//        let filterRules = try await fetchCoreDataFilterRules()
         
         // 3. Swift Data로 변환 및 저장
         currentStep = "Swift Data로 변환 중..."
         migrationProgress = 0.8
         
-        try await convertAndSaveToSwiftData(recipientsRules: recipientsRules, filterRules: filterRules)
+        try await convertAndSaveToSwiftData(recipientsRules: recipientsRules)
         
         migrationProgress = 1.0
     }
     
-    private func fetchCoreDataRecipientsRules() async throws -> [NSManagedObject] {
+    private func fetchCoreDataRecipientsRules() async throws -> [SARecipientsRule] {
         return try await withCheckedThrowingContinuation { continuation in
             coreDataController.context.perform {
-                let fetchRequest: NSFetchRequest<NSManagedObject> = NSFetchRequest(entityName: SAModelController.EntityNames.SARecipientsRule)
+                let fetchRequest: NSFetchRequest<SARecipientsRule> = NSFetchRequest(entityName: SAModelController.EntityNames.SARecipientsRule)
                 
                 do {
                     let rules = try self.coreDataController.context.fetch(fetchRequest)
+                    
                     continuation.resume(returning: rules)
                 } catch {
                     continuation.resume(throwing: error)
@@ -137,52 +138,69 @@ class DataMigrationManager: ObservableObject {
         }
     }
     
-    private func convertAndSaveToSwiftData(recipientsRules: [NSManagedObject], filterRules: [NSManagedObject]) async throws {
+    private func convertAndSaveToSwiftData(recipientsRules: [SARecipientsRule]) async throws {
+        // Update progress
+        await MainActor.run {
+            currentStep = "Recipients 데이터 변환 중..."
+            migrationProgress = 0.5
+        }
+        
         // ModelContainer 가져오기
         guard let modelContainer = try? ModelContainer(for: RecipientsRule.self, RecipientsFilter.self) else {
             throw MigrationError.modelContainerCreationFailed
         }
         
         let context = modelContainer.mainContext
+        let modelController = SAModelController()
+        let totalRules = recipientsRules.count
         
         // RecipientsRule 변환
         var swiftDataRecipientsRules: [RecipientsRule] = []
+        
         for (index, coreDataRule) in recipientsRules.enumerated() {
-            let swiftDataRule = RecipientsRule(
-                title: coreDataRule.value(forKey: SAModelController.EntityAttributes.SARecipientsRule.title) as? String,
-                enabled: coreDataRule.value(forKey: SAModelController.EntityAttributes.SARecipientsRule.enabled) as? Bool ?? true,
-                order: index
-            )
+            // Update progress for each rule
+            let progress = 0.5 + (Double(index) / Double(totalRules * 2))
+            await MainActor.run {
+                migrationProgress = min(progress, 0.9) // Cap at 90% to leave room for cleanup
+            }
+            
+            // Create new RecipientsRule using the new initializer
+            let swiftDataRule = RecipientsRule(from: coreDataRule)
+            
+            // Migrate filters for this rule
+            if let coreDataFilters = coreDataRule.filters as? Set<SAFilterRule> {
+                for coreDataFilter in coreDataFilters {
+                    let filter = RecipientsFilter(from: coreDataFilter)
+                    swiftDataRule.filters?.append(filter)
+                    context.insert(filter)
+                }
+            }
             
             swiftDataRecipientsRules.append(swiftDataRule)
             context.insert(swiftDataRule)
-        }
-        
-        // FilterRule 변환 및 관계 설정
-        for coreDataFilter in filterRules {
-            let swiftDataFilter = RecipientsFilter(
-                target: coreDataFilter.value(forKey: SAModelController.EntityAttributes.SAFilterRule.target) as? String,
-                includes: coreDataFilter.value(forKey: SAModelController.EntityAttributes.SAFilterRule.includes) as? String,
-                excludes: coreDataFilter.value(forKey: SAModelController.EntityAttributes.SAFilterRule.excludes) as? String,
-                all: coreDataFilter.value(forKey: SAModelController.EntityAttributes.SAFilterRule.all) as? Bool ?? false
-            )
             
-            // 관계 설정
-            if let owner = coreDataFilter.value(forKey: SAModelController.EntityAttributes.SAFilterRule.owner) as? NSManagedObject,
-               let ownerIndex = recipientsRules.firstIndex(of: owner),
-               ownerIndex < swiftDataRecipientsRules.count {
-                swiftDataFilter.owner = swiftDataRecipientsRules[ownerIndex]
-                swiftDataRecipientsRules[ownerIndex].filters?.append(swiftDataFilter)
+            // Periodically save to prevent memory issues with large datasets
+            if index % 10 == 0 {
+                try? context.save()
             }
-            
-            context.insert(swiftDataFilter)
         }
         
-        // 저장
+        // Final save
         try context.save()
         
-        // 마이그레이션 완료 후 Core Data 파일 정리
+        // Update progress before cleanup
+        await MainActor.run {
+            currentStep = "마이그레이션 완료 중..."
+            migrationProgress = 0.95
+        }
+        
+        // Clean up Core Data files
         await cleanupCoreDataFiles()
+        
+        // Mark migration as complete
+        await MainActor.run {
+            migrationProgress = 1.0
+        }
     }
     
     private func cleanupCoreDataFiles() async {
