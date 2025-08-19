@@ -90,7 +90,8 @@ let project = Project(
                                 ]
                             ]
                         ]
-                    ]
+                    ],
+                    "NSContactsUsageDescription": "This app requires access to your contacts to create a recipient list for sending messages.",
                 ]
             ),
             sources: ["Sources/**"],
