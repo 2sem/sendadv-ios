@@ -149,7 +149,7 @@ struct RecipientRuleListScreen: View {
 	}
 	
 	private func deleteRule(_ rule: RecipientsRule) {
-//		viewModel.deleteRule(rule)
+		viewModel.deleteRule(rule, modelContext: modelContext)
 //		modelContext.delete(rule)
 //		try? modelContext.save()
 	}

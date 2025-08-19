@@ -40,7 +40,7 @@ struct RuleFilterScreen: View {
             }
         }
         .listStyle(PlainListStyle())
-        .navigationTitle(viewModel.filter.target ?? "")
+        .navigationTitle(viewModel.title)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -64,6 +64,10 @@ class RuleFilterScreenModel {
     var selectedItems: Set<String> = []
     
     private(set) var filter: RecipientsFilter
+    
+    var title: String {
+        FilterTarget(rawValue: filter.target ?? "")?.displayName.localized() ?? ""
+    }
     
     init(filter: RecipientsFilter) {
         self.filter = filter
