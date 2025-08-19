@@ -65,7 +65,7 @@ class RuleDetailScreenModel {
 	
 	func getOrCreateFilter(for target: String) -> RecipientsFilter {
 		guard let rule = rule else {
-			let filter = RecipientsFilter(target: target, includes: nil, excludes: nil, all: true)
+            let filter = RecipientsFilter(target: .init(rawValue: target), includes: nil, excludes: nil, all: true)
 			return filter
 		}
 		
@@ -75,7 +75,7 @@ class RuleDetailScreenModel {
 		}
 		
 		// Create new filter if not found
-		let newFilter = RecipientsFilter(target: target, includes: nil, excludes: nil, all: true)
+		let newFilter = RecipientsFilter(target: .init(rawValue: target), includes: nil, excludes: nil, all: true)
 		rule.filters?.append(newFilter)
 		return newFilter
 	}
