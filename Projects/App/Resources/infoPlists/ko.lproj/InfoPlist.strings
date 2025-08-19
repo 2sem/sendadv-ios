@@ -8,3 +8,4 @@
 
 "CFBundleDisplayName" = "보내봐 단체문자";
 "NSUserTrackingUsageDescription" = "맞춤형 광고 제공 / 앱의 비정상 종료 보고 등을 위해 사용자 정보를 사용합니다";
+"NSContactsUsageDescription" = "문자 수신자 목록을 생성하기 위해 연락처에 접근합니다";
