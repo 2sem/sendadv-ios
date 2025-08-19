@@ -12,8 +12,8 @@ protocol RecipientListScreenModel {
     var phoneNumbers: [String] { get set }
     
     func toggleRule(_ rule: RecipientsRule, isEnabled: Bool)
-    func deleteRule(_ rule: RecipientsRule)
-    func phoneNumbers(for rules: [RecipientsRule], allowAll: Bool) async throws(SendError) -> [String] 
+    func deleteRule(_ rule: RecipientsRule, modelContext: ModelContext)
+    func phoneNumbers(for rules: [RecipientsRule], allowAll: Bool) async throws(SendError) -> [String]
 }
 
 // MARK: - ViewModel
@@ -26,8 +26,9 @@ class SARecipientListScreenModel: RecipientListScreenModel {
         rule.enabled = isEnabled
     }
     
-    func deleteRule(_ rule: RecipientsRule) {
-        // Rule deletion is handled by SwiftUI's @ModelContext
+    func deleteRule(_ rule: RecipientsRule, modelContext: ModelContext) {
+        modelContext.delete(rule)
+        try? modelContext.save()
     }
     
     func remove(_ rules: [RecipientsRule]) {
