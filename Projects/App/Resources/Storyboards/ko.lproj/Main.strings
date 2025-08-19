@@ -6,7 +6,7 @@
 "0pv-aB-xuB.text" = "제목";
 
 /* Class = "UINavigationItem"; title = "Recipients Creation Rules"; ObjectID = "1CU-vy-DN9"; */
-"Dt8-hJ-tOO.title" = "수신자 생성 규칙";
+"Dt8-hJ-tOO.title" = "수신자 목록 생성 규칙";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "4qi-EW-0RZ"; */
 "4qi-EW-0RZ.text" = "Label";
@@ -50,7 +50,7 @@
 /* Class = "UILabel"; text = "Org"; ObjectID = "zb7-gl-YYC"; */
 "zb7-gl-YYC.text" = "회사";
 
-"VGg-YL-zSP.text" = "수신자 생성 규칙이 없습니다";
+"VGg-YL-zSP.text" = "수신자 목록 생성 규칙이 없습니다";
 
 "gbo-nG-cgx.normalTitle" = "새 규칙 만들기";
 

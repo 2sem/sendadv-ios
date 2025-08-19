@@ -94,7 +94,7 @@ struct RecipientRuleListScreen: View {
 				}
 			}
 		}
-		.navigationTitle("수신자 생성 규칙")
+		.navigationTitle("수신자 목록 생성 규칙")
 		.navigationBarTitleDisplayMode(.large)
 		.toolbar {
 			ToolbarItem(placement: .navigationBarLeading) {

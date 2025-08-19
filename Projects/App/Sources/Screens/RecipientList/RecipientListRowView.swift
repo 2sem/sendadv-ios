@@ -27,7 +27,7 @@ struct RecipientRuleRowView: View {
                     if let title = rule.title, !title.isEmpty {
                         Text(title)
                     } else {
-                        Text("수신자 생성 규칙")
+                        Text("수신자 목록 생성 규칙")
                             .font(.headline)
                     }
                 }

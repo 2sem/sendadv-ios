@@ -15,7 +15,7 @@
 "Review '%@'" = "'%@' 평가";
 "App rating and recommendation" = "앱 평가 및 추천";
 "Please rate '%@' or recommend it to your friends." = "'%@'를 평가하거나 친구들에게 추천해보세요.";
-"There is no activated Rules for Reciepients.\nAll Contacts will receive Message" = "활성화된 수신자 생성 규칙이 없습니다. 모든 연락처에 메세지가 전송됩니다.";
+"There is no activated Rules for Reciepients.\nAll Contacts will receive Message" = "활성화된 수신자 목록 생성 규칙이 없습니다. 모든 연락처에 메세지가 전송됩니다.";
 "All" = "모두";
 "Failed to access contacts" = "연락처 접근 실패";
 "Failed to create recipients list" = "수신자 목록 생성 실패";
@@ -23,8 +23,8 @@
 "There is no contact matched to the enabled rules" = "규칙에 일치하는 연락처가 없습니다";
 "Creating recipients list" = "수신자 목록 생성 중";
 "Getting started to write\nIt will take much longer for many recipients." = "작성화면 준비 중\n수신자가 많으면 오래걸릴 수 있습니다";
-"Recipients Creation Rule" = "수신자 생성 규칙";
-"Edit Recipients Rule" = "수신자 생성 규칙 수정";
+"Recipients Creation Rule" = "수신자 목록 생성 규칙";
+"Edit Recipients Rule" = "수신자 목록 생성 규칙 수정";
 "Rule Setting" = "규칙 설정";
 "Job" = "직책";
 "Department" = "부서";
