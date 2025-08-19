@@ -30,4 +30,15 @@ final class RecipientsRule: Identifiable {
 	private static func nextOrder() -> Int {
 		return 0
 	}
+
+	/// Creates default filters for the rule when none exist
+    func createDefaultFilters() -> [RecipientsFilter] {
+        let defaultFilters: [FilterTarget] = FilterTarget.allCases
+        defaultFilters.forEach { [unowned self] target in
+            let filter = RecipientsFilter(target: FilterTarget.organization)
+            filters?.append(filter)
+        }
+        
+        return filters ?? []
+    }
 }

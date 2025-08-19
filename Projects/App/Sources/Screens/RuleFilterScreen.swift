@@ -125,7 +125,7 @@ class RuleFilterScreenModel {
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
     let container = try! ModelContainer(for: RecipientsFilter.self, configurations: config)
     
-    let filter = RecipientsFilter(target: "job", includes: nil, excludes: nil, all: true)
+    let filter = RecipientsFilter(target: .job, includes: nil, excludes: nil, all: true)
     container.mainContext.insert(filter)
     
     let viewModel = RuleFilterScreenModel(filter: filter)

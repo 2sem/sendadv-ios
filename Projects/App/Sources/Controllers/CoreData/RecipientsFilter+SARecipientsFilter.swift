@@ -14,7 +14,7 @@ extension RecipientsFilter {
     /// - Parameter filterRule: The Core Data SAFilterRule to create a RecipientsFilter from
     convenience init(from filterRule: SAFilterRule) {
         self.init(
-            target: filterRule.target,
+            target: FilterTarget.init(rawValue: filterRule.target ?? "")!,
             includes: filterRule.includes,
             excludes: filterRule.excludes,
             all: filterRule.all

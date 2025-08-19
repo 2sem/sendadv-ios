@@ -175,6 +175,13 @@ class DataMigrationManager: ObservableObject {
                     context.insert(filter)
                 }
             }
+
+            // If the new rule doesn't have any filters, create them
+            if swiftDataRule.filters?.isEmpty ?? true {
+                swiftDataRule.createDefaultFilters().forEach { filter in
+                    context.insert(filter)
+                }
+            }
             
             swiftDataRecipientsRules.append(swiftDataRule)
             context.insert(swiftDataRule)
