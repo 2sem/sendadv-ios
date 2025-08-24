@@ -166,7 +166,10 @@ class SAContactController : NSObject{
     func isMatchedContact(contact : CNContact, filter : RecipientsFilter) -> Bool{
         var value = false;
         //name, nickname, jot title, department, company
-    
+        guard !filter.all else {
+            return true
+        }
+        
         switch filter.target ?? ""{
             case FilterTargetNames.Name:
                 value = self.isMatchedText(text: contact.fullName ?? "", filter: filter);
