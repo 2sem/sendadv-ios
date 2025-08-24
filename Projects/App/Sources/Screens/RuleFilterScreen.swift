@@ -11,7 +11,11 @@ struct RuleFilterScreen: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     
-    @State var viewModel: RuleFilterScreenModel
+    @State private var viewModel: RuleFilterScreenModel
+    
+    init(filter: RecipientsFilter) {
+        _viewModel = State(initialValue: RuleFilterScreenModel(filter: filter))
+    }
     
     var body: some View {
         List {
@@ -40,19 +44,22 @@ struct RuleFilterScreen: View {
             }
         }
         .listStyle(PlainListStyle())
-        .navigationTitle(viewModel.title)
+//        .navigationTitle(viewModel.title)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button("완료") {
-                    viewModel.save()
+                    viewModel.save(context: modelContext)
                     dismiss()
                 }
                 .tint(.accent)
             }
         }
         .onAppear {
-            viewModel.loadItems(using: modelContext)
+            viewModel.loadItems()
+        }
+        .onDisappear {
+            //
         }
     }
 }
@@ -70,7 +77,7 @@ struct RuleFilterScreen: View {
     
     return NavigationStack {
         RuleFilterScreen(
-            viewModel: viewModel
+            filter: filter
         )
     }
     .modelContainer(container)

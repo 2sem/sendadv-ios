@@ -90,10 +90,14 @@ struct RuleDetailScreen: View {
 //			default: title = "필터"
 //			}
 			
-            let filterViewModel = RuleFilterScreenModel(filter: filter)
+            RuleFilterScreen(filter: filter)
+        }.onDisappear {
+            guard !viewModel.isSaved else {
+                return
+            }
             
-            RuleFilterScreen(viewModel: filterViewModel)
-		}
+            viewModel.rollback(context: modelContext)
+        }
 	}
 }
 

@@ -12,6 +12,7 @@ import SwiftData
 class RuleDetailScreenModel {
 	var rule: RecipientsRule?
 	var title: String = ""
+    var isSaved: Bool = false
 	
 	init(rule: RecipientsRule?) {
 		self.rule = rule
@@ -20,7 +21,12 @@ class RuleDetailScreenModel {
 	
     func save(using context: ModelContext) {
         try? context.save()
+        isSaved = true
 	}
+    
+    func rollback(context: ModelContext) {
+        context.rollback()
+    }
 	
 	func getFilterText(for target: String) -> String {
 		guard let rule = rule,

@@ -14,6 +14,7 @@ class RuleFilterScreenModel {
     var selectedItems: Set<String> = []
     
     private(set) var filter: RecipientsFilter
+    private(set) var isSaved = false
     
     var title: String {
         FilterTarget(rawValue: filter.target ?? "")?.displayName.localized() ?? ""
@@ -29,7 +30,7 @@ class RuleFilterScreenModel {
         }
     }
     
-    func loadItems(using context: ModelContext) {
+    func loadItems() {
         // Load available items based on target
         switch FilterTarget(rawValue: filter.target ?? "") {
             case .job:
@@ -61,14 +62,14 @@ class RuleFilterScreenModel {
         }
     }
     
-    func save() {
+    func save(context: ModelContext) {
         // Update filter values
         filter.all = selectAll
         filter.includes = selectAll ? nil : selectedItems.sorted().joined(separator: ",")
         
         // Save changes
         do {
-            try filter.modelContext?.save()
+            try context.save()
         } catch {
             print("Failed to save filter:", error)
         }
