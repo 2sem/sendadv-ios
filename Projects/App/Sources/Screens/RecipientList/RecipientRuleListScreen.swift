@@ -16,6 +16,7 @@ struct RecipientRuleListScreen: View {
     @Query(sort: \RecipientsRule.title) private var rules: [RecipientsRule]
     
     @State private var showingMessageComposer = false
+    @State private var isPreparingMessageView = false
     @State private var selectedRule: RecipientsRule?
     @State private var showingAlert = false
     @State private var alertMessage = ""
@@ -120,6 +121,13 @@ struct RecipientRuleListScreen: View {
 		.sheet(isPresented: $showingMessageComposer) {
 			MessageComposerView(recipients: viewModel.phoneNumbers)
 		}
+        .overlay {
+            if isPreparingMessageView {
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle(tint: .accent))
+                    .scaleEffect(1.5)
+            }
+        }
 		.alert("경고", isPresented: $showingAlert) {
 			Button("계속") {
 				onSendMessage(allowAll: true)
@@ -155,7 +163,9 @@ struct RecipientRuleListScreen: View {
 	}
 	
     private func onSendMessage(allowAll: Bool = false) {
+        isPreparingMessageView = true
         Task { @MainActor in
+            defer { isPreparingMessageView = false }
             do {
                 let phoneNumbers = try await viewModel.phoneNumbers(for: rules, allowAll: allowAll)
                 
