@@ -45,7 +45,7 @@ class RuleFilterScreenModel {
         
         // If selectAll is true, select all available items
         if selectAll {
-            selectedItems = Set(availableItems)
+//            selectedItems = Set(availableItems)
         }
     }
     
