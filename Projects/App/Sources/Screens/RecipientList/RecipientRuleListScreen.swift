@@ -15,6 +15,8 @@ struct RecipientRuleListScreen: View {
     // 순서(order) 기준 정렬
     @Query(sort: \RecipientsRule.title) private var rules: [RecipientsRule]
     
+    @InfoPlist(["GADUnitIdentifiers", "Native"], default: "") var nativeAdUnit: String
+    
     @State private var showingMessageComposer = false
     @State private var isPreparingMessageView = false
     @State private var selectedRule: RecipientsRule?
@@ -44,32 +46,94 @@ struct RecipientRuleListScreen: View {
 				EmptyStateView()
 			} else {
 				List {
-					// 규칙 섹션
+					// 규칙 섹션 + 네이티브 광고 섞어 보여주기
 					Section {
-//                        AdsView()
-                        
-						ForEach(rules, id: \.id) { rule in
-							RecipientRuleRowView(rule: rule) { isEnabled in
-								toggleRule(rule, isEnabled: isEnabled)
-                            }
-                            .frame(height: 100)
-							.onTapGesture {
-                                guard isEditing else { return }
-                                selectedRule = rule
-                            }
-                            .if(isEditing) { view in
-                                view.swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                                    Button(role: .destructive) {
-                                        deleteRule(rule)
-                                    } label: {
-                                        Label("삭제", systemImage: "trash")
+						let interval = 5
+						ForEach(Array(rules.enumerated()), id: \.element.id) { index, rule in
+							Group {
+                                if index % interval == 0 {
+                                    NativeAdSwiftUIView(adUnitId: nativeAdUnit) { nativeAd in
+                                        Group {
+                                            if let ad = nativeAd {
+                                                HStack(spacing: 12) {
+                                                    if let icon = ad.icon?.image {
+                                                        Image(uiImage: icon)
+                                                            .resizable()
+                                                            .aspectRatio(contentMode: .fill)
+                                                            .frame(width: 64, height: 64)
+                                                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                                                    }
+                                                    VStack(alignment: .leading, spacing: 6) {
+                                                        Text(ad.headline ?? "")
+                                                            .font(.headline)
+                                                        if let body = ad.body {
+                                                            Text(body)
+                                                                .font(.subheadline)
+                                                                .foregroundStyle(.secondary)
+                                                        }
+                                                        if let advertiser = ad.advertiser {
+                                                            Text(advertiser)
+                                                                .font(.caption)
+                                                                .foregroundStyle(.tertiary)
+                                                        }
+                                                    }
+                                                    Spacer()
+                                                    if let cta = ad.callToAction {
+                                                        Button(cta) {}
+                                                            .buttonStyle(.borderedProminent)
+                                                    }
+                                                }
+                                            } else {
+                                                HStack(spacing: 12) {
+                                                    RoundedRectangle(cornerRadius: 8)
+                                                        .fill(Color.gray.opacity(0.3))
+                                                        .frame(width: 64, height: 64)
+                                                    VStack(alignment: .leading, spacing: 6) {
+                                                        Text("ads header".localized())
+                                                            .font(.headline)
+                                                        Text("ads description".localized())
+                                                            .font(.subheadline)
+                                                            .foregroundStyle(.secondary)
+                                                    }
+                                                    Spacer()
+                                                    Button("ads action".localized()) {}
+                                                        .buttonStyle(.borderedProminent)
+                                                }
+                                                .redacted(reason: .placeholder)
+                                            }
+                                        }
+                                        .frame(maxWidth: .infinity)
+                                        .frame(height: 120)
+                                        .background(Color(.secondarySystemBackground))
+                                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                                        .padding(.vertical, 4)
+                                        .padding(.horizontal, 16)
                                     }
                                 }
-                            }
-                        }
-                    }
-                    .listRowBackground(Color.clear)
-                }
+                                
+								RecipientRuleRowView(rule: rule) { isEnabled in
+									toggleRule(rule, isEnabled: isEnabled)
+								}
+								.frame(height: 100)
+								.onTapGesture {
+									guard isEditing else { return }
+									selectedRule = rule
+								}
+								.if(isEditing) { view in
+									view.swipeActions(edge: .trailing, allowsFullSwipe: false) {
+										Button(role: .destructive) {
+											deleteRule(rule)
+										} label: {
+											Label("삭제", systemImage: "trash")
+										}
+									}
+								}
+								
+							}
+						}
+					}
+					.listRowBackground(Color.clear)
+				}
 //                .onDelete {
 //                    deleteRule(rules[$0])
 //                }
