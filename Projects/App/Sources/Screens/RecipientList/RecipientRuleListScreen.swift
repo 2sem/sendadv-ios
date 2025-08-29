@@ -15,7 +15,11 @@ struct RecipientRuleListScreen: View {
     // 순서(order) 기준 정렬
     @Query(sort: \RecipientsRule.title) private var rules: [RecipientsRule]
     
+#if DEBUG
+    var nativeAdUnit: String = "ca-app-pub-3940256099942544/3986624511"
+#else
     @InfoPlist(["GADUnitIdentifiers", "Native"], default: "") var nativeAdUnit: String
+#endif
     
     @State private var showingMessageComposer = false
     @State private var isPreparingMessageView = false

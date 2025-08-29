@@ -52,10 +52,16 @@ struct NativeAdSwiftUIView<Content: View>: View {
 	}
 
 	var body: some View {
-		contentBuilder(coordinator.nativeAd)
-			.onAppear { coordinator.load() }
-			.listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
-			.listRowBackground(Color.clear)
+		ZStack(alignment: .center) {
+			if let ad = coordinator.nativeAd {
+				NativeAdRepresentable(nativeAd: ad)
+			}
+			contentBuilder(coordinator.nativeAd)
+				.allowsHitTesting(coordinator.nativeAd != nil ? false : true)
+		}
+		.onAppear { coordinator.load() }
+		.listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+		.listRowBackground(Color.clear)
 	}
 }
 
@@ -66,31 +72,31 @@ private struct NativeAdRepresentable: UIViewRepresentable {
 
 	func makeUIView(context: Context) -> NativeAdView {
 		let adView = NativeAdView()
-		configureSubviews(for: adView)
+		// configureSubviews(for: adView)
 		return adView
 	}
 
 	func updateUIView(_ uiView: NativeAdView, context: Context) {
 		uiView.nativeAd = nativeAd
-		if let headline = uiView.headlineView as? UILabel {
-			headline.text = nativeAd.headline
-		}
-		if let body = uiView.bodyView as? UILabel {
-			body.text = nativeAd.body
-			uiView.bodyView?.isHidden = nativeAd.body == nil
-		}
-		if let advertiser = uiView.advertiserView as? UILabel {
-			advertiser.text = nativeAd.advertiser
-			uiView.advertiserView?.isHidden = nativeAd.advertiser == nil
-		}
-		if let icon = uiView.iconView as? UIImageView {
-			icon.image = nativeAd.icon?.image
-			uiView.iconView?.isHidden = nativeAd.icon == nil
-		}
-		if let cta = uiView.callToActionView as? UIButton {
-			cta.setTitle(nativeAd.callToAction, for: .normal)
-			uiView.callToActionView?.isHidden = nativeAd.callToAction == nil
-		}
+//		if let headline = uiView.headlineView as? UILabel {
+//			headline.text = nativeAd.headline
+//		}
+//		if let body = uiView.bodyView as? UILabel {
+//			body.text = nativeAd.body
+//			uiView.bodyView?.isHidden = nativeAd.body == nil
+//		}
+//		if let advertiser = uiView.advertiserView as? UILabel {
+//			advertiser.text = nativeAd.advertiser
+//			uiView.advertiserView?.isHidden = nativeAd.advertiser == nil
+//		}
+//		if let icon = uiView.iconView as? UIImageView {
+//			icon.image = nativeAd.icon?.image
+//			uiView.iconView?.isHidden = nativeAd.icon == nil
+//		}
+//		if let cta = uiView.callToActionView as? UIButton {
+//			cta.setTitle(nativeAd.callToAction, for: .normal)
+//			uiView.callToActionView?.isHidden = nativeAd.callToAction == nil
+//		}
 	}
 
 	private func configureSubviews(for adView: NativeAdView) {
