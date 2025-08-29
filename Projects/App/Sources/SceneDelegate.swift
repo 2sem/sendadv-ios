@@ -33,6 +33,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             let adManager = GADManager<GADUnitName>.init(self.window!)
             SceneDelegate.sharedGADManager = adManager
             adManager.delegate = self
+            MobileAds.shared.requestConfiguration.testDeviceIdentifiers = [ "8a00796a760e384800262e0b7c3d08fe" ]
+
             #if DEBUG
             adManager.prepare(interstitialUnit: .full, interval: 60.0)
             adManager.prepare(openingUnit: .launch, isTest: true, interval: 60.0)
