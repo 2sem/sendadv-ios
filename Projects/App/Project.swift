@@ -80,18 +80,8 @@ let project = Project(
                         "NSAllowsArbitraryLoads": true
                     ],
                     "KAKAO_APP_KEY": "c7ebdb09664b7c7bd73eeab5ccd48589",
-                    "UIApplicationSceneManifest": [
-                        "UIApplicationSupportsMultipleScenes": false,
-                        "UISceneConfigurations": [
-                            "UIWindowSceneSessionRoleApplication": [
-                                [
-                                    "UISceneConfigurationName": "Default Configuration",
-                                    "UISceneDelegateClassName": "$(PRODUCT_MODULE_NAME).SceneDelegate"
-                                    // storyboard를 사용하지 않으므로 "UISceneStoryboardFile" 생략
-                                ]
-                            ]
-                        ]
-                    ],
+                    // UIApplicationSceneManifest is not needed for SwiftUI App
+                    // SwiftUI App handles scene management automatically
                     "NSContactsUsageDescription": "This app requires access to your contacts to create a recipient list for sending messages.",
                 ]
             ),

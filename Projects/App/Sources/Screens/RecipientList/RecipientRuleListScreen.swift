@@ -30,6 +30,17 @@ struct RecipientRuleListScreen: View {
     @State private var viewModel = SARecipientListScreenModel()
     @State private var isEditing = false
     
+    @MainActor
+    private func presentFullAdThen(_ action: @escaping @MainActor () -> Void) {
+        if let manager = SwiftUIAdManager.shared {
+            manager.show(unit: .full, completion: { _, _, _ in
+                Task { @MainActor in action() }
+            })
+        } else {
+            action()
+        }
+    }
+    
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
             viewModel.remove(offsets.map { rules[$0] })
@@ -121,7 +132,9 @@ struct RecipientRuleListScreen: View {
 								.frame(height: 100)
 								.onTapGesture {
 									guard isEditing else { return }
-									selectedRule = rule
+                                    presentFullAdThen {
+                                        selectedRule = rule
+                                    }
 								}
 								.if(isEditing) { view in
 									view.swipeActions(edge: .trailing, allowsFullSwipe: false) {
@@ -176,14 +189,14 @@ struct RecipientRuleListScreen: View {
 			
 			ToolbarItem(placement: .navigationBarTrailing) {
 				Button("추가") {
-					// 새 규칙 생성
-					let newRule = RecipientsRule(title: "새 규칙", enabled: true)
-					modelContext.insert(newRule)
-					try? modelContext.save()
-					
-					// 새 규칙 편집 화면으로 이동
-					selectedRule = newRule
-                }.tint(Color.accent)
+ 					// 새 규칙 생성
+ 					let newRule = RecipientsRule(title: "새 규칙", enabled: true)
+ 					modelContext.insert(newRule)
+ 					try? modelContext.save()
+ 					
+					// 전면 광고 후 새 규칙 편집 화면으로 이동
+					presentFullAdThen { selectedRule = newRule }
+				}.tint(Color.accent)
 			}
 		}
 		.sheet(isPresented: $showingMessageComposer) {
