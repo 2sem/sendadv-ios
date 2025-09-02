@@ -135,7 +135,7 @@ extension LSDefaults{
         }
         
         
-        SceneDelegate.sharedGADManager?.requestPermission(completion: { (result) in
+        SwiftUIAdManager.shared?.requestPermission(completion: { (result) in
             AdsTrackingRequested = true;
         })
         

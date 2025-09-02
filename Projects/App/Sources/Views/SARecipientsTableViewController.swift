@@ -205,7 +205,7 @@ class SARecipientsTableViewController: UIViewController {
         hub.contentColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1);
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(noti:)), name: UIResponder.keyboardWillShowNotification, object: nil);
-        SceneDelegate.sharedGADManager?.show(unit: .full, completion: { [weak self](unit, ads, result) in
+        SwiftUIAdManager.shared?.show(unit: .full, completion: { [weak self](unit, ads, result) in
             guard let self = self else{
                 return;
             }
@@ -297,7 +297,7 @@ class SARecipientsTableViewController: UIViewController {
             }
         }
         
-        SceneDelegate.sharedGADManager?.show(unit: .full, completion: { [weak self](unit, ads, result) in
+        SwiftUIAdManager.shared?.show(unit: .full, completion: { [weak self](unit, ads, result) in
             self?.performSegue(withIdentifier: identifier, sender: sender);
         })
         
