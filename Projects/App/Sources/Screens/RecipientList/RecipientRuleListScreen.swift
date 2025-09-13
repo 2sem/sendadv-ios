@@ -12,6 +12,7 @@ import SwiftData
 
 struct RecipientRuleListScreen: View {
     @Environment(\.modelContext) private var modelContext
+    @EnvironmentObject private var adManager: SwiftUIAdManager
     // 순서(order) 기준 정렬
     @Query(sort: \RecipientsRule.title) private var rules: [RecipientsRule]
     
@@ -32,13 +33,11 @@ struct RecipientRuleListScreen: View {
     
     @MainActor
     private func presentFullAdThen(_ action: @escaping @MainActor () -> Void) {
-        if let manager = SwiftUIAdManager.shared {
-            manager.show(unit: .full, completion: { _, _, _ in
-                Task { @MainActor in action() }
-            })
-        } else {
-            action()
-        }
+        adManager.show(unit: .full, completion: { _, _, _ in
+            Task { @MainActor in
+                action()
+            }
+        })
     }
     
     private func deleteItems(offsets: IndexSet) {
@@ -195,7 +194,9 @@ struct RecipientRuleListScreen: View {
  					try? modelContext.save()
  					
 					// 전면 광고 후 새 규칙 편집 화면으로 이동
-					presentFullAdThen { selectedRule = newRule }
+                    presentFullAdThen {
+                        selectedRule = newRule
+                    }
 				}.tint(Color.accent)
 			}
 		}
@@ -281,8 +282,10 @@ struct RecipientRuleListScreen: View {
     container.mainContext.insert(rule2)
     container.mainContext.insert(rule3)
     
+    let adManager = SwiftUIAdManager()
     return NavigationStack {
         RecipientRuleListScreen()
     }
     .modelContainer(container)
+    .environmentObject(adManager)
 }
