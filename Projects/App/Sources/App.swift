@@ -9,6 +9,7 @@ import GADManager
 struct SendadvApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @State private var isSplashDone = false
+    @State private var isSetupDone = false
     @Environment(\.scenePhase) private var scenePhase
     
     // SceneDelegate의 기능을 SwiftUI ObservableObject로 마이그레이션
@@ -37,10 +38,15 @@ struct SendadvApp: App {
             .onChange(of: scenePhase) { oldPhase, newPhase in
                 handleScenePhaseChange(from: oldPhase, to: newPhase)
             }
+            .environmentObject(adManager)
         }
     }
     
     private func setupAds() {
+        guard !isSetupDone else {
+            return
+        }
+        
         MobileAds.shared.start { [weak adManager, weak reviewManager, weak rewardAd] status in
             guard let adManager = adManager,
                   let reviewManager = reviewManager,
@@ -61,6 +67,8 @@ struct SendadvApp: App {
             #endif
             adManager.canShowFirstTime = true
         }
+        
+        isSetupDone = true
     }
     
     private func handleScenePhaseChange(from oldPhase: ScenePhase, to newPhase: ScenePhase) {
