@@ -66,28 +66,10 @@ struct RecipientRuleListScreen: View {
 						ForEach(Array(rules.enumerated()), id: \.element.id) { index, rule in
                             Group {
                                 if index % interval == 0 {
-                                    HStack(spacing: 12) {
-                                        Image("otherapp")
-                                            .renderingMode(.original)
-                                            .resizable()
-                                            .scaledToFit()
-                                            .aspectRatio(contentMode: .fill)
-                                            .frame(width: 64, height: 64)
-                                            .clipShape(RoundedRectangle(cornerRadius: 8))
-                                        VStack(alignment: .leading, spacing: 6) {
-                                            Text("ads header".localized())
-                                                .font(.headline)
-                                            Text("ads description".localized())
-                                                .font(.subheadline)
-                                                .foregroundStyle(.secondary)
-                                        }
-                                        Spacer()
-                                        Button("ads action".localized()) {}
-                                            .buttonStyle(.borderedProminent)
-                                    }
-                                    // .redacted(reason: .placeholder)
+                                    
+//                                     .redacted(reason: .placeholder)
                                 }
-                                if index % interval == 100 {
+                                if index % interval == 0 {
                                     NativeAdSwiftUIView(adUnitId: nativeAdUnit) { nativeAd in
                                         Group {
                                             if let ad = nativeAd {
@@ -122,7 +104,9 @@ struct RecipientRuleListScreen: View {
                                             } else {
                                                 HStack(spacing: 12) {
                                                     Image("otherapp")
+                                                        .renderingMode(.original)
                                                         .resizable()
+                                                        .scaledToFit()
                                                         .aspectRatio(contentMode: .fill)
                                                         .frame(width: 64, height: 64)
                                                         .clipShape(RoundedRectangle(cornerRadius: 8))
@@ -134,10 +118,18 @@ struct RecipientRuleListScreen: View {
                                                             .foregroundStyle(.secondary)
                                                     }
                                                     Spacer()
-                                                    Button("ads action".localized()) {}
-                                                        .buttonStyle(.borderedProminent)
+                                                    Button("ads action".localized()) {
+                                                        //
+                                                    }
+                                                    .buttonStyle(.borderedProminent)
+                                                }.onTapGesture {
+                                                    guard let url = URL.init(string: "https://apps.apple.com/us/developer/young-jun-lee/id1225480114") else{
+                                                        return;
+                                                    }
+                                                    
+                                                    UIApplication.shared.open(url, options: [.universalLinksOnly : false], completionHandler: nil);
                                                 }
-                                                .redacted(reason: .placeholder)
+//                                                .redacted(reason: .placeholder)
                                             }
                                         }
                                         .frame(maxWidth: .infinity)
