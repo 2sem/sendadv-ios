@@ -64,8 +64,30 @@ struct RecipientRuleListScreen: View {
 					Section {
 						let interval = 5
 						ForEach(Array(rules.enumerated()), id: \.element.id) { index, rule in
-							Group {
+                            Group {
                                 if index % interval == 0 {
+                                    HStack(spacing: 12) {
+                                        Image("otherapp")
+                                            .renderingMode(.original)
+                                            .resizable()
+                                            .scaledToFit()
+                                            .aspectRatio(contentMode: .fill)
+                                            .frame(width: 64, height: 64)
+                                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                                        VStack(alignment: .leading, spacing: 6) {
+                                            Text("ads header".localized())
+                                                .font(.headline)
+                                            Text("ads description".localized())
+                                                .font(.subheadline)
+                                                .foregroundStyle(.secondary)
+                                        }
+                                        Spacer()
+                                        Button("ads action".localized()) {}
+                                            .buttonStyle(.borderedProminent)
+                                    }
+                                    // .redacted(reason: .placeholder)
+                                }
+                                if index % interval == 100 {
                                     NativeAdSwiftUIView(adUnitId: nativeAdUnit) { nativeAd in
                                         Group {
                                             if let ad = nativeAd {
@@ -99,9 +121,11 @@ struct RecipientRuleListScreen: View {
                                                 }
                                             } else {
                                                 HStack(spacing: 12) {
-                                                    RoundedRectangle(cornerRadius: 8)
-                                                        .fill(Color.gray.opacity(0.3))
+                                                    Image("otherapp")
+                                                        .resizable()
+                                                        .aspectRatio(contentMode: .fill)
                                                         .frame(width: 64, height: 64)
+                                                        .clipShape(RoundedRectangle(cornerRadius: 8))
                                                     VStack(alignment: .leading, spacing: 6) {
                                                         Text("ads header".localized())
                                                             .font(.headline)
