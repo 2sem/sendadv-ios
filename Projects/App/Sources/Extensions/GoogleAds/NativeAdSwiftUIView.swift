@@ -22,7 +22,7 @@ final class NativeAdLoaderCoordinator: NSObject, ObservableObject, AdLoaderDeleg
 
 	func load() {
         let options: [NativeAdViewAdOptions] = []
-		self.adLoader = AdLoader(adUnitID: adUnitId, rootViewController: nil, adTypes: [ .native ], options: options)
+        self.adLoader = AdLoader(adUnitID: adUnitId, rootViewController: nil, adTypes: [ .native ], options: options)
 		self.adLoader?.delegate = self
         let req = Request()
 		self.adLoader?.load(Request())
@@ -69,15 +69,19 @@ struct NativeAdSwiftUIView<Content: View>: View {
 
 private struct NativeAdRepresentable: UIViewRepresentable {
 	let nativeAd: NativeAd
+    let headlineView = UILabel()
 
 	func makeUIView(context: Context) -> NativeAdView {
 		let adView = NativeAdView()
+        adView.advertiserView = .init()
+//        adView.headlineView = self.headlineView
 		// configureSubviews(for: adView)
 		return adView
 	}
 
 	func updateUIView(_ uiView: NativeAdView, context: Context) {
 		uiView.nativeAd = nativeAd
+        uiView.adChoicesView = .init()
 //		if let headline = uiView.headlineView as? UILabel {
 //			headline.text = nativeAd.headline
 //		}
@@ -85,10 +89,10 @@ private struct NativeAdRepresentable: UIViewRepresentable {
 //			body.text = nativeAd.body
 //			uiView.bodyView?.isHidden = nativeAd.body == nil
 //		}
-//		if let advertiser = uiView.advertiserView as? UILabel {
-//			advertiser.text = nativeAd.advertiser
-//			uiView.advertiserView?.isHidden = nativeAd.advertiser == nil
-//		}
+		if let advertiser = uiView.advertiserView as? UILabel {
+			advertiser.text = nativeAd.advertiser
+			uiView.advertiserView?.isHidden = nativeAd.advertiser == nil
+		}
 //		if let icon = uiView.iconView as? UIImageView {
 //			icon.image = nativeAd.icon?.image
 //			uiView.iconView?.isHidden = nativeAd.icon == nil
