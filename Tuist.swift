@@ -1,7 +1,7 @@
 import ProjectDescription
 
 let tuist = Tuist(
-    project: .tuist(compatibleXcodeVersions: .upToNextMajor("16.0")
+    project: .tuist(compatibleXcodeVersions: .upToNextMajor("26.0")
 //                    swiftVersion: "",
 //                    plugins: <#T##[PluginLocation]#>,
 //                    generationOptions: <#T##Tuist.GenerationOptions#>,
