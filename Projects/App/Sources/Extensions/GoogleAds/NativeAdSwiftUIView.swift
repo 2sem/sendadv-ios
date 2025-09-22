@@ -73,8 +73,8 @@ private struct NativeAdRepresentable: UIViewRepresentable {
 
 	func makeUIView(context: Context) -> NativeAdView {
 		let adView = NativeAdView()
-        adView.advertiserView = .init()
-//        adView.headlineView = self.headlineView
+//        adView.advertiserView = .init()
+        adView.headlineView = self.headlineView
 		// configureSubviews(for: adView)
 		return adView
 	}
