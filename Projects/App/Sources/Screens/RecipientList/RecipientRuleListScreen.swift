@@ -135,9 +135,7 @@ struct RecipientRuleListScreen: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button("추가") {
                     // 새 규칙 생성
-                    let newRule = RecipientsRule(title: "새 규칙", enabled: true)
-                    modelContext.insert(newRule)
-                    try? modelContext.save()
+                    let newRule = viewModel.createRule(modelContext: modelContext)
                     
                     // 전면 광고 후 새 규칙 편집 화면으로 이동
                     presentFullAdThen {
