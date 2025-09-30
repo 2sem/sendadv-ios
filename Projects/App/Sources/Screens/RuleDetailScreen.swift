@@ -72,7 +72,21 @@ struct RuleDetailScreen: View {
 		}
         .navigationTitle("규칙 수정")
 		.navigationBarTitleDisplayMode(.large)
+		.navigationBarBackButtonHidden(true)
 		.toolbar {
+			ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    // 뒤로 가기 전에 실행할 로직
+                    print("커스텀 뒤로 가기 버튼이 눌렸습니다.")
+                    // 필요한 로직 추가
+                    dismiss()
+                }) {
+                    HStack(alignment: .center, spacing: 4) {
+                        Image(systemName: "chevron.left")
+                    }
+                }.tint(.accent)
+            }
+
 			ToolbarItem(placement: .navigationBarTrailing) {
 				Button("저장") {
                     viewModel.save(using: modelContext)
@@ -91,13 +105,16 @@ struct RuleDetailScreen: View {
 //			}
 			
             RuleFilterScreen(filter: filter)
-        }.onDisappear {
-            guard !viewModel.isSaved else {
-                return
-            }
-            
-            viewModel.rollback(context: modelContext)
         }
+		// .onDisappear {
+        //     print("Rule Detail will be disappeared. isSaved[\(viewModel.isSaved)]")
+            
+        //     guard !viewModel.isSaved else {
+        //         return
+        //     }
+            
+        //     viewModel.rollback(context: modelContext)
+        // }
 	}
 }
 

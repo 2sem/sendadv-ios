@@ -57,6 +57,20 @@ class SARecipientListScreenModel: RecipientListScreenModel {
         
         return phones
     }
+    
+    func createRule(modelContext: ModelContext) -> RecipientsRule? {
+        let newRule = RecipientsRule(title: "새 규칙", enabled: true)
+        
+        do {
+            
+            modelContext.insert(newRule)
+//            try modelContext.save()
+        } catch {
+            return nil
+        }
+        
+        return newRule
+    }
 }
 
 enum SendError: Error {
