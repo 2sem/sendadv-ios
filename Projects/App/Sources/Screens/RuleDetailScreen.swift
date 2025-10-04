@@ -11,6 +11,7 @@ import Contacts
 
 struct RuleDetailScreen: View {
 	@Environment(\.modelContext) private var modelContext
+    @Environment(\.undoManager) private var undoManager
 	@Environment(\.dismiss) private var dismiss
 	
 	@State private var viewModel: RuleDetailScreenModel
@@ -106,15 +107,15 @@ struct RuleDetailScreen: View {
 			
             RuleFilterScreen(filter: filter)
         }
-		// .onDisappear {
-        //     print("Rule Detail will be disappeared. isSaved[\(viewModel.isSaved)]")
+		 .onDisappear {
+             print("Rule Detail will be disappeared. isSaved[\(viewModel.isSaved)]")
             
-        //     guard !viewModel.isSaved else {
-        //         return
-        //     }
+             guard !viewModel.isSaved, let undoManager else {
+                 return
+             }
             
-        //     viewModel.rollback(context: modelContext)
-        // }
+             viewModel.rollback(withUndoManager: undoManager)
+         }
 	}
 }
 

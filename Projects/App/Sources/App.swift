@@ -24,7 +24,7 @@ struct SendadvApp: App {
                 NavigationStack {
                     RecipientRuleListScreen()
                 }
-                .modelContainer(for: [RecipientsRule.self, RecipientsFilter.self], inMemory: false)
+                .modelContainer(for: [RecipientsRule.self, RecipientsFilter.self], inMemory: false, isAutosaveEnabled: false, isUndoEnabled: true)
                 
                 // 스플래시 오버레이
                 if !isSplashDone {
