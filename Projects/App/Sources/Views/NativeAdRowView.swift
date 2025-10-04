@@ -79,9 +79,33 @@ struct NativeAdRowView: View {
                 .frame(height: 120)
                 .background(Color(.secondarySystemBackground))
                 .clipShape(RoundedRectangle(cornerRadius: 10))
+                // 'Ad' badge required by AdMob policy
+                .overlay(alignment: .topLeading) {
+                    if nativeAd != nil {
+                        AdMarkView()
+                    }
+                }
                 .padding(.vertical, 4)
                 .padding(.horizontal, 16)
             }
         }
+    }
+}
+
+// MARK: - Ad Mark
+private struct AdMarkView: View {
+    private let text: String = "Ad" // Keep as "Ad" to satisfy policy; can be localized if needed
+    var body: some View {
+        Text(text)
+            .font(.caption2)
+            .bold()
+            .foregroundStyle(.black)
+            .padding(.horizontal, 6)
+            .padding(.vertical, 3)
+            .background(
+                Capsule()
+                    .fill(Color.yellow)
+            )
+            .accessibilityLabel("Advertisement")
     }
 }
