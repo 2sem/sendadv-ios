@@ -20,12 +20,14 @@ class RuleDetailScreenModel {
 	}
 	
     func save(using context: ModelContext) {
+        rule?.title = title
         try? context.save()
         isSaved = true
 	}
     
-    func rollback(context: ModelContext) {
-        context.rollback()
+    func rollback(withUndoManager undoManager: UndoManager) {
+        undoManager.undo()
+        print("Rule Detail is be rollbacked")
     }
 	
 	func getFilterText(for target: String) -> String {
