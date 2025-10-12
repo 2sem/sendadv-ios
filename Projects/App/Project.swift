@@ -71,7 +71,9 @@ let project = Project(
                                             "FullAd" : "ca-app-pub-9684378399371172/2975452443",
                                             // "FullAd" : "ca-app-pub-3940256099942544/4411468910", // test
                                            "Launch" : "ca-app-pub-9684378399371172/6626536187",
-                                           "Native" : "ca-app-pub-9684378399371172/8770326405"],
+                                           "Native" : "ca-app-pub-9684378399371172/8770326405"
+                                            // "Native" : "ca-app-pub-3940256099942544/3986624511" // test
+                                           ],
                     "Itunes App Id": "1195349333",
                     "NSUserTrackingUsageDescription": "Use location information to explore nearby attractions.",
                     "SKAdNetworkItems": .array(skAdNetworks),
