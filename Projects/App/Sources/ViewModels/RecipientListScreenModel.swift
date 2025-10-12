@@ -59,7 +59,7 @@ class SARecipientListScreenModel: RecipientListScreenModel {
     }
     
     func createRule(modelContext: ModelContext) -> RecipientsRule? {
-        let newRule = RecipientsRule(title: "새 규칙", enabled: true)
+        let newRule = RecipientsRule(title: "New Rule".localized(), enabled: true)
         
         do {
             

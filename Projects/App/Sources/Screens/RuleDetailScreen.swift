@@ -23,17 +23,17 @@ struct RuleDetailScreen: View {
 	
 	var body: some View {
 		ZStack {
-			Color.background
+            Color.background
 				.edgesIgnoringSafeArea(.all)
 			
 			VStack(spacing: 20) {
 				// 제목 입력 필드
 				VStack(alignment: .leading, spacing: 8) {
-					Text("규칙 제목")
+					Text("Rule Title".localized())
 						.font(.headline)
 						.foregroundColor(.title)
 					
-                    TextField("규칙 제목을 입력하세요", text: $viewModel.title)
+					TextField("Enter rule title".localized(), text: $viewModel.title)
 						.textFieldStyle(RoundedBorderTextFieldStyle())
 						.font(.body)
 				}
@@ -43,7 +43,7 @@ struct RuleDetailScreen: View {
 				// 필터 목록
 				VStack(spacing: 16) {
 					FilterRowView(
-						title: "직책",
+						title: "Job".localized(),
 						subtitle: viewModel.getJobFilterText(),
 						icon: "person.2.fill"
 					) {
@@ -51,7 +51,7 @@ struct RuleDetailScreen: View {
 					}
 					
 					FilterRowView(
-						title: "부서",
+						title: "Department".localized(),
 						subtitle: viewModel.getDepartmentFilterText(),
 						icon: "building.2.fill"
 					) {
@@ -59,7 +59,7 @@ struct RuleDetailScreen: View {
 					}
 					
 					FilterRowView(
-						title: "조직",
+						title: "Organization".localized(),
 						subtitle: viewModel.getOrganizationFilterText(),
 						icon: "building.fill"
 					) {
@@ -71,13 +71,12 @@ struct RuleDetailScreen: View {
 				Spacer()
 			}
 		}
-        .navigationTitle("규칙 수정")
+        			.navigationTitle("Edit Recipients Rule".localized())
 		.navigationBarTitleDisplayMode(.large)
 		.navigationBarBackButtonHidden(true)
 		.toolbar {
 			ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
-                    // 뒤로 가기 전에 실행할 로직
                     print("커스텀 뒤로 가기 버튼이 눌렸습니다.")
                     // 필요한 로직 추가
                     dismiss()
@@ -89,7 +88,7 @@ struct RuleDetailScreen: View {
             }
 
 			ToolbarItem(placement: .navigationBarTrailing) {
-				Button("저장") {
+                Button("Save".localized()) {
                     viewModel.save(using: modelContext)
 					dismiss()
 				}

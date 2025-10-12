@@ -16,7 +16,7 @@ struct SplashScreen: View {
                     .frame(width: 120, height: 120)
                     .cornerRadius(24)
                 
-                Text("보내봐 단체 문자")
+                Text("App Title".localized())
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .foregroundColor(.white)
@@ -65,7 +65,7 @@ struct SplashScreen: View {
                             .font(.title)
                             .foregroundColor(.red)
                         
-                        Text("마이그레이션 실패")
+                        Text("Migration Failed".localized())
                             .font(.caption)
                             .foregroundColor(.red)
                         
@@ -81,7 +81,7 @@ struct SplashScreen: View {
                             .progressViewStyle(CircularProgressViewStyle(tint: .white))
                             .scaleEffect(1.2)
                         
-                        Text("앱 초기화 중...")
+                        Text("Initializing app...".localized())
                             .font(.caption)
                             .foregroundColor(.white.opacity(0.8))
                             .multilineTextAlignment(.center)
@@ -112,3 +112,4 @@ struct SplashScreen: View {
 #Preview {
     SplashScreen(isDone: .constant(false))
 }
+

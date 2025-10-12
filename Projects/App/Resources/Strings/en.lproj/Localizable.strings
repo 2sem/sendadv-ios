@@ -9,6 +9,8 @@
 "Recommend '%@'" = "Recommend '%@'";
 "Cancel" = "Cancel";
 "OK" = "OK";
+"Save" = "Save";
+"Done" = "Done";
 "Continue" = "Continue";
 "Warning" = "Warning";
 "Setting" = "Setting";
@@ -23,7 +25,6 @@
 "There is no contact matched to the enabled rules" = "There is no contact matched to the enabled rules";
 "Creating recipients list" = "Creating recipients list";
 "Getting started to write\nIt will take much longer for many recipients" = "Getting started to write\nIt will take much longer for many recipients";
-"Recipients Creation Rule" = "Recipients Creation Rule";
 "Edit Recipients Rule" = "Edit Recipients Rule";
 "Rule Setting" = "Filter";
 "Job" = "Job";
@@ -35,3 +36,45 @@
 "advertiser" = "Developer";
 "ads description" = "See developer's other awesome apps. WhoCallMe, Talk-Translator, WhereWeGo? ...";
 "ads action" = "Install";
+
+"Select All" = "Select All";
+"New Rule" = "New Rule";
+
+// RuleListScreen
+"rules.empty" = "There are no recipient rules";
+"rules.empty.description" = "Try adding a new recipient rule";
+"rules.title" = "Recipients Rule List";
+"rules.add" = "Add New Rule";
+
+// RuleDetailScreen
+"Rule Title" = "Rule Title";
+"Enter rule title" = "Enter rule title";
+
+// Common actions
+"Edit" = "Edit";
+"Delete" = "Delete";
+
+// Exact key match for alerts/messages used in code (keep English key as-is)
+"There is no activated Rules for Reciepients.\nAll Contacts will receive Message." = "There is no activated Rules for Reciepients.\nAll Contacts will receive Message.";
+"Permission required to acess contacts for creating recipients list" = "Permission required to acess contacts for creating recipients list";
+
+// SplashScreen
+"App Title" = "Send Group SMS";
+"Migration Failed" = "Migration Failed";
+"Initializing app..." = "Initializing app...";
+
+// DataMigrationManager
+"Migration already completed." = "Migration already completed.";
+"Checking Core Data..." = "Checking Core Data...";
+"No migration needed." = "No migration needed.";
+"Starting migration..." = "Starting migration...";
+"Migration completed." = "Migration completed.";
+"Migration failed: %@" = "Migration failed: %@";
+"Migrating recipients rules..." = "Migrating recipients rules...";
+"Migrating filter rules..." = "Migrating filter rules...";
+"Converting to SwiftData..." = "Converting to SwiftData...";
+"Converting recipients data..." = "Converting recipients data...";
+"Finalizing migration..." = "Finalizing migration...";
+"Failed to create SwiftData model container." = "Failed to create SwiftData model container.";
+
+
