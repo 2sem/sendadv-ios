@@ -9,6 +9,8 @@
 "Recommend '%@'" = "'%@' 추천";
 "Cancel" = "취소";
 "OK" = "확인";
+"Save" = "저장";
+"Done" = "완료";
 "Continue" = "계속";
 "Warning" = "경고";
 "Setting" = "설정";
@@ -23,7 +25,6 @@
 "There is no contact matched to the enabled rules" = "규칙에 일치하는 연락처가 없습니다";
 "Creating recipients list" = "수신자 목록 생성 중";
 "Getting started to write\nIt will take much longer for many recipients." = "작성화면 준비 중\n수신자가 많으면 오래걸릴 수 있습니다";
-"Recipients Creation Rule" = "수신자 목록 생성 규칙";
 "Edit Recipients Rule" = "수신자 목록 생성 규칙 수정";
 "Rule Setting" = "규칙 설정";
 "Job" = "직책";
@@ -35,3 +36,43 @@
 "advertiser" = "개발자";
 "ads description" = "개발자의 놀라운 다른 앱 보기. 관련주식검색기, 게임도우미, 누군지다알아, 말해봐번역기, 우리어디가? 등 ...";
 "ads action" = "설치하기";
+
+"Select All" = "모두";
+"New Rule" = "새 규칙";
+
+// RecipientRuleListScreen
+"rules.empty" = "수신자 규칙이 없습니다";
+"rules.empty.description" = "새로운 수신자 규칙을 추가해보세요";
+"rules.title" = "수신자 규칙 목록";
+"rules.add" = "새 규칙 추가";
+
+// RuleDetailScreen
+"Rule Title" = "규칙 이름";
+"Enter rule title" = "규칙 이름을 입력하세요";
+
+// Common actions
+"Edit" = "편집";
+"Delete" = "삭제";
+
+// Exact key match for alerts/messages used in code (keep English key as-is)
+"There is no activated Rules for Reciepients\nAll Contacts will receive Message." = "활성화된 수신자 목록 생성 규칙이 없습니다. 모든 연락처에 메시지가 전송됩니다.";
+"Permission required to acess contacts for creating recipients list" = "수신자 목록 생성을 위해 연락처 접근 권한이 필요합니다";
+
+// SplashScreen
+"App Title" = "보내봐 단체 문자";
+"Migration Failed" = "마이그레이션 실패";
+"Initializing app..." = "앱 초기화 중...";
+
+// DataMigrationManager
+"Migration already completed." = "마이그레이션이 이미 완료되었습니다.";
+"Checking Core Data..." = "Core Data 데이터 확인 중...";
+"No migration needed." = "마이그레이션이 필요하지 않습니다.";
+"Starting migration..." = "마이그레이션 시작...";
+"Migration completed." = "마이그레이션이 완료되었습니다.";
+"Migration failed: %@" = "마이그레이션 실패: %@";
+"Migrating recipients rules..." = "수신자 규칙 마이그레이션 중...";
+"Migrating filter rules..." = "필터 규칙 마이그레이션 중...";
+"Converting to SwiftData..." = "SwiftData로 변환 중...";
+"Converting recipients data..." = "Recipients 데이터 변환 중...";
+"Finalizing migration..." = "마이그레이션 완료 중...";
+"Failed to create SwiftData model container." = "SwiftData 모델 컨테이너 생성에 실패했습니다.";

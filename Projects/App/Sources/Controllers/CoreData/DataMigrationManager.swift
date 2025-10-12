@@ -37,33 +37,33 @@ class DataMigrationManager: ObservableObject {
         // 이미 마이그레이션이 완료된 경우
         if isMigrationCompleted {
             migrationStatus = .completed
-            currentStep = "마이그레이션이 이미 완료되었습니다."
+            currentStep = "Migration already completed.".localized()
             return false
         }
         
         migrationStatus = .checking
-        currentStep = "Core Data 데이터 확인 중..."
+        currentStep = "Checking Core Data...".localized()
         
         // Core Data에 데이터가 있는지 확인
         guard await hasCoreData() else {
             migrationStatus = .completed
-            currentStep = "마이그레이션이 필요하지 않습니다."
+            currentStep = "No migration needed.".localized()
             isMigrationCompleted = true
             return false
         }
         
         migrationStatus = .migrating
-        currentStep = "마이그레이션 시작..."
+        currentStep = "Starting migration...".localized()
         
         do {
             try await performMigration()
             migrationStatus = .completed
-            currentStep = "마이그레이션이 완료되었습니다."
+            currentStep = "Migration completed.".localized()
             isMigrationCompleted = true
             return true
         } catch {
             migrationStatus = .failed(error)
-            currentStep = "마이그레이션 실패: \(error.localizedDescription)"
+            currentStep = String(format: "Migration failed: %@".localized(), error.localizedDescription)
             return false
         }
     }
@@ -87,19 +87,19 @@ class DataMigrationManager: ObservableObject {
     
     private func performMigration() async throws {
         // 1. RecipientsRule 마이그레이션
-        currentStep = "수신자 규칙 마이그레이션 중..."
+        currentStep = "Migrating recipients rules...".localized()
         migrationProgress = 0.2
         
         let recipientsRules = try await fetchCoreDataRecipientsRules()
         
         // 2. FilterRule 마이그레이션
-        currentStep = "필터 규칙 마이그레이션 중..."
+        currentStep = "Migrating filter rules...".localized()
         migrationProgress = 0.5
         
 //        let filterRules = try await fetchCoreDataFilterRules()
         
         // 3. Swift Data로 변환 및 저장
-        currentStep = "Swift Data로 변환 중..."
+        currentStep = "Converting to SwiftData...".localized()
         migrationProgress = 0.8
         
         try await convertAndSaveToSwiftData(recipientsRules: recipientsRules)
@@ -141,7 +141,7 @@ class DataMigrationManager: ObservableObject {
     private func convertAndSaveToSwiftData(recipientsRules: [SARecipientsRule]) async throws {
         // Update progress
         await MainActor.run {
-            currentStep = "Recipients 데이터 변환 중..."
+            currentStep = "Converting recipients data...".localized()
             migrationProgress = 0.5
         }
         
@@ -197,7 +197,7 @@ class DataMigrationManager: ObservableObject {
         
         // Update progress before cleanup
         await MainActor.run {
-            currentStep = "마이그레이션 완료 중..."
+            currentStep = "Finalizing migration...".localized()
             migrationProgress = 0.95
         }
         
@@ -233,7 +233,7 @@ enum MigrationError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .modelContainerCreationFailed:
-            return "Swift Data 모델 컨테이너 생성에 실패했습니다."
+            return "Failed to create SwiftData model container.".localized()
         }
     }
 }

@@ -94,7 +94,7 @@ struct RecipientRuleListScreen: View {
                                         Button(role: .destructive) {
                                             deleteRule(rule)
                                         } label: {
-                                            Label("삭제", systemImage: "trash")
+                                            Label("Delete".localized(), systemImage: "trash")
                                         }
                                     }
                                 }
@@ -121,19 +121,19 @@ struct RecipientRuleListScreen: View {
                 }
             }
         }
-        .navigationTitle("수신자 목록 생성 규칙")
+        .navigationTitle("rules.title".localized())
         .navigationBarTitleDisplayMode(.large)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 if !rules.isEmpty {
-                    Button(isEditing ? "취소" : "편집") {
+                    Button(isEditing ? "Cancel".localized() : "Edit".localized()) {
                         isEditing.toggle()
                     }.tint(Color.accent)
                 }
             }
             
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button("추가") {
+                Button("rules.add".localized()) {
                     // 새 규칙 생성
                     let newRule = viewModel.createRule(modelContext: modelContext)
                     
@@ -154,23 +154,23 @@ struct RecipientRuleListScreen: View {
                     .scaleEffect(1.5)
             }
         }
-        .alert("경고", isPresented: $showingAlert) {
-            Button("계속") {
+        .alert("Warning".localized(), isPresented: $showingAlert) {
+            Button("Continue".localized()) {
                 onSendMessage(allowAll: true)
             }
-            Button("취소", role: .cancel) { }
+            Button("Cancel".localized(), role: .cancel) { }
         } message: {
             Text(alertMessage)
         }
-        .alert("연락처 접근 실패", isPresented: $showingSettingsAlert) {
-            Button("설정") {
+        .alert("Failed to access contacts".localized(), isPresented: $showingSettingsAlert) {
+            Button("Setting".localized()) {
                 if let settingsUrl = URL(string: UIApplication.openSettingsURLString) {
                     UIApplication.shared.open(settingsUrl)
                 }
             }
-            Button("취소", role: .cancel) { }
+            Button("Cancel".localized(), role: .cancel) { }
         } message: {
-            Text("연락처에 접근할 권한이 필요합니다.")
+            Text("Permission required to acess contacts for creating recipients list".localized())
         }
         .navigationDestination(item: $selectedRule) { rule in
             RuleDetailScreen(rule: rule)
@@ -198,10 +198,10 @@ struct RecipientRuleListScreen: View {
             } catch let sendMessageError as SendError {
                 switch sendMessageError {
                     case .noRulesEnabled:
-                        alertMessage = "활성화된 수신자 규칙이 없습니다.\n모든 연락처가 메시지를 받게 됩니다."
+                        alertMessage = "There is no activated Rules for Reciepients.\nAll Contacts will receive Message.".localized()
                         showingAlert = true
                     case .noContacts:
-                        alertMessage = "활성화된 규칙과 일치하는 연락처가 없습니다."
+                        alertMessage = "There is no contact matched to the enabled rules".localized()
                         showingAlert = true
                     case .permissionDenied:
                         showingSettingsAlert = true

@@ -21,7 +21,7 @@ struct RuleFilterScreen: View {
         List {
             // All items toggle
             Toggle(isOn: $viewModel.selectAll) {
-                Text("모두 선택")
+                Text("Select All".localized())
                     .font(.headline)
             }
             .padding(.vertical, 8)
@@ -48,7 +48,7 @@ struct RuleFilterScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button("완료") {
+                Button("Done".localized()) {
                     viewModel.save(context: modelContext)
                     dismiss()
                 }

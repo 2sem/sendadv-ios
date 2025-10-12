@@ -16,11 +16,11 @@ struct EmptyStateView: View {
 				.font(.system(size: 60))
 				.foregroundColor(.gray)
 			
-			Text("수신자 규칙이 없습니다")
+            Text("rules.empty".localized())
 				.font(.title2)
 				.foregroundColor(.gray)
 			
-			Text("새로운 수신자 규칙을 추가해보세요")
+            Text("rules.empty.description".localized())
 				.font(.body)
 				.foregroundColor(.gray)
 		}
@@ -48,7 +48,7 @@ struct SendButton: View {
 struct AdsView: View {
 	var body: some View {
 		HStack {
-			Text("광고")
+			Text("ads.label")
 				.font(.headline)
 			Spacer()
 		}
@@ -86,15 +86,16 @@ struct RuleEditView: View {
 	@Environment(\.dismiss) private var dismiss
 	
 	var body: some View {
-		Text("규칙 편집 화면")
-			.navigationTitle("규칙 편집")
+		Text("recipients.rules.edit.screen")
+			.navigationTitle(Text("recipients.rules.edit.title"))
 			.navigationBarTitleDisplayMode(.inline)
 			.toolbar {
 				ToolbarItem(placement: .navigationBarTrailing) {
-					Button("완료") {
+					Button("done") {
 						dismiss()
 					}
 				}
 			}
 	}
 } 
+

@@ -16,7 +16,7 @@ class RuleDetailScreenModel {
 	
 	init(rule: RecipientsRule?) {
 		self.rule = rule
-		self.title = rule?.title ?? ""
+        self.title = rule?.title ?? ""
 	}
 	
     func save(using context: ModelContext) {
