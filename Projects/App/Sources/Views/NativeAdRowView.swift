@@ -19,13 +19,9 @@ struct NativeAdRowView: View {
                 Group {
                     if let ad = nativeAd {
                         HStack(spacing: 12) {
-                            if let icon = ad.icon?.image {
-                                Image(uiImage: icon)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: 64, height: 64)
-                                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                            }
+                            MediaViewSwiftUIView(mediaContent: ad.mediaContent)
+                                .frame(width: 64, height: 64)
+                                .clipShape(RoundedRectangle(cornerRadius: 8))
                             VStack(alignment: .leading, spacing: 6) {
                                 Text(ad.headline ?? "")
                                     .font(.headline)
@@ -75,7 +71,6 @@ struct NativeAdRowView: View {
                         }
                     }
                 }
-                .frame(maxWidth: .infinity)
                 .frame(height: 120)
                 .background(Color(.secondarySystemBackground))
                 .clipShape(RoundedRectangle(cornerRadius: 10))
