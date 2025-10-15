@@ -9,13 +9,12 @@ import SwiftUI
 
 // A subview that displays a native ad row with given ad unit and index, using the provided interval to determine placement.
 struct NativeAdRowView: View {
-    let nativeAdUnit: String
     let index: Int
     let interval: Int
 
     var body: some View {
         if index % interval == 0 {
-            NativeAdSwiftUIView(adUnitId: nativeAdUnit) { nativeAd in
+            NativeAdSwiftUIView() { nativeAd in
                 Group {
                     if let ad = nativeAd {
                         HStack(spacing: 12) {
