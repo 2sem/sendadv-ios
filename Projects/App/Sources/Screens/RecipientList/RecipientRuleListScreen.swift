@@ -46,11 +46,11 @@ struct RecipientRuleListScreen: View {
     
     @MainActor
     private func presentFullAdThen(_ action: @escaping @MainActor () -> Void) {
-        adManager.show(unit: .full, completion: { _, _, _ in
+        adManager.show(unit: .full) { _, _, _ in
             Task { @MainActor in
                 action()
             }
-        })
+        }
     }
     
     private func deleteItems(offsets: IndexSet) {
@@ -78,7 +78,7 @@ struct RecipientRuleListScreen: View {
                         let interval = 5
                         ForEach(Array(rules.enumerated()), id: \.element.id) { index, rule in
                             Group {
-                                NativeAdRowView(nativeAdUnit: nativeAdUnit, index: index, interval: interval)
+                                NativeAdRowView(index: index, interval: interval)
                                 RecipientRuleRowView(rule: rule) { isEnabled in
                                     toggleRule(rule, isEnabled: isEnabled)
                                 }

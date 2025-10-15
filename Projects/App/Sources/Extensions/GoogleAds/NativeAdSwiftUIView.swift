@@ -14,18 +14,17 @@ import GoogleMobileAds
 final class NativeAdLoaderCoordinator: NSObject, ObservableObject, AdLoaderDelegate, NativeAdLoaderDelegate {
 	var nativeAd: NativeAd?
 	private var adLoader: AdLoader?
-	private let adUnitId: String
 
-	init(adUnitId: String) {
-		self.adUnitId = adUnitId
-	}
-
-	func load() {
-        let options: [NativeAdViewAdOptions] = []
-        self.adLoader = AdLoader(adUnitID: adUnitId, rootViewController: nil, adTypes: [ .native ], options: options)
+    func load(withAdManager manager: SwiftUIAdManager) {
+        guard let adLoader = manager.createAdLoader(forUnit: .native) else {
+            return
+        }
+        
+        self.adLoader = adLoader
 		self.adLoader?.delegate = self
+        
         let req = Request()
-		self.adLoader?.load(Request())
+		self.adLoader?.load(req)
 	}
 
 	func adLoader(_ adLoader: AdLoader, didFailToReceiveAdWithError error: Error) {
@@ -41,13 +40,13 @@ final class NativeAdLoaderCoordinator: NSObject, ObservableObject, AdLoaderDeleg
 }
 
 struct NativeAdSwiftUIView<Content: View>: View {
-	private let adUnitId: String
+    @EnvironmentObject private var adManager: SwiftUIAdManager
+    
 	@State private var coordinator: NativeAdLoaderCoordinator
 	private let contentBuilder: (NativeAd?) -> Content
 
-	init(adUnitId: String, @ViewBuilder content: @escaping (NativeAd?) -> Content) {
-		self.adUnitId = adUnitId
-        _coordinator = State(wrappedValue: NativeAdLoaderCoordinator(adUnitId: adUnitId))
+	init(@ViewBuilder content: @escaping (NativeAd?) -> Content) {
+        _coordinator = State(wrappedValue: NativeAdLoaderCoordinator())
 		self.contentBuilder = content
 	}
 
@@ -59,7 +58,9 @@ struct NativeAdSwiftUIView<Content: View>: View {
 			contentBuilder(coordinator.nativeAd)
 				.allowsHitTesting(coordinator.nativeAd != nil ? false : true)
 		}
-		.onAppear { coordinator.load() }
+        .onAppear {
+            coordinator.load(withAdManager: adManager)
+        }
 		.listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
 		.listRowBackground(Color.clear)
 	}
