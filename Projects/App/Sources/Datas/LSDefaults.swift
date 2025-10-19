@@ -25,6 +25,7 @@ class LSDefaults{
         
         static let AdsShownCount = "AdsShownCount";
         static let AdsTrackingRequested = "AdsTrackingRequested";
+        static let MessageSentCount = "MessageSentCount";
     }
     
     static var LastFullADShown : Date{
@@ -88,6 +89,21 @@ class LSDefaults{
 }
 
 extension LSDefaults{
+    static var MessageSentCount : Int{
+        get{
+            return Defaults.integer(forKey: Keys.MessageSentCount);
+        }
+        
+        set{
+            Defaults.set(newValue, forKey: Keys.MessageSentCount);
+        }
+    }
+    
+    static func increaseMessageSentCount(){
+        MessageSentCount += 1;
+        debugPrint("Message Sent Count[\(MessageSentCount)]")
+    }
+    
     static var AdsShownCount : Int{
         get{
             return Defaults.integer(forKey: Keys.AdsShownCount);
