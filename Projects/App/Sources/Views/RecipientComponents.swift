@@ -7,6 +7,7 @@
 
 import SwiftUI
 import MessageUI
+import Foundation
 
 // MARK: - Supporting Views
 struct EmptyStateView: View {
@@ -76,6 +77,9 @@ struct MessageComposerView: UIViewControllerRepresentable {
 	
 	class Coordinator: NSObject, MFMessageComposeViewControllerDelegate {
 		func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
+            if result == .sent {
+                LSDefaults.increaseMessageSentCount();
+            }
 			controller.dismiss(animated: true)
 		}
 	}
