@@ -32,13 +32,13 @@ struct SendadvApp: App {
                         .transition(.opacity)
                 }
             }
+            .environmentObject(adManager)
             .onAppear {
                 setupAds()
             }
             .onChange(of: scenePhase) { oldPhase, newPhase in
                 handleScenePhaseChange(from: oldPhase, to: newPhase)
             }
-            .environmentObject(adManager)
         }
     }
     
@@ -57,12 +57,12 @@ struct SendadvApp: App {
             adManager.setup()
             
             MobileAds.shared.requestConfiguration.testDeviceIdentifiers = ["8a00796a760e384800262e0b7c3d08fe"]
-            
+
+            adManager.prepare(interstitialUnit: .full, interval: 60.0)
             #if DEBUG
-            adManager.prepare(interstitialUnit: .full, interval: 60.0)
-            adManager.prepare(openingUnit: .launch, isTest: true, interval: 60.0)
+            adManager.prepare(openingUnit: .launch, interval: 60.0)
             #else
-            adManager.prepare(interstitialUnit: .full, interval: 60.0)
+            adManager.prepare(interstitialUnit: .full, interval: 60.0 * 60)
             adManager.prepare(openingUnit: .launch, interval: 60.0 * 5)
             #endif
             adManager.canShowFirstTime = true
@@ -101,11 +101,7 @@ struct SendadvApp: App {
             return
         }
         
-        #if DEBUG
-        let test = true
-        #else
-        let test = false
-        #endif
+        let isTest = adManager.isTesting(unit: .launch)
         
         reviewManager.appPermissionRequested = reviewManager.appPermissionRequested || LSDefaults.requestAppTrackingIfNeed()
         guard reviewManager.appPermissionRequested else {
@@ -113,7 +109,7 @@ struct SendadvApp: App {
             return
         }
         
-        adManager.show(unit: .launch, isTest: test, completion: { (unit, ad, result) in })
+        adManager.show(unit: .launch, completion: { (unit, ad, result) in })
     }
 }
 
@@ -122,13 +118,25 @@ class SwiftUIAdManager: NSObject, ObservableObject {
     enum GADUnitName: String {
         case full = "FullAd"
         case launch = "Launch"
+        case native = "Native"
     }
     
-    private var gadManager: GADManager<GADUnitName>?
+#if DEBUG
+    var testUnits: [GADUnitName] = [
+        .full,
+        .launch,
+        .native,
+    ]
+#else
+    var testUnits: [GADUnitName] = []
+#endif
+    
+    private var gadManager: GADManager<GADUnitName>!
     var canShowFirstTime = true
     
     // 싱글톤 패턴으로 전역 접근 지원
     static var shared: SwiftUIAdManager?
+    @Published var isReady: Bool = false
     
     func setup() {
         guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
@@ -140,18 +148,28 @@ class SwiftUIAdManager: NSObject, ObservableObject {
         
         // 싱글톤 인스턴스 설정
         SwiftUIAdManager.shared = self
+        self.isReady = true
     }
     
-    func prepare(interstitialUnit: GADUnitName, interval: TimeInterval) {
-        gadManager?.prepare(interstitialUnit: interstitialUnit, interval: interval)
+    func prepare(interstitialUnit unit: GADUnitName, interval: TimeInterval) {
+        gadManager?.prepare(interstitialUnit: unit, isTesting: self.isTesting(unit: unit), interval: interval)
     }
     
-    func prepare(openingUnit: GADUnitName, isTest: Bool = false, interval: TimeInterval) {
-        gadManager?.prepare(openingUnit: openingUnit, isTest: isTest, interval: interval)
+    func prepare(openingUnit unit: GADUnitName, interval: TimeInterval) {
+        gadManager?.prepare(openingUnit: unit, isTesting: self.isTesting(unit: unit), interval: interval)
     }
     
-    func show(unit: GADUnitName, isTest: Bool = false, completion: @escaping (GADUnitName, Any?, Bool) -> Void) {
-        gadManager?.show(unit: unit, isTest: isTest, completion: completion)
+    func show(unit: GADUnitName, completion: @escaping (GADUnitName, Any?, Bool) -> Void) {
+        gadManager?.show(unit: unit, isTesting: self.isTesting(unit: .launch), completion: completion)
+    }
+    
+    func createAdLoader(forUnit unit: GADUnitName, options: [NativeAdViewAdOptions] = []) -> AdLoader? {
+        return gadManager?.createNativeLoader(forAd: unit, isTesting: self.isTesting(unit: unit))
+    }
+    
+    // MARK: - Testing Flags
+    func isTesting(unit: GADUnitName) -> Bool {
+        return testUnits.contains(unit)
     }
     
     // 기존 코드 호환성을 위한 메서드

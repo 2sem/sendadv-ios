@@ -58,7 +58,9 @@ struct NativeAdSwiftUIView<Content: View>: View {
 			contentBuilder(coordinator.nativeAd)
 				.allowsHitTesting(coordinator.nativeAd != nil ? false : true)
 		}
-        .onAppear {
+        .onChange(of: adManager.isReady, initial: false) {
+            guard adManager.isReady else { return }
+            
             coordinator.load(withAdManager: adManager)
         }
 		.listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
