@@ -45,6 +45,7 @@ struct RecipientRuleListScreen: View {
     @State private var showingSettingsAlert = false
     @State private var viewModel = SARecipientListScreenModel()
     @State private var isEditing = false
+    @State private var messageComposerState: MessageComposeState = .unknown
     
     @MainActor
     private func presentFullAdThen(_ action: @escaping @MainActor () -> Void) {
@@ -147,22 +148,24 @@ struct RecipientRuleListScreen: View {
             }
         }
         .sheet(isPresented: $showingMessageComposer) {
-            MessageComposerView(recipients: viewModel.phoneNumbers) { result in
-                print("Message Compose View is dismissed. result[\(result)]")
-                
-            #if DEBUG
-                guard case .cancelled = result else {
-                    return
-                }
-            #else
-                guard case .sent = result else {
-                    return
-                }
-            #endif
-                LSDefaults.increaseMessageSentCount()
-                
-                reviewManager.show()
+            MessageComposerView(recipients: viewModel.phoneNumbers, composeState: $messageComposerState)
+        }
+        .onChange(of: messageComposerState) {
+            print("rule list screen detect message composer dismission. state[\(messageComposerState)]")
+        #if DEBUG
+            guard case .cancelled = messageComposerState else {
+                return
             }
+        #else
+            guard case .sent = messageComposerState else {
+                return
+            }
+        #endif
+            
+            LSDefaults.increaseMessageSentCount()
+            reviewManager.show()
+            
+            messageComposerState = .unknown
         }
         .overlay {
             if isPreparingMessageView {
@@ -250,4 +253,3 @@ struct RecipientRuleListScreen: View {
     .modelContainer(container)
     .environmentObject(adManager)
 }
-
