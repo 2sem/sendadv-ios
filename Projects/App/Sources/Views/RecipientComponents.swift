@@ -8,6 +8,7 @@
 import SwiftUI
 import MessageUI
 import Foundation
+import Combine
 
 // MARK: - Supporting Views
 struct EmptyStateView: View {
@@ -56,32 +57,6 @@ struct AdsView: View {
 		.padding()
 		.background(Color.gray.opacity(0.1))
 		.cornerRadius(8)
-	}
-}
-
-struct MessageComposerView: UIViewControllerRepresentable {
-	let recipients: [String]
-	
-	func makeUIViewController(context: Context) -> MFMessageComposeViewController {
-		let controller = MFMessageComposeViewController()
-		controller.recipients = recipients
-		controller.messageComposeDelegate = context.coordinator
-		return controller
-	}
-	
-	func updateUIViewController(_ uiViewController: MFMessageComposeViewController, context: Context) {}
-	
-	func makeCoordinator() -> Coordinator {
-		Coordinator()
-	}
-	
-	class Coordinator: NSObject, MFMessageComposeViewControllerDelegate {
-		func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
-            if result == .sent {
-                LSDefaults.increaseMessageSentCount();
-            }
-			controller.dismiss(animated: true)
-		}
 	}
 }
 
