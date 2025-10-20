@@ -10,7 +10,7 @@ public enum MessageComposeState {
 
 struct MessageComposerView: UIViewControllerRepresentable {
     let recipients: [String]
-    var onComplete: ((MessageComposeState) -> Void)?
+    @Binding var composeState: MessageComposeState
     
     func makeUIViewController(context: Context) -> MFMessageComposeViewController {
         let controller = MFMessageComposeViewController()
@@ -34,8 +34,8 @@ struct MessageComposerView: UIViewControllerRepresentable {
             self.parent = parent
         }
         
-        func messageComposeViewController(_ controller: MFMessageComposeViewController, 
-                                        didFinishWith result: MessageComposeResult) {
+        func messageComposeViewController(_ controller: MFMessageComposeViewController,
+                                          didFinishWith result: MessageComposeResult) {
             controller.dismiss(animated: true) {
                 // Convert MFMessageComposeResult to MessageComposeState
                 let state: MessageComposeState
@@ -50,8 +50,8 @@ struct MessageComposerView: UIViewControllerRepresentable {
                     state = .unknown
                 }
                 
-                // Call completion handler if set
-                self.parent.onComplete?(state)
+                // Update binding with new state
+                self.parent.composeState = state
             }
         }
     }
@@ -59,9 +59,9 @@ struct MessageComposerView: UIViewControllerRepresentable {
 
 // Preview Provider for SwiftUI previews
 struct MessageComposerView_Previews: PreviewProvider {
+    @State static var composeState: MessageComposeState = .unknown
+    
     static var previews: some View {
-        MessageComposerView(recipients: ["010-1234-5678"]) { result in
-            print("Message compose result: \(result)")
-        }
+        MessageComposerView(recipients: ["010-1234-5678"], composeState: $composeState)
     }
 }
