@@ -17,7 +17,6 @@ class LSDefaults{
     
     class Keys{
         static let LastFullADShown = "LastFullADShown";
-        static let LastShareShown = "LastShareShown";
         static let LastRewardShown = "LastRewardShown";
         static let LastOpeningAdPrepared = "LastOpeningAdPrepared";
         
@@ -26,6 +25,7 @@ class LSDefaults{
         static let AdsShownCount = "AdsShownCount";
         static let AdsTrackingRequested = "AdsTrackingRequested";
         static let MessageSentCount = "MessageSentCount";
+        static let ReviewRequestedDate = "ReviewRequestedDate";
     }
     
     static var LastFullADShown : Date{
@@ -36,17 +36,6 @@ class LSDefaults{
         
         set(value){
             Defaults.set(value.timeIntervalSince1970, forKey: Keys.LastFullADShown);
-        }
-    }
-    
-    static var LastShareShown : Date{
-        get{
-            let seconds = Defaults.double(forKey: Keys.LastShareShown);
-            return Date.init(timeIntervalSince1970: seconds);
-        }
-        
-        set(value){
-            Defaults.set(value.timeIntervalSince1970, forKey: Keys.LastShareShown);
         }
     }
     
@@ -131,6 +120,31 @@ extension LSDefaults{
         set{
             Defaults.set(newValue, forKey: Keys.AdsTrackingRequested);
         }
+    }
+    
+    static var isReviewRequested: Bool {
+        get {
+            return ReviewRequestedDate != nil
+        }
+    }
+    
+    static var ReviewRequestedDate: Date? {
+        get {
+            let seconds = Defaults.double(forKey: Keys.ReviewRequestedDate)
+            return seconds > 0 ? Date(timeIntervalSince1970: seconds) : nil
+        }
+        
+        set {
+            if let value = newValue {
+                Defaults.set(value.timeIntervalSince1970, forKey: Keys.ReviewRequestedDate)
+            } else {
+                Defaults.removeObject(forKey: Keys.ReviewRequestedDate)
+            }
+        }
+    }
+    
+    static func updateReviewRequestDate() {
+        ReviewRequestedDate = Date()
     }
     
     static func requestAppTrackingIfNeed() -> Bool{

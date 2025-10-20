@@ -14,7 +14,7 @@ struct SendadvApp: App {
     
     // SceneDelegate의 기능을 SwiftUI ObservableObject로 마이그레이션
     @StateObject private var adManager = SwiftUIAdManager()
-    @StateObject private var reviewManager = SwiftUIReviewManager()
+    @StateObject private var reviewManager = ReviewManager()
     @StateObject private var rewardAd = SwiftUIRewardAdManager()
     
     var body: some Scene {
@@ -33,6 +33,7 @@ struct SendadvApp: App {
                 }
             }
             .environmentObject(adManager)
+            .environmentObject(reviewManager)
             .onAppear {
                 setupAds()
             }
@@ -47,12 +48,10 @@ struct SendadvApp: App {
             return
         }
         
-        MobileAds.shared.start { [weak adManager, weak reviewManager, weak rewardAd] status in
+        MobileAds.shared.start { [weak adManager, weak rewardAd] status in
             guard let adManager = adManager,
-                  let reviewManager = reviewManager,
                   let rewardAd = rewardAd else { return }
             
-            reviewManager.setup(interval: 60.0 * 60 * 24 * 2)
             rewardAd.setup(unitId: InterstitialAd.loadUnitId(name: "RewardAd") ?? "", interval: 60.0 * 60.0 * 24)
             adManager.setup()
             
@@ -92,24 +91,9 @@ struct SendadvApp: App {
             LSDefaults.increaseLaunchCount()
         }
         
-        guard LSDefaults.LaunchCount % reviewManager.reviewInterval > 0 else {
-            if #available(iOS 10.3, *) {
-                SKStoreReviewController.requestReview()
-            } else {
-                reviewManager.show()
-            }
-            return
-        }
+//        let isTest = adManager.isTesting(unit: .launch)
         
-        let isTest = adManager.isTesting(unit: .launch)
-        
-        reviewManager.appPermissionRequested = reviewManager.appPermissionRequested || LSDefaults.requestAppTrackingIfNeed()
-        guard reviewManager.appPermissionRequested else {
-            debugPrint("App doesn't allow launching Ads. appPermissionRequested[\(reviewManager.appPermissionRequested)]")
-            return
-        }
-        
-        adManager.show(unit: .launch, completion: { (unit, ad, result) in })
+//        adManager.show(unit: .launch, completion: { (unit, ad, result) in })
     }
 }
 
@@ -201,35 +185,6 @@ extension SwiftUIAdManager: GADManagerDelegate {
     
     func GAD<E>(manager: GADManager<E>, updatShownTimeForUnit unit: E, showTime time: Date) {
         LSDefaults.LastFullADShown = time
-    }
-}
-
-// MARK: - SwiftUI Review Manager
-class SwiftUIReviewManager: NSObject, ObservableObject {
-    var reviewInterval = 30
-    var appPermissionRequested = false
-    
-    func setup(interval: TimeInterval) {
-        // ReviewManager 초기화 로직
-    }
-    
-    func show() {
-        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-              let window = windowScene.windows.first else { return }
-        
-        let reviewManager = ReviewManager(window, interval: 60.0 * 60 * 24 * 2)
-        reviewManager.delegate = self
-        reviewManager.show()
-    }
-}
-
-extension SwiftUIReviewManager: ReviewManagerDelegate {
-    func reviewGetLastShowTime() -> Date {
-        return LSDefaults.LastShareShown
-    }
-    
-    func reviewUpdate(showTime: Date) {
-        LSDefaults.LastShareShown = showTime
     }
 }
 

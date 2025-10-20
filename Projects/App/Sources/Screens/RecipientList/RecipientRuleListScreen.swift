@@ -9,6 +9,7 @@ import SwiftUI
 import MessageUI
 import Contacts
 import SwiftData
+import StoreKit
 
 // A container view for a single recipient rule row that handles toggle, tap, and swipe actions, adapting to editing mode.
 struct RecipientRuleRowContainerView: View {
@@ -26,6 +27,7 @@ struct RecipientRuleRowContainerView: View {
 struct RecipientRuleListScreen: View {
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var adManager: SwiftUIAdManager
+    @EnvironmentObject private var reviewManager: ReviewManager
     // 순서(order) 기준 정렬
     @Query(sort: \RecipientsRule.title) private var rules: [RecipientsRule]
     
@@ -145,7 +147,22 @@ struct RecipientRuleListScreen: View {
             }
         }
         .sheet(isPresented: $showingMessageComposer) {
-            MessageComposerView(recipients: viewModel.phoneNumbers)
+            MessageComposerView(recipients: viewModel.phoneNumbers) { result in
+                print("Message Compose View is dismissed. result[\(result)]")
+                
+            #if DEBUG
+                guard case .cancelled = result else {
+                    return
+                }
+            #else
+                guard case .sent = result else {
+                    return
+                }
+            #endif
+                LSDefaults.increaseMessageSentCount()
+                
+                reviewManager.show()
+            }
         }
         .overlay {
             if isPreparingMessageView {
@@ -210,6 +227,8 @@ struct RecipientRuleListScreen: View {
         }
     }
 }
+
+
 
 #Preview {
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
