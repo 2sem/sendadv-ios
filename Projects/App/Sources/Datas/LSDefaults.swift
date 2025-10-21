@@ -147,29 +147,5 @@ extension LSDefaults{
         ReviewRequestedDate = Date()
     }
     
-    static func requestAppTrackingIfNeed() -> Bool{
-        guard !AdsTrackingRequested else{
-            debugPrint(#function, "Already requested")
-            return false;
-        }
-        
-        guard LaunchCount > 1 else{
-//            AdsShownCount += 1;
-            debugPrint(#function, "GAD requestPermission", "LaunchCount", LaunchCount)
-            return false;
-        }
-        
-        guard #available(iOS 14.0, *) else{
-            debugPrint(#function, "OS Under 14")
-            return false;
-        }
-        
-        
-        SwiftUIAdManager.shared?.requestPermission(completion: { (result) in
-            AdsTrackingRequested = true;
-        })
-        
-        return true;
-    }
 }
 

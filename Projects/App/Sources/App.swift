@@ -91,9 +91,9 @@ struct SendadvApp: App {
             LSDefaults.increaseLaunchCount()
         }
         
-//        let isTest = adManager.isTesting(unit: .launch)
+       let isTest = adManager.isTesting(unit: .launch)
         
-//        adManager.show(unit: .launch, completion: { (unit, ad, result) in })
+       adManager.show(unit: .launch, completion: { (unit, ad, result) in })
     }
 }
 
@@ -159,8 +159,32 @@ class SwiftUIAdManager: NSObject, ObservableObject {
     // 기존 코드 호환성을 위한 메서드
     func requestPermission(completion: @escaping (Bool) -> Void) {
         gadManager?.requestPermission { status in
-            completion(status == .authorized)
+completion(status == .authorized)
         }
+    }
+    
+    // 앱 추적 권한 요청 (필요한 경우에만)
+    func requestAppTrackingIfNeed() -> Bool {
+        guard !LSDefaults.AdsTrackingRequested else {
+            debugPrint(#function, "Already requested")
+            return false
+        }
+        
+        guard LSDefaults.LaunchCount > 1 else {
+            debugPrint(#function, "GAD requestPermission", "LaunchCount", LSDefaults.LaunchCount)
+            return false
+        }
+        
+        guard #available(iOS 14.0, *) else {
+            debugPrint(#function, "OS Under 14")
+            return false
+        }
+        
+        requestPermission { result in
+            LSDefaults.AdsTrackingRequested = true
+        }
+        
+        return true
     }
 }
 
