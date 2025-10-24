@@ -205,20 +205,20 @@ class SARecipientsTableViewController: UIViewController {
         hub.contentColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1);
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(noti:)), name: UIResponder.keyboardWillShowNotification, object: nil);
-        SwiftUIAdManager.shared?.show(unit: .full, completion: { [weak self](unit, ads, result) in
-            guard let self = self else{
-                return;
-            }
-            
-            self.present(self.messageController!, animated: true) {
-                print("Presenting message view controller has been completed");
-                
-                self.messageController?.view?.alpha = 1.0;
-                self.messageController?.view?.isHidden = false;
-                self.messageController?.view?.isHidden = false;
-                MBProgressHUD.hide(for: self.view, animated: true);
-            }
-        })
+//        SwiftUIAdManager.shared?.show(unit: .full, completion: { [weak self](unit, ads, result) in
+//            guard let self = self else{
+//                return;
+//            }
+//            
+//            self.present(self.messageController!, animated: true) {
+//                print("Presenting message view controller has been completed");
+//                
+//                self.messageController?.view?.alpha = 1.0;
+//                self.messageController?.view?.isHidden = false;
+//                self.messageController?.view?.isHidden = false;
+//                MBProgressHUD.hide(for: self.view, animated: true);
+//            }
+//        })
     }
     
     @objc func keyboardWillShow(noti: Notification){
@@ -297,9 +297,9 @@ class SARecipientsTableViewController: UIViewController {
             }
         }
         
-        SwiftUIAdManager.shared?.show(unit: .full, completion: { [weak self](unit, ads, result) in
-            self?.performSegue(withIdentifier: identifier, sender: sender);
-        })
+//        SwiftUIAdManager.shared?.show(unit: .full, completion: { [weak self](unit, ads, result) in
+//            self?.performSegue(withIdentifier: identifier, sender: sender);
+//        })
         
         return false;
     }
