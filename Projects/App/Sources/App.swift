@@ -164,6 +164,7 @@ completion(status == .authorized)
     }
     
     // 앱 추적 권한 요청 (필요한 경우에만)
+    @discardableResult
     func requestAppTrackingIfNeed() -> Bool {
         guard !LSDefaults.AdsTrackingRequested else {
             debugPrint(#function, "Already requested")
@@ -172,11 +173,6 @@ completion(status == .authorized)
         
         guard LSDefaults.LaunchCount > 1 else {
             debugPrint(#function, "GAD requestPermission", "LaunchCount", LSDefaults.LaunchCount)
-            return false
-        }
-        
-        guard #available(iOS 14.0, *) else {
-            debugPrint(#function, "OS Under 14")
             return false
         }
         
