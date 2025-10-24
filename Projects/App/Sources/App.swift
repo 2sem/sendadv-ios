@@ -87,13 +87,15 @@ struct SendadvApp: App {
     
     private func handleAppDidBecomeActive() {
         print("scene become active")
-        defer {
-            LSDefaults.increaseLaunchCount()
+        Task{
+            defer {
+                LSDefaults.increaseLaunchCount()
+            }
+            
+            let isTest = adManager.isTesting(unit: .launch)
+            
+            await adManager.show(unit: .launch)
         }
-        
-       let isTest = adManager.isTesting(unit: .launch)
-        
-       adManager.show(unit: .launch, completion: { (unit, ad, result) in })
     }
 }
 
@@ -143,8 +145,19 @@ class SwiftUIAdManager: NSObject, ObservableObject {
         gadManager?.prepare(openingUnit: unit, isTesting: self.isTesting(unit: unit), interval: interval)
     }
     
-    func show(unit: GADUnitName, completion: @escaping (GADUnitName, Any?, Bool) -> Void) {
-        gadManager?.show(unit: unit, isTesting: self.isTesting(unit: .launch), completion: completion)
+    @MainActor
+    @discardableResult
+    func show(unit: GADUnitName) async -> Bool {
+        await withCheckedContinuation { continuation in
+            guard let gadManager else {
+                continuation.resume(returning: false)
+                return
+            }
+            
+            gadManager.show(unit: unit, isTesting: self.isTesting(unit: .launch) ){ unit, _,result  in
+                continuation.resume(returning: result)
+            }
+        }
     }
     
     func createAdLoader(forUnit unit: GADUnitName, options: [NativeAdViewAdOptions] = []) -> AdLoader? {
@@ -158,14 +171,19 @@ class SwiftUIAdManager: NSObject, ObservableObject {
     
     // 기존 코드 호환성을 위한 메서드
     func requestPermission(completion: @escaping (Bool) -> Void) {
-        gadManager?.requestPermission { status in
-completion(status == .authorized)
+        guard let gadManager else {
+            completion(false)
+            return
+        }
+        
+        gadManager.requestPermission { status in
+            completion(status == .authorized)
         }
     }
     
     // 앱 추적 권한 요청 (필요한 경우에만)
     @discardableResult
-    func requestAppTrackingIfNeed() -> Bool {
+    func requestAppTrackingIfNeed() async -> Bool {
         guard !LSDefaults.AdsTrackingRequested else {
             debugPrint(#function, "Already requested")
             return false
@@ -176,11 +194,12 @@ completion(status == .authorized)
             return false
         }
         
-        requestPermission { result in
-            LSDefaults.AdsTrackingRequested = true
+        return await withCheckedContinuation { continuation in
+            self.requestPermission { granted in
+                LSDefaults.AdsTrackingRequested = true
+                continuation.resume(returning: granted)
+            }
         }
-        
-        return true
     }
 }
 

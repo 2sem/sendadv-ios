@@ -31,6 +31,8 @@ struct RecipientRuleListScreen: View {
     // 순서(order) 기준 정렬
     @Query(sort: \RecipientsRule.title) private var rules: [RecipientsRule]
     
+    @AppStorage("LaunchCount") var launchCount: Int = 0
+    
 #if DEBUG
     var nativeAdUnit: String = "ca-app-pub-3940256099942544/3986624511"
 #else
@@ -48,11 +50,17 @@ struct RecipientRuleListScreen: View {
     @State private var messageComposerState: MessageComposeState = .unknown
     
     @MainActor
-    private func presentFullAdThen(_ action: @escaping @MainActor () -> Void) {
-        adManager.show(unit: .full) { _, _, _ in
-            Task { @MainActor in
-                action()
-            }
+    private func presentFullAdThen(_ action: @escaping () -> Void) {
+        guard launchCount > 1 else {
+            action()
+            return
+        }
+        
+        Task {
+            await adManager.requestAppTrackingIfNeed()
+            
+            await adManager.show(unit: .full)
+            action()
         }
     }
     
@@ -88,7 +96,8 @@ struct RecipientRuleListScreen: View {
                                 .frame(height: 100)
                                 .onTapGesture {
                                     guard isEditing else { return }
-                                    presentFullAdThen {
+                                    
+                                    presentFullAdThen { @MainActor in
                                         selectedRule = rule
                                     }
                                 }
