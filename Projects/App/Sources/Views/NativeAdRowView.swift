@@ -36,6 +36,8 @@ struct NativeAdRowView: View {
                                         .font(.caption)
                                         .foregroundStyle(.tertiary)
                                 }
+                            }.onAppearOnce {
+                                adManager.requestAppTrackingIfNeed()
                             }
                             Spacer()
                             if let cta = ad.callToAction {
