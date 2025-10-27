@@ -26,6 +26,7 @@ struct RecipientRuleRowContainerView: View {
 
 struct RecipientRuleListScreen: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.undoManager) private var undoManager
     @EnvironmentObject private var adManager: SwiftUIAdManager
     @EnvironmentObject private var reviewManager: ReviewManager
     // 순서(order) 기준 정렬
@@ -39,9 +40,11 @@ struct RecipientRuleListScreen: View {
     @InfoPlist(["GADUnitIdentifiers", "Native"], default: "") var nativeAdUnit: String
 #endif
     
+    @State private var state: SARecipientListScreenModel.State = .idle
+    @State private var selectedRule: RecipientsRule?
+    
     @State private var showingMessageComposer = false
     @State private var isPreparingMessageView = false
-    @State private var selectedRule: RecipientsRule?
     @State private var showingAlert = false
     @State private var alertMessage = ""
     @State private var showingSettingsAlert = false
@@ -49,7 +52,6 @@ struct RecipientRuleListScreen: View {
     @State private var isEditing = false
     @State private var messageComposerState: MessageComposeState = .unknown
     
-    @MainActor
     private func presentFullAdThen(_ action: @escaping () -> Void) {
         guard launchCount > 1 else {
             action()
@@ -60,6 +62,7 @@ struct RecipientRuleListScreen: View {
             await adManager.requestAppTrackingIfNeed()
             
             await adManager.show(unit: .full)
+            
             action()
         }
     }
@@ -98,7 +101,7 @@ struct RecipientRuleListScreen: View {
                                     guard isEditing else { return }
                                     
                                     presentFullAdThen { @MainActor in
-                                        selectedRule = rule
+                                        state = .editingRule(rule)
                                     }
                                 }
                                 .if(isEditing) { view in
@@ -146,12 +149,10 @@ struct RecipientRuleListScreen: View {
             
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button("rules.add".localized()) {
-                    // 새 규칙 생성
-                    let newRule = viewModel.createRule(modelContext: modelContext)
-                    
                     // 전면 광고 후 새 규칙 편집 화면으로 이동
-                    presentFullAdThen {
-                        selectedRule = newRule
+                    presentFullAdThen { @MainActor in
+                        print("select new rule.")
+                        state = .creatingRule
                     }
                 }.tint(Color.accent)
             }
@@ -176,6 +177,29 @@ struct RecipientRuleListScreen: View {
             
             messageComposerState = .unknown
         }
+        .onChange(of: state, { _, newState in
+            switch newState {
+            case .creatingRule:
+                // 새 규칙 생성
+                guard let newRule = viewModel.createRule(modelContext: modelContext, undoManager: undoManager) else {
+                    return
+                }
+                
+                state = .editingRule(newRule)
+            case .editingRule(let newRule):
+                selectedRule = newRule
+            case .idle:
+                break
+            }
+        })
+        .onChange(of: selectedRule, { _, newSelectedRule in
+            if let newSelectedRule {
+                return
+            }
+            
+            state = .idle
+        })
+//        .onChange(of: state, handleStateChange)
         .overlay {
             if isPreparingMessageView {
                 ProgressView()

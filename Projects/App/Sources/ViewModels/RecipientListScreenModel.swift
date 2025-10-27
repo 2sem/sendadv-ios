@@ -20,6 +20,14 @@ protocol RecipientListScreenModel {
 @Observable
 class SARecipientListScreenModel: RecipientListScreenModel {
     
+    public enum State: Equatable {
+        case idle
+        case creatingRule
+        case editingRule(RecipientsRule)
+    }
+    
+    var state: State = .idle
+    
     var phoneNumbers: [String] = []
     
     func toggleRule(_ rule: RecipientsRule, isEnabled: Bool) {
@@ -58,12 +66,14 @@ class SARecipientListScreenModel: RecipientListScreenModel {
         return phones
     }
     
-    func createRule(modelContext: ModelContext) -> RecipientsRule? {
+    func createRule(modelContext: ModelContext, undoManager: UndoManager?) -> RecipientsRule? {
         let newRule = RecipientsRule(title: "New Rule".localized(), enabled: true)
         
         do {
-            
             modelContext.insert(newRule)
+//            undoManager?.registerUndo(withTarget: modelContext) { context in
+//                context.delete(newRule)
+//            }
 //            try modelContext.save()
         } catch {
             return nil

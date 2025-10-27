@@ -145,6 +145,10 @@ class SwiftUIAdManager: NSObject, ObservableObject {
         gadManager?.prepare(openingUnit: unit, isTesting: self.isTesting(unit: unit), interval: interval)
     }
     
+    /// Shows an ad for the specified unit.
+    /// 
+    /// Note: This method may cause undo/transaction issues in SwiftUI.
+    /// To avoid potential problems, consider using `showDeferred(unit:)` which defers the call to the main queue and ensures proper transaction handling.
     @MainActor
     @discardableResult
     func show(unit: GADUnitName) async -> Bool {
@@ -257,3 +261,4 @@ extension SwiftUIRewardAdManager: GADRewardManagerDelegate {
         // 필요한 경우 추가 로직
     }
 }
+
