@@ -78,7 +78,11 @@ struct RuleDetailScreen: View {
 			ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
                     print("커스텀 뒤로 가기 버튼이 눌렸습니다.")
-                    // 필요한 로직 추가
+                    
+                    if let undoManager {
+                        viewModel.rollback(withUndoManager: undoManager)
+                    }
+                    
                     dismiss()
                 }) {
                     HStack(alignment: .center, spacing: 4) {
@@ -106,15 +110,6 @@ struct RuleDetailScreen: View {
 			
             RuleFilterScreen(filter: filter)
         }
-		 .onDisappear {
-             print("Rule Detail will be disappeared. isSaved[\(viewModel.isSaved)]")
-            
-             guard !viewModel.isSaved, let undoManager else {
-                 return
-             }
-            
-             viewModel.rollback(withUndoManager: undoManager)
-         }
 	}
 }
 

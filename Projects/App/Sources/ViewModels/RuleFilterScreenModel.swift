@@ -69,7 +69,7 @@ class RuleFilterScreenModel {
         
         // Save changes
         do {
-            try context.save()
+//            try context.save()
         } catch {
             print("Failed to save filter:", error)
         }

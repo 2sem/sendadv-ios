@@ -27,7 +27,12 @@ class RuleDetailScreenModel {
     
     func rollback(withUndoManager undoManager: UndoManager) {
         undoManager.undo()
-        print("Rule Detail is be rollbacked")
+        while undoManager.canUndo {
+            undoManager.undo()
+//        undoManager.endUndoGrouping()
+//        undoManager.undoNestedGroup()
+        }
+        print("Rule Detail is be rollbacked. is Main Thread: \(Thread.isMainThread)")
     }
 	
 	func getFilterText(for target: String) -> String {
