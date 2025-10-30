@@ -11,19 +11,6 @@ import Contacts
 import SwiftData
 import StoreKit
 
-// A container view for a single recipient rule row that handles toggle, tap, and swipe actions, adapting to editing mode.
-struct RecipientRuleRowContainerView: View {
-    let rule: RecipientsRule
-    let isEditing: Bool
-    let toggleRule: (RecipientsRule, Bool) -> Void
-    let onSelect: () -> Void
-    let onDelete: (RecipientsRule) -> Void
-
-    var body: some View {
-        
-    }
-}
-
 struct RecipientRuleListScreen: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.undoManager) private var undoManager
@@ -93,6 +80,8 @@ struct RecipientRuleListScreen: View {
                         ForEach(Array(rules.enumerated()), id: \.element.id) { index, rule in
                             Group {
                                 NativeAdRowView(index: index, interval: interval)
+                                // Added print statement for lifecycle tracking
+                                let _ = print("RecipientRuleRowView init - rule id: \(rule.id), title: \(rule.title)")
                                 RecipientRuleRowView(rule: rule) { isEnabled in
                                     toggleRule(rule, isEnabled: isEnabled)
                                 }
@@ -107,6 +96,8 @@ struct RecipientRuleListScreen: View {
                                 .if(isEditing) { view in
                                     view.swipeActions(edge: .trailing, allowsFullSwipe: false) {
                                         Button(role: .destructive) {
+                                            // Added print statement before deletion
+                                            print("Deleting rule - id: \(rule.id), title: \(rule.title)")
                                             deleteRule(rule)
                                         } label: {
                                             Label("Delete".localized(), systemImage: "trash")
@@ -286,3 +277,4 @@ struct RecipientRuleListScreen: View {
     .modelContainer(container)
     .environmentObject(adManager)
 }
+
