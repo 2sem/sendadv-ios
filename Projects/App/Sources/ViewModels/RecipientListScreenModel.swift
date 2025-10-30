@@ -35,6 +35,9 @@ class SARecipientListScreenModel: RecipientListScreenModel {
     }
     
     func deleteRule(_ rule: RecipientsRule, modelContext: ModelContext) {
+//        try! modelContext.delete(model: RecipientsRule.self, where: #Predicate { ruleToDelete in
+//            ruleToDelete.persistentModelID == ruleId
+//        })
         modelContext.delete(rule)
         try? modelContext.save()
     }
