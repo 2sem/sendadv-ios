@@ -39,6 +39,10 @@ struct RecipientRuleListScreen: View {
     @State private var isEditing = false
     @State private var messageComposerState: MessageComposeState = .unknown
     @State private var skipPhoneNumberWarning = false
+	@State private var isBatchSending = false
+	@State private var allPhoneNumbers: [String] = []
+	@State private var currentBatchIndex: Int = 0
+	private let batchSize: Int = 20
     
     private func presentFullAdThen(_ action: @escaping () -> Void) {
         guard launchCount > 1 else {
@@ -150,25 +154,40 @@ struct RecipientRuleListScreen: View {
             }
         }
         .sheet(isPresented: $showingMessageComposer) {
-            MessageComposerView(recipients: viewModel.phoneNumbers, composeState: $messageComposerState)
+			MessageComposerView(recipients: viewModel.phoneNumbers, composeState: $messageComposerState)
         }
-        .onChange(of: messageComposerState) {
-            print("rule list screen detect message composer dismission. state[\(messageComposerState)]")
-        #if DEBUG
-            guard case .cancelled = messageComposerState else {
+		.onChange(of: messageComposerState) {
+            guard messageComposerState != .unknown else {
                 return
             }
-        #else
-            guard case .sent = messageComposerState else {
-                return
-            }
-        #endif
             
-            LSDefaults.increaseMessageSentCount()
-            reviewManager.show()
-            
-            messageComposerState = .unknown
-        }
+			print("rule list screen detect message composer dismission. state[\(messageComposerState)]")
+			// 배치 전송 처리: 사용자가 취소하지 않은 경우 다음 배치를 자동 진행
+			if isBatchSending {
+                if messageComposerState == .cancelled {
+					// 사용자가 취소하면 배치 전송 중단
+					isBatchSending = false
+					allPhoneNumbers = []
+					currentBatchIndex = 0
+				} else {
+					presentNextBatch()
+				}
+			}
+			
+			// 리뷰 유도 로직은 기존 조건을 유지하되, 배치 여부와 무관하게 동작
+		#if DEBUG
+			if case .cancelled = messageComposerState {
+				LSDefaults.increaseMessageSentCount()
+				reviewManager.show()
+			}
+		#else
+			if case .sent = messageComposerState {
+				LSDefaults.increaseMessageSentCount()
+				reviewManager.show()
+			}
+		#endif
+			messageComposerState = .unknown
+		}
         .onChange(of: state, { _, newState in
             switch newState {
             case .creatingRule:
@@ -199,11 +218,11 @@ struct RecipientRuleListScreen: View {
                     .scaleEffect(1.5)
             }
         }
-        .alert("Warning".localized(), isPresented: $showingAlert) {
-            Button("Continue".localized()) {
-                skipPhoneNumberWarning = true
-                onSendMessage(allowAll: true)
-            }
+		.alert("Warning".localized(), isPresented: $showingAlert) {
+			Button("Continue".localized()) {
+				skipPhoneNumberWarning = true
+				onSendMessage(allowAll: true)
+			}
             Button("Cancel".localized(), role: .cancel) { }
         } message: {
             Text(alertMessage)
@@ -232,7 +251,7 @@ struct RecipientRuleListScreen: View {
         viewModel.deleteRule(rule, modelContext: modelContext)
     }
     
-    private func onSendMessage(allowAll: Bool = false) {
+	private func onSendMessage(allowAll: Bool = false) {
         // 규칙이 설정되었는지 확인
         let enabledRules = rules.filter { $0.enabled }
         if enabledRules.isEmpty && !allowAll {
@@ -245,19 +264,32 @@ struct RecipientRuleListScreen: View {
         Task { @MainActor in
             defer { isPreparingMessageView = false }
             do {
-                let phoneNumbers = try await viewModel.phoneNumbers(for: rules, allowAll: allowAll)
+				let _phoneNumbers = try await viewModel.phoneNumbers(for: rules, allowAll: allowAll)
+				let phoneNumbers = Array(_phoneNumbers)
                 
                 // 전화번호가 많으면 경고 표시 (skipPhoneNumberWarning이 false일 때만)
-                if phoneNumbers.count > 100 && !skipPhoneNumberWarning {
-                    alertMessage = String(format: "send.warning.manyRecipients".localized(), phoneNumbers.count)
-                    viewModel.phoneNumbers = phoneNumbers
-                    showingAlert = true
-                    return
-                }
+				if phoneNumbers.count > batchSize && !skipPhoneNumberWarning {
+					alertMessage = String(format: "send.warning.manyRecipients".localized(), phoneNumbers.count)
+					// 경고 표시 후 사용자가 '계속'하면 배치 전송을 시작
+					allPhoneNumbers = phoneNumbers
+					isBatchSending = true
+					currentBatchIndex = 0
+					showingAlert = true
+					return
+				}
                 
-                skipPhoneNumberWarning = false
-                viewModel.phoneNumbers = phoneNumbers
-                showingMessageComposer = true
+				skipPhoneNumberWarning = false
+				if phoneNumbers.count > batchSize {
+					// 바로 배치 전송 시작 (경고를 이미 건너뛴 경우)
+					allPhoneNumbers = phoneNumbers
+					isBatchSending = true
+					currentBatchIndex = 0
+					presentNextBatch()
+				} else {
+					// 소량이면 단일 표시
+					viewModel.phoneNumbers = phoneNumbers
+					showingMessageComposer = true
+				}
             } catch let sendMessageError as SendError {
                 switch sendMessageError {
                     case .noRulesEnabled:
@@ -272,6 +304,27 @@ struct RecipientRuleListScreen: View {
             }
         }
     }
+
+	private func presentNextBatch() {
+		guard isBatchSending else { return }
+		let start = currentBatchIndex * batchSize
+		guard start < allPhoneNumbers.count else {
+			// 모든 배치 완료
+			print("Batch sending completed. total: \(allPhoneNumbers.count)")
+			isBatchSending = false
+			allPhoneNumbers = []
+			currentBatchIndex = 0
+			return
+		}
+		let end = min(start + batchSize, allPhoneNumbers.count)
+		let batch = Array(allPhoneNumbers[start..<end])
+		let totalBatches = Int(ceil(Double(allPhoneNumbers.count) / Double(batchSize)))
+		let currentNumber = currentBatchIndex + 1
+		print("Presenting batch \(currentNumber)/\(totalBatches) [range: \(start)..<\(end), count: \(batch.count)]")
+		viewModel.phoneNumbers = batch
+		showingMessageComposer = true
+		currentBatchIndex += 1
+	}
 }
 
 
