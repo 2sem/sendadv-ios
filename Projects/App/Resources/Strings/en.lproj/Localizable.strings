@@ -41,7 +41,7 @@
 "New Rule" = "New Rule";
 
 // Sending warnings
-"send.warning.manyRecipients" = "You are about to send message to %d recipients.\nThis may take a moment to load the message composer.";
+"send.warning.batchSending" = "You are about to send message to %d recipients.\nRecipients will be separated into groups of %d for sending.";
 
 // RuleListScreen
 "rules.empty" = "There are no recipient rules";

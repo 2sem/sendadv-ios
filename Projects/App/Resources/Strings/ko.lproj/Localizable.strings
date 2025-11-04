@@ -59,7 +59,7 @@
 "Permission required to acess contacts for creating recipients list" = "수신자 목록 생성을 위해 연락처 접근 권한이 필요합니다";
 
 // Sending warnings
-"send.warning.manyRecipients" = "메시지를 %d명의 수신자에게 전송하려고 합니다.\n메시지 작성 화면을 불러오는데 시간이 걸릴 수 있습니다.";
+"send.warning.batchSending" = "메시지를 %d명의 수신자에게 전송하려고 합니다.\n수신자를 %d명씩 나누어 전송합니다.";
 
 // SplashScreen
 "App Title" = "보내봐 단체 문자";
