@@ -38,6 +38,7 @@ struct RecipientRuleListScreen: View {
     @State private var viewModel = SARecipientListScreenModel()
     @State private var isEditing = false
     @State private var messageComposerState: MessageComposeState = .unknown
+    @State private var skipPhoneNumberWarning = false
     
     private func presentFullAdThen(_ action: @escaping () -> Void) {
         guard launchCount > 1 else {
@@ -200,6 +201,7 @@ struct RecipientRuleListScreen: View {
         }
         .alert("Warning".localized(), isPresented: $showingAlert) {
             Button("Continue".localized()) {
+                skipPhoneNumberWarning = true
                 onSendMessage(allowAll: true)
             }
             Button("Cancel".localized(), role: .cancel) { }
@@ -231,12 +233,29 @@ struct RecipientRuleListScreen: View {
     }
     
     private func onSendMessage(allowAll: Bool = false) {
+        // 규칙이 설정되었는지 확인
+        let enabledRules = rules.filter { $0.enabled }
+        if enabledRules.isEmpty && !allowAll {
+            alertMessage = "There is no activated Rules for Reciepients.\nAll Contacts will receive Message.".localized()
+            showingAlert = true
+            return
+        }
+        
         isPreparingMessageView = true
         Task { @MainActor in
             defer { isPreparingMessageView = false }
             do {
                 let phoneNumbers = try await viewModel.phoneNumbers(for: rules, allowAll: allowAll)
                 
+                // 전화번호가 많으면 경고 표시 (skipPhoneNumberWarning이 false일 때만)
+                if phoneNumbers.count > 100 && !skipPhoneNumberWarning {
+                    alertMessage = "You are about to send message to \(phoneNumbers.count) recipients.\nThis may take a moment to load the message composer.".localized()
+                    viewModel.phoneNumbers = phoneNumbers
+                    showingAlert = true
+                    return
+                }
+                
+                skipPhoneNumberWarning = false
                 viewModel.phoneNumbers = phoneNumbers
                 showingMessageComposer = true
             } catch let sendMessageError as SendError {
