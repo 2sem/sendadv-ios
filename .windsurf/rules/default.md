@@ -58,6 +58,37 @@ respond in korean always.
 - ViewController에 해당하는 전체 View는 Screen으로 끝냄
 - Screen내 하위 View는 View로 끝냄
 
+## 파일
+### 화면
+1. 스플래시 화면
+- name: 스플래시 화면 / SplashScreen
+- file: Projects/App/Sources/Screens/SplashScreen.swift
+- view model: DataMigrationManager (내장 @StateObject)
+- description: 앱 시작 시 데이터 마이그레이션 처리
+
+2. 규칙 목록 화면
+- name: 규칙 목록 화면 / RecipientRuleListScreen
+- file: Projects/App/Sources/Screens/RecipientList/RecipientRuleListScreen.swift
+- view model: Projects/App/Sources/ViewModels/RecipientListScreenModel.swift
+
+3. 규칙 상세 화면
+- name: 규칙 상세 화면 / RuleDetailScreen
+- file: Projects/App/Sources/Screens/RuleDetailScreen.swift
+- view model: Projects/App/Sources/ViewModels/RuleDetailScreenModel.swift
+- description: 수신자 규칙 편집 (직책/부서/조직 필터 설정)
+
+4. 규칙 필터 화면
+- name: 규칙 필터 화면 / RuleFilterScreen
+- file: Projects/App/Sources/Screens/RuleFilterScreen.swift
+- view model: Projects/App/Sources/ViewModels/RuleFilterScreenModel.swift
+- description: 필터 항목 선택 (직책/부서/조직)
+
+5. 앱 시작 지점
+- name: SendadvIosApp
+- file: sendadv-ios/Sources/SendadvIosApp.swift
+- view model: 없음
+- description: @main 앱 진입점
+
 # 패치 안전성(Safe Patch) 규칙
 
 # 금지 사항
