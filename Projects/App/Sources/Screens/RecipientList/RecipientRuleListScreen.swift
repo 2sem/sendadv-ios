@@ -249,7 +249,7 @@ struct RecipientRuleListScreen: View {
                 
                 // 전화번호가 많으면 경고 표시 (skipPhoneNumberWarning이 false일 때만)
                 if phoneNumbers.count > 100 && !skipPhoneNumberWarning {
-                    alertMessage = "You are about to send message to \(phoneNumbers.count) recipients.\nThis may take a moment to load the message composer.".localized()
+                    alertMessage = String(format: "send.warning.manyRecipients".localized(), phoneNumbers.count)
                     viewModel.phoneNumbers = phoneNumbers
                     showingAlert = true
                     return

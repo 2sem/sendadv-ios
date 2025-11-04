@@ -58,6 +58,9 @@
 "There is no activated Rules for Reciepients\nAll Contacts will receive Message." = "활성화된 수신자 목록 생성 규칙이 없습니다. 모든 연락처에 메시지가 전송됩니다.";
 "Permission required to acess contacts for creating recipients list" = "수신자 목록 생성을 위해 연락처 접근 권한이 필요합니다";
 
+// Sending warnings
+"send.warning.manyRecipients" = "메시지를 %d명의 수신자에게 전송하려고 합니다.\n메시지 작성 화면을 불러오는데 시간이 걸릴 수 있습니다.";
+
 // SplashScreen
 "App Title" = "보내봐 단체 문자";
 "Migration Failed" = "마이그레이션 실패";

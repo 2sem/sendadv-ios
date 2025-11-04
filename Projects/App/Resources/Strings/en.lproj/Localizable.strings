@@ -40,6 +40,9 @@
 "Select All" = "Select All";
 "New Rule" = "New Rule";
 
+// Sending warnings
+"send.warning.manyRecipients" = "You are about to send message to %d recipients.\nThis may take a moment to load the message composer.";
+
 // RuleListScreen
 "rules.empty" = "There are no recipient rules";
 "rules.empty.description" = "Try adding a new recipient rule";
