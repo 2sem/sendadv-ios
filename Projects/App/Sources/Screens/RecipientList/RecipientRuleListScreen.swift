@@ -10,6 +10,7 @@ import MessageUI
 import Contacts
 import SwiftData
 import StoreKit
+import Combine
 
 struct RecipientRuleListScreen: View {
     @Environment(\.modelContext) private var modelContext
@@ -32,6 +33,7 @@ struct RecipientRuleListScreen: View {
     
     @State private var showingMessageComposer = false
     @State private var isPreparingMessageView = false
+	@State private var isMessageComposerLoading = false
     @State private var showingAlert = false
     @State private var alertMessage = ""
     @State private var showingSettingsAlert = false
@@ -154,7 +156,29 @@ struct RecipientRuleListScreen: View {
             }
         }
         .sheet(isPresented: $showingMessageComposer) {
-			MessageComposerView(recipients: viewModel.phoneNumbers, composeState: $messageComposerState)
+			ZStack {
+				MessageComposerView(
+					recipients: viewModel.phoneNumbers,
+					composeState: $messageComposerState,
+					isLoading: $isMessageComposerLoading
+				)
+				
+				if isMessageComposerLoading {
+					Color.black.opacity(0.4)
+						.edgesIgnoringSafeArea(.all)
+					
+					VStack(spacing: 16) {
+						ProgressView()
+							.progressViewStyle(CircularProgressViewStyle(tint: .white))
+							.scaleEffect(1.5)
+						
+						Text("Getting started to write\nIt will take much longer for many recipients.".localized())
+							.foregroundColor(.white)
+							.multilineTextAlignment(.center)
+							.font(.system(size: 14))
+					}
+				}
+			}
         }
 		.onChange(of: messageComposerState) {
             guard messageComposerState != .unknown else {
@@ -218,7 +242,13 @@ struct RecipientRuleListScreen: View {
                     .scaleEffect(1.5)
             }
         }
-		.alert("Warning".localized(), isPresented: $showingAlert) {
+		.onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
+			print("keyboard will show on rule list screen")
+		}
+		.onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
+			print("keyboard will hide on rule list screen")
+		}
+        .alert("Warning".localized(), isPresented: $showingAlert) {
 			Button("Continue".localized()) {
 				skipPhoneNumberWarning = true
 				onSendMessage(allowAll: true)
@@ -251,7 +281,7 @@ struct RecipientRuleListScreen: View {
         viewModel.deleteRule(rule, modelContext: modelContext)
     }
     
-	private func onSendMessage(allowAll: Bool = false) {
+    private func onSendMessage(allowAll: Bool = false) {
         // 규칙이 설정되었는지 확인
         let enabledRules = rules.filter { $0.enabled }
         if enabledRules.isEmpty && !allowAll {
@@ -261,6 +291,7 @@ struct RecipientRuleListScreen: View {
         }
         
         isPreparingMessageView = true
+        
         Task { @MainActor in
             defer { isPreparingMessageView = false }
             do {
@@ -288,6 +319,7 @@ struct RecipientRuleListScreen: View {
 				} else {
 					// 소량이면 단일 표시
 					viewModel.phoneNumbers = phoneNumbers
+					isMessageComposerLoading = true
 					showingMessageComposer = true
 				}
             } catch let sendMessageError as SendError {
@@ -322,6 +354,7 @@ struct RecipientRuleListScreen: View {
 		let currentNumber = currentBatchIndex + 1
 		print("Presenting batch \(currentNumber)/\(totalBatches) [range: \(start)..<\(end), count: \(batch.count)]")
 		viewModel.phoneNumbers = batch
+		isMessageComposerLoading = true
 		showingMessageComposer = true
 		currentBatchIndex += 1
 	}

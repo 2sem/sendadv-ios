@@ -1,5 +1,6 @@
 import SwiftUI
 import MessageUI
+import Combine
 
 public enum MessageComposeState {
     case unknown
@@ -11,11 +12,23 @@ public enum MessageComposeState {
 struct MessageComposerView: UIViewControllerRepresentable {
     let recipients: [String]
     @Binding var composeState: MessageComposeState
+    @Binding var isLoading: Bool
     
     func makeUIViewController(context: Context) -> MFMessageComposeViewController {
         let controller = MFMessageComposeViewController()
         controller.recipients = recipients
         controller.messageComposeDelegate = context.coordinator
+        
+        // Combine Publisher로 키보드 이벤트 구독
+        context.coordinator.keyboardCancellable = NotificationCenter.default
+            .publisher(for: UIResponder.keyboardWillShowNotification)
+            .sink { _ in
+                print("keyboard will show in message composer")
+                DispatchQueue.main.async {
+                    self.isLoading = false
+                }
+            }
+        
         return controller
     }
     
@@ -29,6 +42,7 @@ struct MessageComposerView: UIViewControllerRepresentable {
     
     class Coordinator: NSObject, MFMessageComposeViewControllerDelegate {
         var parent: MessageComposerView
+        var keyboardCancellable: AnyCancellable?
         
         init(_ parent: MessageComposerView) {
             self.parent = parent
@@ -36,6 +50,10 @@ struct MessageComposerView: UIViewControllerRepresentable {
         
         func messageComposeViewController(_ controller: MFMessageComposeViewController,
                                           didFinishWith result: MessageComposeResult) {
+            // Publisher 구독 취소
+            keyboardCancellable?.cancel()
+            keyboardCancellable = nil
+            
             controller.dismiss(animated: true) {
                 // Convert MFMessageComposeResult to MessageComposeState
                 let state: MessageComposeState
@@ -60,8 +78,9 @@ struct MessageComposerView: UIViewControllerRepresentable {
 // Preview Provider for SwiftUI previews
 struct MessageComposerView_Previews: PreviewProvider {
     @State static var composeState: MessageComposeState = .unknown
+    @State static var isLoading: Bool = true
     
     static var previews: some View {
-        MessageComposerView(recipients: ["010-1234-5678"], composeState: $composeState)
+        MessageComposerView(recipients: ["010-1234-5678"], composeState: $composeState, isLoading: $isLoading)
     }
 }
