@@ -101,6 +101,8 @@ struct SplashScreen: View {
             
             // 마이그레이션 완료 후 App에 알림
             await MainActor.run {
+				// 키보드 웜업: 메시지 작성기 표시 전에 한 번 트리거
+				KeyboardWarmup.prewarm()
                 withAnimation(.easeInOut(duration: 0.5)) {
                     isDone = true
                 }
