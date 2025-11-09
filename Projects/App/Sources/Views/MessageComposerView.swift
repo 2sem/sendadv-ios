@@ -20,14 +20,13 @@ struct MessageComposerView: UIViewControllerRepresentable {
         controller.messageComposeDelegate = context.coordinator
         
         // Combine Publisher로 키보드 이벤트 구독
-        context.coordinator.keyboardCancellable = NotificationCenter.default
-            .publisher(for: UIResponder.keyboardWillShowNotification)
-            .sink { _ in
-                print("keyboard will show in message composer")
-                DispatchQueue.main.async {
-                    self.isLoading = false
-                }
-            }
+		context.coordinator.keyboardCancellable = NotificationCenter.default
+			.publisher(for: UIResponder.keyboardWillShowNotification)
+			.receive(on: RunLoop.main)
+            .sink { _ in 
+				print("keyboard will show in message composer")
+				self.isLoading = false
+			}
         
         return controller
     }
