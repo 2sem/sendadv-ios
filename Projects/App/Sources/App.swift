@@ -158,7 +158,7 @@ class SwiftUIAdManager: NSObject, ObservableObject {
                 return
             }
             
-            gadManager.show(unit: unit, isTesting: self.isTesting(unit: .launch) ){ unit, _,result  in
+            gadManager.show(unit: unit, isTesting: self.isTesting(unit: unit) ){ unit, _,result  in
                 continuation.resume(returning: result)
             }
         }
