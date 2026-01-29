@@ -25,7 +25,7 @@
 "There is no contact matched to the enabled rules" = "규칙에 일치하는 연락처가 없습니다";
 "Creating recipients list" = "수신자 목록 생성 중";
 "Getting started to write\nIt will take much longer for many recipients." = "작성화면 준비 중\n수신자가 많으면 오래걸릴 수 있습니다";
-"Edit Recipients Rule" = "수신자 목록 생성 규칙 수정";
+"Edit Recipients Rule" = "연락처 필터 수정";
 "Rule Setting" = "규칙 설정";
 "Job" = "직책";
 "Department" = "부서";
@@ -38,17 +38,17 @@
 "ads action" = "설치하기";
 
 "Select All" = "모두";
-"New Rule" = "새 규칙";
+"New Rule" = "새 필터";
 
 // RecipientRuleListScreen
-"rules.empty" = "수신자 규칙이 없습니다";
-"rules.empty.description" = "새로운 수신자 규칙을 추가해보세요";
-"rules.title" = "수신자 규칙 목록";
-"rules.add" = "새 규칙 추가";
+"rules.empty" = "연락처 필터가 없습니다";
+"rules.empty.description" = "새로운 연락처 필터를 추가해보세요";
+"rules.title" = "연락처 필터 목록";
+"rules.add" = "새 필터 추가";
 
 // RuleDetailScreen
-"Rule Title" = "규칙 이름";
-"Enter rule title" = "규칙 이름을 입력하세요";
+"Rule Title" = "필터 이름";
+"Enter rule title" = "필터 이름을 입력하세요";
 
 // Common actions
 "Edit" = "편집";
@@ -73,7 +73,7 @@
 "Starting migration..." = "마이그레이션 시작...";
 "Migration completed." = "마이그레이션이 완료되었습니다.";
 "Migration failed: %@" = "마이그레이션 실패: %@";
-"Migrating recipients rules..." = "수신자 규칙 마이그레이션 중...";
+"Migrating recipients rules..." = "연락처 필터 마이그레이션 중...";
 "Migrating filter rules..." = "필터 규칙 마이그레이션 중...";
 "Converting to SwiftData..." = "SwiftData로 변환 중...";
 "Converting recipients data..." = "Recipients 데이터 변환 중...";
