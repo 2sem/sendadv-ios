@@ -44,13 +44,15 @@ mise x -- tuist generate
 ### Deployment
 ```bash
 # Deploy to TestFlight only
-fastlane ios release description:'변경사항 설명' isReleasing:false
+fastlane ios release description:'Change description' isReleasing:false
 
 # Deploy to App Store for review
-fastlane ios release description:'변경사항 설명' isReleasing:true
+fastlane ios release description:'Change description' isReleasing:true
 ```
 
 ## Project Architecture
+
+**Send Multi SMS**: An iOS app for sending bulk SMS messages to multiple recipients. Users create contact filters (based on department, position, organization) to organize and manage recipient lists.
 
 ### Tuist Multi-Project Workspace
 This is a Tuist-managed workspace with three separate projects:
@@ -59,7 +61,7 @@ This is a Tuist-managed workspace with three separate projects:
 2. **ThirdParty** (`Projects/ThirdParty/`): Static framework with KakaoSDK, MBProgressHUD, LSExtensions, Material
 3. **DynamicThirdParty** (`Projects/DynamicThirdParty/`): Dynamic framework with Firebase and SDWebImage
 
-**CRITICAL**: Never regenerate Xcode projects manually without file insert/delete. Always use `mise x -- tuist generate` instead of direct Xcode operations.
+**CRITICAL**: Don't regenerate Xcode projects manually without file insert/delete. Always use `mise x -- tuist generate` instead of direct Xcode operations.
 
 ### MVVM Architecture
 - **ViewModels/**: View models for each screen
@@ -78,12 +80,16 @@ This is a Tuist-managed workspace with three separate projects:
 
 ### Key Screens
 1. **SplashScreen** - Data migration handling on app start
-2. **RecipientRuleListScreen** - Main screen, recipient rules list
+2. **RecipientRuleListScreen** - Main screen showing contact filters list
    - ViewModel: `RecipientListScreenModel`
-3. **RuleDetailScreen** - Edit recipient rules (department/position/organization filters)
+   - User-facing label: "Contact Filter List" (연락처 필터 목록)
+3. **RuleDetailScreen** - Edit contact filters (department/position/organization criteria)
    - ViewModel: `RuleDetailScreenModel`
+   - User-facing label: "Edit Contact Filter" (연락처 필터 수정)
 4. **RuleFilterScreen** - Select filter items
    - ViewModel: `RuleFilterScreenModel`
+
+**Note**: Code uses `RecipientsRule`/`RecipientsFilter` naming, but user-facing terminology is "Contact Filter" (연락처 필터) for better UX clarity.
 
 ## Coding Standards
 
@@ -104,9 +110,10 @@ This is a Tuist-managed workspace with three separate projects:
 - **Location**:
   - `Projects/App/Resources/Strings/en.lproj/Localizable.strings`
   - `Projects/App/Resources/Strings/ko.lproj/Localizable.strings`
-- **Key naming**: English, concise, meaningful (e.g., `"Rule Title"`, `"Enter rule title"`)
+- **Key naming**: English, concise, meaningful (e.g., `"Filter Title"`, `"Enter filter title"`)
 - Reuse existing keys, avoid duplicates
 - Format strings: `"Formatted Key".localized().asFormat(...)`
+- **Terminology**: User-facing strings use "Contact Filter" (not "Recipient Rule") for better UX
 
 ### Safe Editing Rules
 - **NEVER** insert code markers like `{{ ... }}`, `...`, `<snip>` into code
@@ -148,9 +155,11 @@ Ad manager setup is in `SendadvApp.setupAds()` with different intervals for debu
 
 ## Important Notes
 
-- **Answer in Korean**: All responses should be in Korean (as per cursor rules)
-- **Think like Paul Hudson or Antoine van der Lee**: Apply their iOS development principles
+- **Response language**: Respond in Korean when working with this codebase (as per cursor rules)
+- **Development approach**: Think and implement like Paul Hudson or Antoine van der Lee - apply their iOS development principles
 - **Minimum iOS**: 18.0 (target deployment)
 - **No unauthorized renaming**: Always confirm before renaming symbols/files not explicitly requested
+- **Tuist project regeneration**: Don't regenerate project without any file insert/delete - always use `mise x -- tuist generate`
 - **Tuist helpers**: When adding shared projects, update `Tuist/ProjectDescriptionHelpers/` files
-- **CI/CD**: GitHub Actions on macOS 15 + Xcode 16.2, manually triggered
+- **CI/CD**: GitHub Actions on macOS 15 + Xcode 16.2, manually triggered from GitHub UI
+- **Terminology**: Code uses `RecipientsRule`/`RecipientsFilter`, but UI displays "Contact Filter" (연락처 필터)
