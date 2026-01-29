@@ -70,13 +70,13 @@ jobs:
             actions: read
 
           # Optional: Give a custom prompt to Claude. If this is not specified, Claude will perform the instructions specified in the comment that tagged it.
-          prompt: |
-            Focus only on the topic.
-            Please write clean, idiomatic Swift code following our CLAUDE.md guidelines.
-            Only include code changes in the PR.
-            Provide a concise summary when explaining the purpose.
+          # prompt: |
+          #   Focus only on the topic.
+          #   Please write clean, idiomatic Swift code following our CLAUDE.md guidelines.
+          #   Only include code changes in the PR.
+          #   Provide a concise summary when explaining the purpose.
 
-            Use the repository's CLAUDE.md for guidance on style and conventions. Be constructive and helpful in your feedback.
+          #   Use the repository's CLAUDE.md for guidance on style and conventions. Be constructive and helpful in your feedback.
 
           # Optional: Add claude_args to customize behavior and configuration
           # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
