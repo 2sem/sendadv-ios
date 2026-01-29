@@ -25,7 +25,7 @@
 "There is no contact matched to the enabled rules" = "There is no contact matched to the enabled rules";
 "Creating recipients list" = "Creating recipients list";
 "Getting started to write\nIt will take much longer for many recipients" = "Getting started to write\nIt will take much longer for many recipients";
-"Edit Recipients Rule" = "Edit Recipients Rule";
+"Edit Recipients Rule" = "Edit Contact Filter";
 "Rule Setting" = "Filter";
 "Job" = "Job";
 "Department" = "Department";
@@ -38,20 +38,20 @@
 "ads action" = "Install";
 
 "Select All" = "Select All";
-"New Rule" = "New Rule";
+"New Rule" = "New Filter";
 
 // Sending warnings
 "send.warning.batchSending" = "You are about to send message to %d recipients.\nRecipients will be separated into groups of %d for sending.";
 
 // RuleListScreen
-"rules.empty" = "There are no recipient rules";
-"rules.empty.description" = "Try adding a new recipient rule";
-"rules.title" = "Recipients Rule List";
-"rules.add" = "Add New Rule";
+"rules.empty" = "There are no contact filters";
+"rules.empty.description" = "Try adding a new contact filter";
+"rules.title" = "Contact Filter List";
+"rules.add" = "Add New Filter";
 
 // RuleDetailScreen
-"Rule Title" = "Rule Title";
-"Enter rule title" = "Enter rule title";
+"Rule Title" = "Filter Title";
+"Enter rule title" = "Enter filter title";
 
 // Common actions
 "Edit" = "Edit";
@@ -73,7 +73,7 @@
 "Starting migration..." = "Starting migration...";
 "Migration completed." = "Migration completed.";
 "Migration failed: %@" = "Migration failed: %@";
-"Migrating recipients rules..." = "Migrating recipients rules...";
+"Migrating recipients rules..." = "Migrating contact filters...";
 "Migrating filter rules..." = "Migrating filter rules...";
 "Converting to SwiftData..." = "Converting to SwiftData...";
 "Converting recipients data..." = "Converting recipients data...";
