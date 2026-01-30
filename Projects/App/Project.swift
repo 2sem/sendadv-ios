@@ -61,7 +61,6 @@ let project = Project(
             name: "App",
             destinations: [.iPhone, .iPad],
             product: .app,
-            productName: "sendadv",
             bundleId: .appBundleId,
             deploymentTargets: .iOS("18.0"),
             infoPlist: .extendingDefault(
