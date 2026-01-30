@@ -17,9 +17,12 @@ concurrency:
   group: ${{ github.ref }}/ios/deploy
   cancel-in-progress: true
 
+permissions:
+  id-token: write
+
 jobs:
   deploy:
-    runs-on: macos-15
+    runs-on: macos-26
     env:
         PRODUCT_NAME: 'sendadv'
         IOS_CERT_PATH: 'cert.p12'
@@ -32,23 +35,14 @@ jobs:
 
       - name: Select Xcode
         run: |
-          sudo xcode-select -s /Applications/Xcode_16.2.app
+          sudo xcode-select -s /Applications/Xcode_26.1.1.app
 
       - name: Install Mise
-        run: |
-            brew install mise
-  
-      - name: Install Tuist
-        run: |
-          mise install tuist
+        uses: jdx/mise-action@v2
 
       - name: Install Dependencies
         run: |
-          mise x -- tuist install
-
-      - name: Build Tuist
-        run: |
-            mise x -- tuist build
+          tuist install
 
       - name: Import signing certificate
         env:
