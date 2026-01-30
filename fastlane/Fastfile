@@ -30,6 +30,7 @@ platform :ios do
     @api_key_path = ENV["IOS_KEY_PATH"]
     @xcodeproj = "./Projects/#{@project_name}/#{@project_name}.xcodeproj"
     @profile_name = @workspace_name
+    @ipa_path = ENV["IOS_IPA_PATH"]
 
     puts "iOS 프로젝트: #{@project_name}]"
     puts "Fastlane 키파일 경로: #{@api_key_path}]"
@@ -57,27 +58,26 @@ platform :ios do
 
   def readySigning
     installCert()
-    
+
     install_provisioning_profile(
       path: @provisioning_profile_path
     )
     puts "Provisioning Profile 설치"
-    
+
     #update_project_provisioning(
     #  xcodeproj: @xcodeproj,
     #  profile: @provisioning_profile_path
     #)
     #puts "Provisioning Profile 설정"
-    
+
     update_code_signing_settings(
       use_automatic_signing: false,
       path: @xcodeproj,
       team_id: @team_id,
-      code_sign_identity: "iPhone Distribution",
+      code_sign_identity: "Apple Distribution",
       profile_name: @profile_name
     )
     puts "Code Signing 수동으로 전환"
-
   end
 
   def setiOSVersions
@@ -104,47 +104,40 @@ platform :ios do
     @full_app_verion = "#{@app_version}(#{@new_build_version})"
   end
 
-  def buildiOS(changelog: 'build from fastlane', isReleasing: false)
+  lane :setup do
     loadiOSConfigs()
     readySigning()
     setiOSVersions()
-    
-    puts "iOS 운영서버 빌드 시작: #{@full_app_verion}"
-    build_app(
-      workspace: "./#{@workspace_name}.xcworkspace",
-      scheme: "#{@project_name}",
-      skip_profile_detection: true,
-      export_options: {
-        provisioningProfiles: {
-          @package_name => @profile_name,
-        }
-      },
-      silent: true
-    )
-    
+
+    puts "iOS 인증서 설치 및 버전 관리 완료"
+  end
+
+  lane :upload do | options|
+    loadiOSConfigs()
+
+    changelog = options[:description] || 'build from fastlane'
+    isReleasing = options[:isReleasing] || false
+
     if isReleasing
         puts "iOS 심사 업로드 시작"
         upload_to_app_store(
+          ipa: @ipa_path,
           api_key_path: @api_key_path,
+          release_notes: changelog,
           app_identifier: @package_name,
           submit_for_review: true,
-          release_notes: {
-            'default' => changelog
-          }
         )
         puts "iOS 심사 제출 완료"
     else
         puts "iOS TestFlight 업로드 시작"
         upload_to_testflight(
+          ipa: @ipa_path,
           api_key_path: @api_key_path,
           changelog: changelog,
           app_identifier: @package_name,
+          skip_waiting_for_build_processing: true
         )
         puts "iOS TestFlight 배포 완료"
     end
-  end
-
-  lane :release do | options|
-    buildiOS(changelog: options[:description], isReleasing: options[:isReleasing])
   end
 end
