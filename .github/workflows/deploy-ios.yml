@@ -63,6 +63,10 @@ jobs:
         run: |
           /usr/libexec/PlistBuddy -c "delete :NSAppTransportSecurity:NSExceptionDomains" ./ios/$PRODUCT_NAME/Info.plist
 
+      - name: Generate Xcode Project
+        run: |
+          tuist generate --cache-profile none
+
       - name: Upgrade fastlane
         run: |
           sudo gem install fastlane
@@ -74,9 +78,6 @@ jobs:
           echo '${{ secrets.IOS_API_KEY }}' > $API_KEY_PATH_BASE64
           base64 --decode -i $API_KEY_PATH_BASE64 -o $IOS_KEY_PATH
           rm $API_KEY_PATH_BASE64
-          
-      - name: Patch Xcode 15.3
-        uses: 2sem/patch-package-resolved@v2
           
       - name: Build/Upload app
         env:
