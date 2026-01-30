@@ -91,7 +91,10 @@ let project = Project(
                 ]
             ),
             sources: ["Sources/**"],
-            resources: ["Resources/**"],
+            resources: [
+                .glob(pattern: "Resources/**",
+                      excluding: ["Resources/Datas/sendadv.xcdatamodeld/**"])
+            ],
             //            entitlements: .file(path: .relativeToCurrentFile("Sources/gersanghelper.entitlements")),
             scripts: [.post(script: "${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run",
                             name: "Upload dSYM for Crashlytics",
