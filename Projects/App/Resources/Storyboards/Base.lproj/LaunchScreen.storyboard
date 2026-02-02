@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="LPL-4Z-gt7">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="LPL-4Z-gt7">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -19,15 +19,12 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SplashIcon" translatesAutoresizingMaskIntoConstraints="NO" id="splash-image-view">
-                                <rect key="frame" x="127.5" y="273.5" width="120" height="120"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="120" id="splash-width"/>
-                                    <constraint firstAttribute="height" constant="120" id="splash-height"/>
-                                </constraints>
+                                <rect key="frame" x="94" y="163" width="187.5" height="341"/>
                             </imageView>
                         </subviews>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.4118652344" green="0.7109375" blue="0.8647460938" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
+                            <constraint firstItem="splash-image-view" firstAttribute="width" secondItem="05h-oa-cpG" secondAttribute="width" multiplier="0.5" id="TKr-gA-kZ1"/>
                             <constraint firstItem="splash-image-view" firstAttribute="centerX" secondItem="05h-oa-cpG" secondAttribute="centerX" id="splash-center-x"/>
                             <constraint firstItem="splash-image-view" firstAttribute="centerY" secondItem="05h-oa-cpG" secondAttribute="centerY" id="splash-center-y"/>
                         </constraints>
@@ -39,6 +36,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="SplashIcon" width="512" height="512"/>
+        <image name="SplashIcon" width="341.33334350585938" height="341.33334350585938"/>
     </resources>
 </document>
