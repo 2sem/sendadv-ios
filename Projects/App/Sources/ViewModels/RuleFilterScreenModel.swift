@@ -42,20 +42,39 @@ class RuleFilterScreenModel {
             default:
                 availableItems = []
         }
-        
-        // If selectAll is true, select all available items
+
+        // If selectAll is true, populate selectedItems with all available items for display purposes
         if selectAll {
-//            selectedItems = Set(availableItems)
+            selectedItems = Set(availableItems)
+        }
+    }
+
+    func toggleSelectAll(_ newValue: Bool) {
+        selectAll = newValue
+        if newValue {
+            // When "All" is turned on, select all available items
+            selectedItems = Set(availableItems)
+        } else {
+            // When "All" is turned off manually, keep all items selected so user can deselect individually
+            selectedItems = Set(availableItems)
         }
     }
     
     func toggleItem(_ item: String) {
+        // If "All" is on, turn it off first and initialize selectedItems with all items except the one being toggled
+        if selectAll {
+            selectAll = false
+            selectedItems = Set(availableItems)
+            selectedItems.remove(item)
+            return
+        }
+
+        // Normal toggle behavior
         if selectedItems.contains(item) {
             selectedItems.remove(item)
-            selectAll = false
         } else {
             selectedItems.insert(item)
-            // If all items are selected, update selectAll
+            // If all items are now selected, update selectAll
             if selectedItems.count == availableItems.count {
                 selectAll = true
             }
