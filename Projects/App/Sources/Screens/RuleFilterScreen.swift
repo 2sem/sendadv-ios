@@ -20,7 +20,12 @@ struct RuleFilterScreen: View {
     var body: some View {
         List {
             // All items toggle
-            Toggle(isOn: $viewModel.selectAll) {
+            Toggle(isOn: Binding(
+                get: { viewModel.selectAll },
+                set: { newValue in
+                    viewModel.toggleSelectAll(newValue)
+                }
+            )) {
                 Text("Select All".localized())
                     .font(.headline)
             }
