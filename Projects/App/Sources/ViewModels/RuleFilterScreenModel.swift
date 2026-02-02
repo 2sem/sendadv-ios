@@ -55,8 +55,8 @@ class RuleFilterScreenModel {
             // When "All" is turned on, select all available items
             selectedItems = Set(availableItems)
         } else {
-            // When "All" is turned off manually, clear all selections
-            selectedItems.removeAll()
+            // When "All" is turned off manually, keep all items selected so user can deselect individually
+            selectedItems = Set(availableItems)
         }
     }
     
