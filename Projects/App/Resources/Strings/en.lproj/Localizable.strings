@@ -43,6 +43,11 @@
 // Sending warnings
 "send.warning.batchSending" = "You are about to send message to %d recipients.\nRecipients will be separated into groups of %d for sending.";
 
+// Success popup (review request after 5 sends)
+"success.popup.title" = "Congratulations!";
+"success.popup.message" = "Sent to %d recipients";
+"success.popup.dismiss" = "Rate the App";
+
 // RuleListScreen
 "rules.empty" = "There are no contact filters";
 "rules.empty.description" = "Try adding a new contact filter";

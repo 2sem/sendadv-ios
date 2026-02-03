@@ -45,6 +45,8 @@ struct RecipientRuleListScreen: View {
 	@State private var allPhoneNumbers: [String] = []
 	@State private var currentBatchIndex: Int = 0
 	private let batchSize: Int = 20
+	@State private var showSuccessPopup = false
+	@State private var successRecipientCount: Int = 0
     
     private func presentFullAdThen(_ action: @escaping () -> Void) {
         guard launchCount > 1 else {
@@ -186,6 +188,9 @@ struct RecipientRuleListScreen: View {
             }
             
 			print("rule list screen detect message composer dismission. state[\(messageComposerState)]")
+			// 배치 전송 시 총 수신자 수를 배치 정리 전에 캡처
+			let totalRecipientCount = isBatchSending ? allPhoneNumbers.count : viewModel.phoneNumbers.count
+
 			// 배치 전송 처리: 사용자가 취소하지 않은 경우 다음 배치를 자동 진행
 			if isBatchSending {
                 if messageComposerState == .cancelled {
@@ -197,19 +202,27 @@ struct RecipientRuleListScreen: View {
 					presentNextBatch()
 				}
 			}
-			
-			// 리뷰 유도 로직은 기존 조건을 유지하되, 배치 여부와 무관하게 동작
+
+			// 발송 성공 시 카운트 증가 후 5회째에서 성공 팝업 + 리뷰 요청
+			let isSent: Bool = {
 		#if DEBUG
-			if case .cancelled = messageComposerState {
-				LSDefaults.increaseMessageSentCount()
-				reviewManager.show()
-			}
+				if case .cancelled = messageComposerState { return true }
+				return false
 		#else
-			if case .sent = messageComposerState {
-				LSDefaults.increaseMessageSentCount()
-				reviewManager.show()
-			}
+				if case .sent = messageComposerState { return true }
+				return false
 		#endif
+			}()
+
+			if isSent {
+				LSDefaults.increaseMessageSentCount()
+
+				// 5회 성공 시에만 성공 팝업 표시
+				if reviewManager.canShow {
+					successRecipientCount = totalRecipientCount
+					showSuccessPopup = true
+				}
+			}
 			messageComposerState = .unknown
 		}
         .onChange(of: state, { _, newState in
@@ -241,6 +254,11 @@ struct RecipientRuleListScreen: View {
                     .progressViewStyle(CircularProgressViewStyle(tint: .accent))
                     .scaleEffect(1.5)
             }
+        }
+        .sheet(isPresented: $showSuccessPopup, onDismiss: {
+            reviewManager.show()
+        }) {
+            SuccessPopupView(recipientCount: successRecipientCount)
         }
 		.onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
 			print("keyboard will show on rule list screen")
