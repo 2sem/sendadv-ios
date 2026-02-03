@@ -45,8 +45,6 @@ struct RecipientRuleListScreen: View {
 	@State private var allPhoneNumbers: [String] = []
 	@State private var currentBatchIndex: Int = 0
 	private let batchSize: Int = 20
-	@State private var showSuccessPopup = false
-	@State private var successRecipientCount: Int = 0
     
     private func presentFullAdThen(_ action: @escaping () -> Void) {
         guard launchCount > 1 else {
@@ -216,11 +214,9 @@ struct RecipientRuleListScreen: View {
 
 			if isSent {
 				LSDefaults.increaseMessageSentCount()
-
-				// 5회 성공 시에만 성공 팝업 표시
+				// 5회 성공 시에만 App Store 리뷰 요청
 				if reviewManager.canShow {
-					successRecipientCount = totalRecipientCount
-					showSuccessPopup = true
+					reviewManager.show()
 				}
 			}
 			messageComposerState = .unknown
@@ -255,11 +251,7 @@ struct RecipientRuleListScreen: View {
                     .scaleEffect(1.5)
             }
         }
-        .sheet(isPresented: $showSuccessPopup, onDismiss: {
-            reviewManager.show()
-        }) {
-            SuccessPopupView(recipientCount: successRecipientCount)
-        }
+        
 		.onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
 			print("keyboard will show on rule list screen")
 		}
