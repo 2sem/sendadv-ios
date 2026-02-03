@@ -60,44 +60,6 @@ struct AdsView: View {
 	}
 }
 
-// MARK: - 발송 성공 팝업 (5회 성공 시 리뷰 유도)
-struct SuccessPopupView: View {
-	let recipientCount: Int
-	@Environment(\.dismiss) private var dismiss
-
-	var body: some View {
-		VStack(spacing: 32) {
-			Spacer()
-
-			Text("🎉")
-				.font(.system(size: 64))
-
-			Text("success.popup.title".localized())
-				.font(.title)
-				.fontWeight(.bold)
-
-			Text(String(format: "success.popup.message".localized(), recipientCount))
-				.font(.title2)
-				.foregroundColor(.secondary)
-				.multilineTextAlignment(.center)
-
-			Button("success.popup.dismiss".localized()) {
-				dismiss()
-			}
-			.font(.headline)
-			.foregroundColor(.white)
-			.padding(.horizontal, 32)
-			.padding(.vertical, 14)
-			.background(Color.accent)
-			.clipShape(Capsule())
-
-			Spacer()
-		}
-		.padding()
-		.presentationDetents([.medium])
-		.presentationDragIndicator(.visible)
-	}
-}
 
 struct RuleEditView: View {
 	let rule: RecipientsRule
