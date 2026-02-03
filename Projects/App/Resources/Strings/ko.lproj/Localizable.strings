@@ -61,6 +61,11 @@
 // Sending warnings
 "send.warning.batchSending" = "메시지를 %d명의 수신자에게 전송하려고 합니다.\n수신자를 %d명씩 나누어 전송합니다.";
 
+// Success popup (발송 5회 성공 시 리뷰 유도)
+"success.popup.title" = "축하해요!";
+"success.popup.message" = "%d명에게 보냈어요";
+"success.popup.dismiss" = "리뷰 남기기";
+
 // SplashScreen
 "App Title" = "보내봐 단체 문자";
 "Migration Failed" = "마이그레이션 실패";
