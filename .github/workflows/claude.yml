@@ -23,7 +23,7 @@ jobs:
       pull-requests: write     # Claude needs write to create/update PRs and post PR comments
       issues: write            # Claude needs write to update issue comments
       id-token: write
-      actions: read
+      actions: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
