@@ -28,7 +28,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 1
+          fetch-depth: 0 # Full history — safest for push operations
 
       - name: Setup uv
         uses: astral-sh/setup-uv@v7
