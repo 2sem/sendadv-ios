@@ -186,12 +186,18 @@ struct RecipientRuleListScreen: View {
             }
             
 			print("rule list screen detect message composer dismission. state[\(messageComposerState)]")
-			// 배치 전송 시 총 수신자 수를 배치 정리 전에 캡처
-//			let totalRecipientCount = isBatchSending ? allPhoneNumbers.count : viewModel.phoneNumbers.count
-
 			// 배치 전송 처리: 사용자가 취소하지 않은 경우 다음 배치를 자동 진행
 			if isBatchSending {
-                if messageComposerState == .cancelled {
+				let isCancelled: Bool = {
+		#if DEBUG
+					// 시뮬레이터는 .sent를 반환하지 못하므로 .cancelled를 성공으로 간주
+					return false
+		#else
+					return messageComposerState == .cancelled
+		#endif
+				}()
+
+				if isCancelled {
 					// 사용자가 취소하면 배치 전송 중단
 					isBatchSending = false
 					allPhoneNumbers = []
