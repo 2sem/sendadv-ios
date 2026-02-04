@@ -187,7 +187,7 @@ struct RecipientRuleListScreen: View {
             
 			print("rule list screen detect message composer dismission. state[\(messageComposerState)]")
 			// 배치 전송 시 총 수신자 수를 배치 정리 전에 캡처
-			let totalRecipientCount = isBatchSending ? allPhoneNumbers.count : viewModel.phoneNumbers.count
+//			let totalRecipientCount = isBatchSending ? allPhoneNumbers.count : viewModel.phoneNumbers.count
 
 			// 배치 전송 처리: 사용자가 취소하지 않은 경우 다음 배치를 자동 진행
 			if isBatchSending {
@@ -199,6 +199,9 @@ struct RecipientRuleListScreen: View {
 				} else {
 					presentNextBatch()
 				}
+                
+                messageComposerState = .unknown
+                return
 			}
 
 			// 발송 성공 시 카운트 증가 후 5회째에서 성공 팝업 + 리뷰 요청
@@ -353,6 +356,10 @@ struct RecipientRuleListScreen: View {
 		guard start < allPhoneNumbers.count else {
 			// 모든 배치 완료
 			print("Batch sending completed. total: \(allPhoneNumbers.count)")
+			LSDefaults.increaseMessageSentCount()
+			if reviewManager.canShow {
+				reviewManager.show()
+			}
 			isBatchSending = false
 			allPhoneNumbers = []
 			currentBatchIndex = 0
