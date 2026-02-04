@@ -46,19 +46,6 @@ jobs:
       - name: Install Serena
         run: uv tool install --from git+https://github.com/oraios/serena serena-agent
 
-      - name: Create Serena cache key
-        id: serena-cache-hash
-        run: echo "hash=${{ runner.os }}-serena-cache-${{ hashFiles('**/*.swift', 'Tuist/**/*', 'Projects/**/*.swift') }}" >> $GITHUB_OUTPUT
-
-      - name: Cache Serena data
-        uses: actions/cache@v4
-        id: cache-serena
-        with:
-          path: .serena
-          key: ${{ steps.serena-cache-hash.outputs.hash }}
-          restore-keys: |
-            ${{ runner.os }}-serena-cache-
-
       - name: Run Claude Code
         id: claude
         uses: anthropics/claude-code-action@v1
