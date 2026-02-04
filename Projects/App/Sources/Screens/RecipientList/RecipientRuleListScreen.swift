@@ -204,8 +204,15 @@ struct RecipientRuleListScreen: View {
 					currentBatchIndex = 0
 				} else {
 					presentNextBatch()
+					// 배치 마지막 전송 완료 시에만 카운트 증가 + 리뷰 요청
+					if !isBatchSending {
+						LSDefaults.increaseMessageSentCount()
+						if reviewManager.canShow {
+							reviewManager.show()
+						}
+					}
 				}
-                
+
                 messageComposerState = .unknown
                 return
 			}
@@ -362,10 +369,6 @@ struct RecipientRuleListScreen: View {
 		guard start < allPhoneNumbers.count else {
 			// 모든 배치 완료
 			print("Batch sending completed. total: \(allPhoneNumbers.count)")
-			LSDefaults.increaseMessageSentCount()
-			if reviewManager.canShow {
-				reviewManager.show()
-			}
 			isBatchSending = false
 			allPhoneNumbers = []
 			currentBatchIndex = 0
