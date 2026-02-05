@@ -85,12 +85,8 @@ class RuleFilterScreenModel {
         // Update filter values
         filter.all = selectAll
         filter.includes = selectAll ? nil : selectedItems.sorted().joined(separator: ",")
-        
+
         // Save changes
-        do {
-//            try context.save()
-        } catch {
-            print("Failed to save filter:", error)
-        }
+//        try context.save()
     }
 }

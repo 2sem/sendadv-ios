@@ -71,17 +71,13 @@ class SARecipientListScreenModel: RecipientListScreenModel {
     
     func createRule(modelContext: ModelContext, undoManager: UndoManager?) -> RecipientsRule? {
         let newRule = RecipientsRule(title: "New Rule".localized(), enabled: true)
-        
-        do {
-            modelContext.insert(newRule)
-//            undoManager?.registerUndo(withTarget: modelContext) { context in
-//                context.delete(newRule)
-//            }
-//            try modelContext.save()
-        } catch {
-            return nil
-        }
-        
+
+        modelContext.insert(newRule)
+//        undoManager?.registerUndo(withTarget: modelContext) { context in
+//            context.delete(newRule)
+//        }
+//        try modelContext.save()
+
         return newRule
     }
 }
