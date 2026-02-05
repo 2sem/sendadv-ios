@@ -65,7 +65,7 @@ class SAModelController : NSObject{
         let context = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
         context.persistentStoreCoordinator = {
             let coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
-            try? coordinator.addPersistentStore(ofType: NSInMemoryStoreType, configurationName: nil, at: nil, options: nil)
+            _ = try? coordinator.addPersistentStore(ofType: NSInMemoryStoreType, configurationName: nil, at: nil, options: nil)
             
             return coordinator
         }()
