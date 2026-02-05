@@ -88,7 +88,7 @@ struct RecipientRuleListScreen: View {
                             Group {
                                 NativeAdRowView(index: index, interval: interval)
                                 // Added print statement for lifecycle tracking
-                                let _ = print("RecipientRuleRowView init - rule id: \(rule.id), title: \(rule.title)")
+                                let _ = print("RecipientRuleRowView init - rule id: \(rule.id), title: \(rule.title ?? "")")
                                 RecipientRuleRowView(rule: rule) { isEnabled in
                                     toggleRule(rule, isEnabled: isEnabled)
                                 }
@@ -104,7 +104,7 @@ struct RecipientRuleListScreen: View {
                                     view.swipeActions(edge: .trailing, allowsFullSwipe: false) {
                                         Button(role: .destructive) {
                                             // Added print statement before deletion
-                                            print("Deleting rule - id: \(rule.id), title: \(rule.title)")
+                                            print("Deleting rule - id: \(rule.id), title: \(rule.title ?? "")")
                                             deleteRule(rule)
                                         } label: {
                                             Label("Delete".localized(), systemImage: "trash")
