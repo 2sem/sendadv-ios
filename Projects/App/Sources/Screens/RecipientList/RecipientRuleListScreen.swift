@@ -253,7 +253,7 @@ struct RecipientRuleListScreen: View {
             }
         })
         .onChange(of: selectedRule, { _, newSelectedRule in
-            if let newSelectedRule {
+            if newSelectedRule != nil {
                 return
             }
             
