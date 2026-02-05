@@ -203,9 +203,9 @@ struct RecipientRuleListScreen: View {
 					allPhoneNumbers = []
 					currentBatchIndex = 0
 				} else {
-					presentNextBatch()
+					let isBatchComplete = presentNextBatch()
 					// 배치 마지막 전송 완료 시에만 카운트 증가 + 리뷰 요청
-					if !isBatchSending {
+					if isBatchComplete {
 						LSDefaults.increaseMessageSentCount()
 						if reviewManager.canShow {
 							reviewManager.show()
@@ -363,8 +363,8 @@ struct RecipientRuleListScreen: View {
         }
     }
 
-	private func presentNextBatch() {
-		guard isBatchSending else { return }
+	@discardableResult private func presentNextBatch() -> Bool {
+		guard isBatchSending else { return false }
 		let start = currentBatchIndex * batchSize
 		guard start < allPhoneNumbers.count else {
 			// 모든 배치 완료
@@ -372,7 +372,7 @@ struct RecipientRuleListScreen: View {
 			isBatchSending = false
 			allPhoneNumbers = []
 			currentBatchIndex = 0
-			return
+			return true
 		}
 		let end = min(start + batchSize, allPhoneNumbers.count)
 		let batch = Array(allPhoneNumbers[start..<end])
@@ -383,6 +383,7 @@ struct RecipientRuleListScreen: View {
 		isMessageComposerLoading = true
 		showingMessageComposer = true
 		currentBatchIndex += 1
+		return false
 	}
 }
 
