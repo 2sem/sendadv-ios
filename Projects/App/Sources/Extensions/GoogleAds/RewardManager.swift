@@ -146,7 +146,7 @@ class GADRewardManager : NSObject{
          alert.dismiss(animated: false, completion: nil);
          }*/
         
-        guard !(UIApplication.shared.keyWindow?.rootViewController?.presentedViewController is UIAlertController) else{
+        guard !(self.window.rootViewController?.presentedViewController is UIAlertController) else{
             //alert.dismiss(animated: false, completion: nil);
             self.rewardAd = nil;
             return;
