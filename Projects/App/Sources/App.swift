@@ -91,9 +91,9 @@ struct SendadvApp: App {
             defer {
                 LSDefaults.increaseLaunchCount()
             }
-            
-            let isTest = adManager.isTesting(unit: .launch)
-            
+
+            _ = adManager.isTesting(unit: .launch)
+
             await adManager.show(unit: .launch)
         }
     }
