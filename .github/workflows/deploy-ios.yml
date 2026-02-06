@@ -24,7 +24,7 @@ jobs:
   deploy:
     runs-on: macos-26
     env:
-        PRODUCT_NAME: 'sendadv'
+        PRODUCT_NAME: ${{ vars.PRODUCT_NAME }}
         PACKAGE_NAME: ${{ secrets.PACKAGE_NAME }}
         IOS_CERT_PATH: 'cert.p12'
         IOS_PROFILE_PATH: 'profile.mobileprovision'
@@ -82,7 +82,6 @@ jobs:
 
       - name: Setup Certificates and Increment Version
         env:
-          PRODUCT_NAME: ${{ env.PRODUCT_NAME }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
           IOS_CERT_PWD: ${{ secrets.IOS_CERT_P12_PWD }}
           IOS_KEYCHAIN: ${{ secrets.IOS_KEYCHAIN }}
@@ -155,7 +154,6 @@ jobs:
 
       - name: Upload to TestFlight/App Store
         env:
-          PRODUCT_NAME: ${{ env.PRODUCT_NAME }}
           IOS_KEY_PATH: ${{ env.IOS_KEY_PATH }}
           IOS_IPA_PATH: ./Output/IPA/App.ipa
         run: |
