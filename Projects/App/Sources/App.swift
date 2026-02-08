@@ -10,8 +10,9 @@ struct SendadvApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @State private var isSplashDone = false
     @State private var isSetupDone = false
+    @State private var isFromBackground = false
     @Environment(\.scenePhase) private var scenePhase
-    
+
     // SceneDelegate의 기능을 SwiftUI ObservableObject로 마이그레이션
     @StateObject private var adManager = SwiftUIAdManager()
     @StateObject private var reviewManager = ReviewManager()
@@ -79,6 +80,7 @@ struct SendadvApp: App {
             break
         case .background:
             // 앱이 백그라운드로 갈 때의 처리
+            isFromBackground = true
             break
         @unknown default:
             break
@@ -92,7 +94,11 @@ struct SendadvApp: App {
                 LSDefaults.increaseLaunchCount()
             }
 
-            await adManager.show(unit: .launch)
+            // 백그라운드에서 돌아온 경우에만 Launch Ad를 표시
+            if isFromBackground {
+                await adManager.show(unit: .launch)
+                isFromBackground = false
+            }
         }
     }
 }
