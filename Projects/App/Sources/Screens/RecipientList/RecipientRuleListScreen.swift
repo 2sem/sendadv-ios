@@ -43,15 +43,15 @@ struct RecipientRuleListScreen: View {
     @State private var skipPhoneNumberWarning = false
 	@State private var isBatchSending = false
 	@State private var allPhoneNumbers: [String] = []
-	@State private var currentBatchIndex: Int = 0
-	private let batchSize: Int = 20
-    
-    private func presentFullAdThen(_ action: @escaping () -> Void) {
-        guard launchCount > 1 else {
-            action()
-            return
-        }
-        
+	    @State private var currentBatchIndex: Int = 0
+	    private let batchSize: Int = 20
+	    private let addRuleTip = AddRuleTip()
+	    
+	    private func presentFullAdThen(_ action: @escaping () -> Void) {
+	        guard launchCount > 1 else {
+	            action()
+	            return
+	        }        
         Task {
             await adManager.requestAppTrackingIfNeed()
             
@@ -146,13 +146,18 @@ struct RecipientRuleListScreen: View {
             }
             
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button("rules.add".localized()) {
+                Button {
+                    addRuleTip.invalidate(reason: .actionPerformed)
                     // 전면 광고 후 새 규칙 편집 화면으로 이동
                     presentFullAdThen { @MainActor in
                         print("select new rule.")
                         state = .creatingRule
                     }
-                }.tint(Color.accent)
+                } label: {
+                    Image(systemName: "plus")
+                }
+                .tint(Color.accent)
+                .popoverTip(addRuleTip, arrowEdge: .top)
             }
         }
         .sheet(isPresented: $showingMessageComposer) {

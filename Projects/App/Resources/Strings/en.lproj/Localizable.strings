@@ -89,4 +89,7 @@
 "Finalizing migration..." = "Finalizing migration...";
 "Failed to create SwiftData model container." = "Failed to create SwiftData model container.";
 
+"title_add_rule_tip" = "Add a new sending rule";
+"message_add_rule_tip" = "Tap here to create a rule for filtering recipients.";
+
 

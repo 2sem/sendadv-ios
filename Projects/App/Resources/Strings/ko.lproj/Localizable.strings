@@ -84,3 +84,7 @@
 "Converting recipients data..." = "Recipients 데이터 변환 중...";
 "Finalizing migration..." = "마이그레이션 완료 중...";
 "Failed to create SwiftData model container." = "SwiftData 모델 컨테이너 생성에 실패했습니다.";
+
+"title_add_rule_tip" = "새 발송 규칙 추가";
+"message_add_rule_tip" = "수신자 필터링 규칙을 만들려면 여기를 누르세요.";
+
