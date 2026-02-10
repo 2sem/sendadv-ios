@@ -4,6 +4,7 @@ import GoogleMobileAds
 import Firebase
 import StoreKit
 import GADManager
+import TipKit
 
 @main
 struct SendadvApp: App {
@@ -37,6 +38,7 @@ struct SendadvApp: App {
             .environmentObject(reviewManager)
             .onAppear {
                 setupAds()
+                setupTips()
             }
             .onChange(of: scenePhase) { oldPhase, newPhase in
                 handleScenePhaseChange(from: oldPhase, to: newPhase)
@@ -44,6 +46,17 @@ struct SendadvApp: App {
         }
     }
     
+    private func setupTips() {
+        do {
+            try Tips.configure([
+                .displayFrequency(.immediate),
+                .datastoreLocation(.applicationDefault)
+            ])
+        } catch {
+            print("TipKit configuration error: \(error)")
+        }
+    }
+
     private func setupAds() {
         guard !isSetupDone else {
             return
