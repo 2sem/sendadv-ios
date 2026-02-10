@@ -10,6 +10,7 @@ struct SendadvApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @State private var isSplashDone = false
     @State private var isSetupDone = false
+    @State private var isLaunched = false
     @State private var isFromBackground = false
     @Environment(\.scenePhase) private var scenePhase
 
@@ -90,9 +91,10 @@ struct SendadvApp: App {
     private func handleAppDidBecomeActive() {
         print("scene become active")
         Task{
-            // terminated 상태에서 실행된 경우에만 launch count 증가
-            if !isFromBackground {
+            // 앱 최초 실행(terminated → active) 시 첫 번째 active 호출에서만 launch count 증가
+            if !isLaunched {
                 LSDefaults.increaseLaunchCount()
+                isLaunched = true
             }
 
             // 백그라운드에서 돌아온 경우에만 Launch Ad를 표시
