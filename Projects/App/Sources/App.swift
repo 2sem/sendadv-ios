@@ -90,7 +90,8 @@ struct SendadvApp: App {
     private func handleAppDidBecomeActive() {
         print("scene become active")
         Task{
-            defer {
+            // terminated 상태에서 실행된 경우에만 launch count 증가
+            if !isFromBackground {
                 LSDefaults.increaseLaunchCount()
             }
 
