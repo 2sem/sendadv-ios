@@ -9,22 +9,28 @@ import SwiftUI
 import MessageUI
 import Foundation
 import Combine
+import TipKit
 
 // MARK: - Supporting Views
 struct EmptyStateView: View {
+	private let addFirstFilterTip = AddFirstFilterTip()
+
 	var body: some View {
 		VStack(spacing: 20) {
 			Image(systemName: "person.3.fill")
 				.font(.system(size: 60))
 				.foregroundColor(.gray)
-			
+
             Text("rules.empty".localized())
 				.font(.title2)
 				.foregroundColor(.gray)
-			
+
             Text("rules.empty.description".localized())
 				.font(.body)
 				.foregroundColor(.gray)
+
+			TipView(addFirstFilterTip, arrowEdge: .top)
+				.padding(.horizontal, 20)
 		}
 	}
 }

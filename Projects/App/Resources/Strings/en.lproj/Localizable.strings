@@ -54,6 +54,10 @@
 "rules.title" = "Contact Filter List";
 "rules.add" = "Add New Filter";
 
+// TipKit - AddFirstFilterTip
+"tip.addFilter.title" = "Try adding a filter";
+"tip.addFilter.message" = "No need to create groups — just pick people by company, department, or job title and send directly.\n\nCreate your first filter now!";
+
 // RuleDetailScreen
 "Rule Title" = "Filter Title";
 "Enter rule title" = "Enter filter title";
@@ -84,5 +88,8 @@
 "Converting recipients data..." = "Converting recipients data...";
 "Finalizing migration..." = "Finalizing migration...";
 "Failed to create SwiftData model container." = "Failed to create SwiftData model container.";
+
+"title_add_rule_tip" = "Add your first filter";
+"message_add_rule_tip" = "Tap here to create your first contact filter.";
 
 
