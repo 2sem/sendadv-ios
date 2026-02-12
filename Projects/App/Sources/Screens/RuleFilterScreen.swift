@@ -77,9 +77,7 @@ struct RuleFilterScreen: View {
     
     let filter = RecipientsFilter(target: .job, includes: nil, excludes: nil, all: true)
     container.mainContext.insert(filter)
-    
-    let viewModel = RuleFilterScreenModel(filter: filter)
-    
+
     return NavigationStack {
         RuleFilterScreen(
             filter: filter
