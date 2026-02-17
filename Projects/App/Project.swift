@@ -59,7 +59,7 @@ let project = Project(
             ],
             //            entitlements: .file(path: .relativeToCurrentFile("Sources/gersanghelper.entitlements")),
             scripts: [
-                .pre(script: "\"${SRCROOT}/Scripts/merge_skadnetworks.sh\"",
+                .pre(script: "/bin/sh \"${SRCROOT}/Scripts/merge_skadnetworks.sh\"",
                      name: "Merge SKAdNetworkItems",
                      inputPaths: ["$(SRCROOT)/Resources/skNetworks.plist"],
                      outputPaths: []),
