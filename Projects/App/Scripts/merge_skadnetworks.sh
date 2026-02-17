@@ -2,7 +2,7 @@
 #
 # merge_skadnetworks.sh
 #
-# Pre-build script that merges SKAdNetworkItems from skNetworks.plist into Info.plist.
+# Post-build script that merges SKAdNetworkItems from skNetworks.plist into the built Info.plist.
 # If Info.plist doesn't have SKAdNetworkItems yet, it adds the full list.
 # If it already exists, it merges (adds missing identifiers) from skNetworks.plist.
 #
