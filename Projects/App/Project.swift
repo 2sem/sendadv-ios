@@ -95,7 +95,12 @@ let project = Project(
                       excluding: ["Resources/Datas/sendadv.xcdatamodeld/**"])
             ],
             //            entitlements: .file(path: .relativeToCurrentFile("Sources/gersanghelper.entitlements")),
-            scripts: [.post(script: "${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run",
+            scripts: [
+                .pre(script: "\"${SRCROOT}/Scripts/merge_skadnetworks.sh\"",
+                     name: "Merge SKAdNetworkItems",
+                     inputPaths: ["$(SRCROOT)/Resources/skNetworks.plist"],
+                     outputPaths: []),
+                .post(script: "${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run",
                             name: "Upload dSYM for Crashlytics",
                             inputPaths: ["${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}",
                                          "${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${PRODUCT_NAME}",
