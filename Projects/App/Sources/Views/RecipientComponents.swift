@@ -14,6 +14,7 @@ import TipKit
 // MARK: - Supporting Views
 struct EmptyStateView: View {
 	private let addFirstFilterTip = AddFirstFilterTip()
+	@AppStorage("LaunchCount") private var launchCount: Int = 0
 
 	var body: some View {
 		VStack(spacing: 20) {
@@ -31,6 +32,16 @@ struct EmptyStateView: View {
 
 			TipView(addFirstFilterTip, arrowEdge: .top)
 				.padding(.horizontal, 20)
+				.task {
+					for await shouldDisplay in addFirstFilterTip.shouldDisplayUpdates {
+						if shouldDisplay {
+							AnalyticsManager.shared.logTipShown(
+								tipId: AnalyticsManager.TipID.addFirstFilter,
+								isFirstLaunch: launchCount <= 1
+							)
+						}
+					}
+				}
 		}
 	}
 }

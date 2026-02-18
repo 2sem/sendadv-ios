@@ -46,6 +46,7 @@ struct RecipientRuleListScreen: View {
 	    @State private var currentBatchIndex: Int = 0
 	    private let batchSize: Int = 20
 	    private let addRuleTip = AddRuleTip()
+	    private let addFirstFilterTip = AddFirstFilterTip()
 	    
 	    private func presentFullAdThen(_ action: @escaping () -> Void) {
 	        guard launchCount > 1 else {
@@ -147,6 +148,20 @@ struct RecipientRuleListScreen: View {
             
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
+                    if addRuleTip.status.shouldDisplay {
+                        // AddRuleTip 팁이 표시 중일 때 버튼을 눌렀으므로 → tip_action_taken
+                        AnalyticsManager.shared.logTipActionTaken(
+                            tipId: AnalyticsManager.TipID.addRule,
+                            actionType: "add_rule"
+                        )
+                    }
+                    if rules.isEmpty && addFirstFilterTip.status.shouldDisplay {
+                        // AddFirstFilterTip (빈 화면 팁) 표시 중에 + 버튼을 눌렀으므로 → tip_action_taken
+                        AnalyticsManager.shared.logTipActionTaken(
+                            tipId: AnalyticsManager.TipID.addFirstFilter,
+                            actionType: "add_filter"
+                        )
+                    }
                     addRuleTip.invalidate(reason: .actionPerformed)
                     // 전면 광고 후 새 규칙 편집 화면으로 이동
                     presentFullAdThen { @MainActor in
@@ -158,6 +173,16 @@ struct RecipientRuleListScreen: View {
                 }
                 .tint(Color.accent)
                 .popoverTip(addRuleTip, arrowEdge: .top)
+                .task {
+                    for await shouldDisplay in addRuleTip.shouldDisplayUpdates {
+                        if shouldDisplay {
+                            AnalyticsManager.shared.logTipShown(
+                                tipId: AnalyticsManager.TipID.addRule,
+                                isFirstLaunch: launchCount <= 1
+                            )
+                        }
+                    }
+                }
             }
         }
         .sheet(isPresented: $showingMessageComposer) {
