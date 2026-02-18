@@ -57,6 +57,7 @@
 // TipKit - AddFirstFilterTip
 "tip.addFilter.title" = "Try adding a filter";
 "tip.addFilter.message" = "No need to create groups — just pick people by company, department, or job title and send directly.\n\nCreate your first filter now!";
+"tip.addFilter.action" = "Add Filter";
 
 // RuleDetailScreen
 "Rule Title" = "Filter Title";

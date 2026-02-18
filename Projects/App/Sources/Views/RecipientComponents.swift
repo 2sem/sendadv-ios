@@ -30,15 +30,14 @@ struct EmptyStateView: View {
 				.font(.body)
 				.foregroundColor(.gray)
 
-			TipView(addFirstFilterTip, arrowEdge: .top)
+			TipView(addFirstFilterTip, arrowEdge: .top) { _ in
+					addFirstFilterTip.logActionTaken()
+				}
 				.padding(.horizontal, 20)
 				.task {
 					for await shouldDisplay in addFirstFilterTip.shouldDisplayUpdates {
 						if shouldDisplay {
-							AnalyticsManager.shared.logTipShown(
-								tipId: AnalyticsManager.TipID.addFirstFilter,
-								isFirstLaunch: launchCount <= 1
-							)
+							addFirstFilterTip.logShown(isFirstLaunch: launchCount <= 1)
 						}
 					}
 				}
