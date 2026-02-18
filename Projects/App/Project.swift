@@ -95,5 +95,17 @@ let project = Project(
             resources: [],
             dependencies: [.target(name: "App")]
         ),
+    ], schemes: [
+        .scheme(
+            name: "App",
+            shared: true,
+            buildAction: .buildAction(targets: ["App"]),
+            runAction: .runAction(
+                configuration: "Debug",
+                arguments: .arguments(launchArguments: [
+                    .launchArgument(name: "-FIRAnalyticsDebugEnabled", isEnabled: true)
+                ])
+            )
+        )
     ], resourceSynthesizers: []
 )
