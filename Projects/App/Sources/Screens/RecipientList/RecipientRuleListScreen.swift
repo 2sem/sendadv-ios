@@ -46,7 +46,8 @@ struct RecipientRuleListScreen: View {
 	    @State private var currentBatchIndex: Int = 0
 	    private let batchSize: Int = 20
 	    private let addRuleTip = AddRuleTip()
-	    
+	    @State private var isAddRuleTipVisible = false
+
 	    private func presentFullAdThen(_ action: @escaping () -> Void) {
 	        guard launchCount > 1 else {
 	            action()
@@ -147,7 +148,7 @@ struct RecipientRuleListScreen: View {
             
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-                    if addRuleTip.status.shouldDisplay {
+                    if isAddRuleTipVisible {
                         addRuleTip.logActionTaken()
                     }
                     addRuleTip.invalidate(reason: .actionPerformed)
@@ -163,6 +164,7 @@ struct RecipientRuleListScreen: View {
                 .popoverTip(addRuleTip, arrowEdge: .top)
                 .task {
                     for await shouldDisplay in addRuleTip.shouldDisplayUpdates {
+                        isAddRuleTipVisible = shouldDisplay
                         if shouldDisplay {
                             addRuleTip.logShown(isFirstLaunch: launchCount <= 1)
                         }
