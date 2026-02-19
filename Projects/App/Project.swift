@@ -99,7 +99,17 @@ let project = Project(
         .scheme(
             name: "App",
             shared: true,
-            buildAction: .buildAction(targets: ["App"]),
+            buildAction: .buildAction(
+                targets: ["App"],
+                postActions: [
+                    .executionAction(
+                        title: "Tuist Inspect Build",
+                        scriptText: "$TUIST_PATH inspect build",
+                        target: "App"
+                    )
+                ],
+                runPostActionsOnFailure: true
+            ),
             runAction: .runAction(
                 configuration: "Debug",
                 arguments: .arguments(launchArguments: [
