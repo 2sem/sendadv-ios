@@ -196,11 +196,16 @@ struct RecipientRuleListScreen: View {
                     }
                 }
                 .task {
+                    var previousShouldDisplay = false
                     for await shouldDisplay in addFirstFilterTip.shouldDisplayUpdates {
                         isAddFirstFilterTipVisible = shouldDisplay
                         if shouldDisplay {
                             addFirstFilterTip.logShown(isFirstLaunch: launchCount <= 1)
+                        } else if previousShouldDisplay && !shouldDisplay {
+                            // 팁이 표시되었다가 닫힘 (어떤 방식으로든)
+                            AddFirstFilterTip.shownThisLaunch = true
                         }
+                        previousShouldDisplay = shouldDisplay
                     }
                 }
             }
