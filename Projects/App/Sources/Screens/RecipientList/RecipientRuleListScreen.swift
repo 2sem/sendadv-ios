@@ -175,7 +175,6 @@ struct RecipientRuleListScreen: View {
                 }
             }
         }
-        .tipViewStyle(AccentTipViewStyle())
         .navigationTitle("rules.title".localized())
         .navigationBarTitleDisplayMode(.large)
         .toolbar {
@@ -219,6 +218,7 @@ struct RecipientRuleListScreen: View {
                 }
             }
         }
+        .tipViewStyle(AccentTipViewStyle())
         .sheet(isPresented: $showingMessageComposer) {
 			ZStack {
 				MessageComposerView(
