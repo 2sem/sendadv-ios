@@ -213,7 +213,7 @@ struct RecipientRuleListScreen: View {
             }
         }
         .onAppear {
-            // 초기 로드 시 필터 상태 설정
+            // 초기 로드 시 필터 상태 설정 (shownThisLaunch는 .transient로 자동 초기화됨)
             Task { @MainActor in
                 AddFirstFilterTip.hasFilters = !rules.isEmpty
             }
