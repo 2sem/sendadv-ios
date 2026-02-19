@@ -7,16 +7,18 @@
 # If it already exists, it merges (adds missing identifiers) from skNetworks.plist.
 #
 
-set -euo pipefail
+set -eo pipefail
 
 INFOPLIST_PATH="${TARGET_BUILD_DIR}/${INFOPLIST_PATH}"
 SKNETWORKS_PLIST="${SRCROOT}/Resources/skNetworks.plist"
 
+# Check if Info.plist exists, if not exit gracefully (might not be built yet)
 if [ ! -f "${INFOPLIST_PATH}" ]; then
-    echo "warning: Info.plist not found at ${INFOPLIST_PATH}"
+    echo "Info.plist not found at ${INFOPLIST_PATH}, skipping SKAdNetwork merge (normal on first build)"
     exit 0
 fi
 
+# Check if skNetworks.plist exists
 if [ ! -f "${SKNETWORKS_PLIST}" ]; then
     echo "warning: skNetworks.plist not found at ${SKNETWORKS_PLIST}"
     exit 0

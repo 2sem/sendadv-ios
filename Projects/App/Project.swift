@@ -62,7 +62,7 @@ let project = Project(
                 .post(script: "/bin/sh \"${SRCROOT}/Scripts/merge_skadnetworks.sh\"",
                       name: "Merge SKAdNetworkItems",
                       inputPaths: ["$(SRCROOT)/Resources/skNetworks.plist"],
-                      outputPaths: []),
+                      basedOnDependencyAnalysis: false),
                 .post(script: "${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run",
                             name: "Upload dSYM for Crashlytics",
                             inputPaths: ["${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}",
