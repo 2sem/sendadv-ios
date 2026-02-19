@@ -11,6 +11,46 @@ import Contacts
 import SwiftData
 import StoreKit
 import Combine
+import TipKit
+
+private struct AccentTipViewStyle: TipViewStyle {
+	func makeBody(configuration: TipViewStyleConfiguration) -> some View {
+		VStack(alignment: .leading, spacing: 10) {
+			HStack(alignment: .top) {
+				VStack(alignment: .leading, spacing: 4) {
+					configuration.title
+						.font(.headline)
+					configuration.message?
+						.font(.subheadline)
+						.foregroundStyle(.secondary)
+				}
+				Spacer()
+				Button {
+					configuration.tip.invalidate(reason: .tipClosed)
+				} label: {
+					Image(systemName: "xmark")
+						.imageScale(.small)
+						.foregroundStyle(.secondary)
+				}
+				.buttonStyle(.plain)
+			}
+			if !configuration.actions.isEmpty {
+				HStack {
+					ForEach(configuration.actions) { action in
+						Button(action: action.handler) {
+							action.label()
+						}
+						.foregroundStyle(Color.accentButtonLabel)
+						.buttonStyle(.borderedProminent)
+						.tint(.accent)
+					}
+					Spacer()
+				}
+			}
+		}
+		.padding()
+	}
+}
 
 struct RecipientRuleListScreen: View {
     @Environment(\.modelContext) private var modelContext
@@ -19,18 +59,18 @@ struct RecipientRuleListScreen: View {
     @EnvironmentObject private var reviewManager: ReviewManager
     // 순서(order) 기준 정렬
     @Query(sort: \RecipientsRule.title) private var rules: [RecipientsRule]
-    
+
     @AppStorage("LaunchCount") var launchCount: Int = 0
-    
+
 #if DEBUG
     var nativeAdUnit: String = "ca-app-pub-3940256099942544/3986624511"
 #else
     @InfoPlist(["GADUnitIdentifiers", "Native"], default: "") var nativeAdUnit: String
 #endif
-    
+
     @State private var state: SARecipientListScreenModel.State = .idle
     @State private var selectedRule: RecipientsRule?
-    
+
     @State private var showingMessageComposer = false
     @State private var isPreparingMessageView = false
 	@State private var isMessageComposerLoading = false
@@ -45,22 +85,23 @@ struct RecipientRuleListScreen: View {
 	@State private var allPhoneNumbers: [String] = []
 	    @State private var currentBatchIndex: Int = 0
 	    private let batchSize: Int = 20
-	    private let addRuleTip = AddRuleTip()
-	    
+	    private let addFirstFilterTip = AddFirstFilterTip()
+	    @State private var isAddFirstFilterTipVisible = false
+
 	    private func presentFullAdThen(_ action: @escaping () -> Void) {
 	        guard launchCount > 1 else {
 	            action()
 	            return
-	        }        
+	        }
         Task {
             await adManager.requestAppTrackingIfNeed()
-            
+
             await adManager.show(unit: .full)
-            
+
             action()
         }
     }
-    
+
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
             viewModel.remove(offsets.map { rules[$0] })
@@ -71,12 +112,12 @@ struct RecipientRuleListScreen: View {
             try? modelContext.save()
         }
     }
-    
+
     var body: some View {
         ZStack {
             Color.background
                 .edgesIgnoringSafeArea(.all)
-            
+
             if rules.isEmpty {
                 EmptyStateView()
             } else {
@@ -95,7 +136,7 @@ struct RecipientRuleListScreen: View {
                                 .frame(height: 100)
                                 .onTapGesture {
                                     guard isEditing else { return }
-                                    
+
                                     presentFullAdThen { @MainActor in
                                         state = .editingRule(rule)
                                     }
@@ -118,7 +159,7 @@ struct RecipientRuleListScreen: View {
                 }
                 .listStyle(.plain)
             }
-            
+
             // 전송 버튼
             if !rules.isEmpty {
                 VStack {
@@ -144,10 +185,13 @@ struct RecipientRuleListScreen: View {
                     }.tint(Color.accent)
                 }
             }
-            
+
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-                    addRuleTip.invalidate(reason: .actionPerformed)
+                    if isAddFirstFilterTipVisible {
+                        addFirstFilterTip.logActionTaken()
+                    }
+                    addFirstFilterTip.invalidate(reason: .actionPerformed)
                     // 전면 광고 후 새 규칙 편집 화면으로 이동
                     presentFullAdThen { @MainActor in
                         print("select new rule.")
@@ -157,9 +201,24 @@ struct RecipientRuleListScreen: View {
                     Image(systemName: "plus")
                 }
                 .tint(Color.accent)
-                .popoverTip(addRuleTip, arrowEdge: .top)
+                .popoverTip(addFirstFilterTip, arrowEdge: .top) { _ in
+                    addFirstFilterTip.logActionTaken()
+                    addFirstFilterTip.invalidate(reason: .actionPerformed)
+                    presentFullAdThen { @MainActor in
+                        state = .creatingRule
+                    }
+                }
+                .task {
+                    for await shouldDisplay in addFirstFilterTip.shouldDisplayUpdates {
+                        isAddFirstFilterTipVisible = shouldDisplay
+                        if shouldDisplay {
+                            addFirstFilterTip.logShown(isFirstLaunch: launchCount <= 1)
+                        }
+                    }
+                }
             }
         }
+        .tipViewStyle(AccentTipViewStyle())
         .sheet(isPresented: $showingMessageComposer) {
 			ZStack {
 				MessageComposerView(
@@ -167,16 +226,16 @@ struct RecipientRuleListScreen: View {
 					composeState: $messageComposerState,
 					isLoading: $isMessageComposerLoading
 				)
-				
+
 				if isMessageComposerLoading {
 					Color.black.opacity(0.4)
 						.edgesIgnoringSafeArea(.all)
-					
+
 					VStack(spacing: 16) {
 						ProgressView()
 							.progressViewStyle(CircularProgressViewStyle(tint: .white))
 							.scaleEffect(1.5)
-						
+
 						Text("Getting started to write\nIt will take much longer for many recipients.".localized())
 							.foregroundColor(.white)
 							.multilineTextAlignment(.center)
@@ -189,7 +248,7 @@ struct RecipientRuleListScreen: View {
             guard messageComposerState != .unknown else {
                 return
             }
-            
+
 			print("rule list screen detect message composer dismission. state[\(messageComposerState)]")
 			// 배치 전송 처리: 사용자가 취소하지 않은 경우 다음 배치를 자동 진행
 			if isBatchSending {
@@ -249,7 +308,7 @@ struct RecipientRuleListScreen: View {
                 guard let newRule = viewModel.createRule(modelContext: modelContext, undoManager: undoManager) else {
                     return
                 }
-                
+
                 state = .editingRule(newRule)
             case .editingRule(let newRule):
                 selectedRule = newRule
@@ -261,7 +320,7 @@ struct RecipientRuleListScreen: View {
             if newSelectedRule != nil {
                 return
             }
-            
+
             state = .idle
         })
 //        .onChange(of: state, handleStateChange)
@@ -272,7 +331,7 @@ struct RecipientRuleListScreen: View {
                     .scaleEffect(1.5)
             }
         }
-        
+
 		.onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
 			print("keyboard will show on rule list screen")
 		}
@@ -302,16 +361,16 @@ struct RecipientRuleListScreen: View {
             RuleDetailScreen(rule: rule)
         }
     }
-    
+
     private func toggleRule(_ rule: RecipientsRule, isEnabled: Bool) {
         viewModel.toggleRule(rule, isEnabled: isEnabled)
         try? modelContext.save()
     }
-    
+
     private func deleteRule(_ rule: RecipientsRule) {
         viewModel.deleteRule(rule, modelContext: modelContext)
     }
-    
+
     private func onSendMessage(allowAll: Bool = false) {
         // 규칙이 설정되었는지 확인
         let enabledRules = rules.filter { $0.enabled }
@@ -320,15 +379,15 @@ struct RecipientRuleListScreen: View {
             showingAlert = true
             return
         }
-        
+
         isPreparingMessageView = true
-        
+
         Task { @MainActor in
             defer { isPreparingMessageView = false }
             do {
 				let _phoneNumbers = try await viewModel.phoneNumbers(for: rules, allowAll: allowAll)
 				let phoneNumbers = Array(_phoneNumbers)
-                
+
                 // 전화번호가 많으면 경고 표시 (skipPhoneNumberWarning이 false일 때만)
 				if phoneNumbers.count > batchSize && !skipPhoneNumberWarning {
 					alertMessage = String(format: "send.warning.batchSending".localized(), phoneNumbers.count, batchSize)
@@ -339,7 +398,7 @@ struct RecipientRuleListScreen: View {
 					showingAlert = true
 					return
 				}
-                
+
 				skipPhoneNumberWarning = false
 				if phoneNumbers.count > batchSize {
 					// 바로 배치 전송 시작 (경고를 이미 건너뛴 경우)
@@ -397,16 +456,16 @@ struct RecipientRuleListScreen: View {
 #Preview {
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
     let container = try! ModelContainer(for: RecipientsRule.self, configurations: config)
-    
+
     // 샘플 규칙 추가
     let rule1 = RecipientsRule(title: "회사 동료들", enabled: true, order: 1)
     let rule2 = RecipientsRule(title: "가족", enabled: false, order: 2)
     let rule3 = RecipientsRule(title: "학교 친구들", enabled: true, order: 3)
-    
+
     container.mainContext.insert(rule1)
     container.mainContext.insert(rule2)
     container.mainContext.insert(rule3)
-    
+
     let adManager = SwiftUIAdManager()
     return NavigationStack {
         RecipientRuleListScreen()

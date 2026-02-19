@@ -2,15 +2,39 @@ import TipKit
 import SwiftUI
 
 struct AddFirstFilterTip: Tip {
+	let analyticsManager: AnalyticsManager
+
+	init(analyticsManager: AnalyticsManager = .shared) {
+		self.analyticsManager = analyticsManager
+	}
+
 	var title: Text {
-		Text("tip.addFilter.title".localized())
+		Text("title_add_rule_tip", bundle: .main)
 	}
 
 	var message: Text? {
-		Text("tip.addFilter.message".localized())
+		Text("message_add_rule_tip", bundle: .main)
 	}
 
-	var image: Image? {
-		Image(systemName: "plus.circle.fill")
+	// var image: Image? {
+	//     Image(systemName: "plus.circle.fill")
+	// }
+
+	var actions: [Action] {
+		[Action(id: "add_filter", title: "rules.add".localized())]
+	}
+
+	func logShown(isFirstLaunch: Bool = false) {
+		analyticsManager.logTipShown(
+			tipId: AnalyticsManager.TipID.addFirstFilter,
+			isFirstLaunch: isFirstLaunch
+		)
+	}
+
+	func logActionTaken() {
+		analyticsManager.logTipActionTaken(
+			tipId: AnalyticsManager.TipID.addFirstFilter,
+			actionType: "add_first_filter"
+		)
 	}
 }
