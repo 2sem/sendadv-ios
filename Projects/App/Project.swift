@@ -104,7 +104,7 @@ let project = Project(
                 postActions: [
                     .executionAction(
                         title: "Tuist Inspect Build",
-                        scriptText: "$TUIST_PATH inspect build",
+                        scriptText: "$HOME/.local/share/mise/shims/tuist inspect build",
                         target: "App"
                     )
                 ],
