@@ -11,6 +11,7 @@ extension Color {
     static let background = Color("Colors/background")
     static let accent = Color("Colors/accent")
     static let title = Color("Colors/title")
+    static let accentButtonLabel = Color("Colors/accentButtonLabel")
 }
 
 // HEX 컬러 지원 확장
