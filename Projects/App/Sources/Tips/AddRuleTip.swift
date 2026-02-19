@@ -20,6 +20,10 @@ struct AddRuleTip: Tip {
 	//     Image(systemName: "plus.circle.fill")
 	// }
 
+	var actions: [Action] {
+		[Action(id: "add_filter", title: "rules.add".localized())]
+	}
+
 	func logShown(isFirstLaunch: Bool = false) {
 		analyticsManager.logTipShown(
 			tipId: AnalyticsManager.TipID.addRule,

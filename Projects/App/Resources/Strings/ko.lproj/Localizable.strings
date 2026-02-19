@@ -46,11 +46,6 @@
 "rules.title" = "연락처 필터 목록";
 "rules.add" = "새 필터 추가";
 
-// TipKit - AddFirstFilterTip
-"tip.addFilter.title" = "필터를 추가해 보세요";
-"tip.addFilter.message" = "그룹 만들 필요 없이, 연락처의 회사·부서·직위로 원하는 사람들만 바로 골라 발송할 수 있어요.\n\n지금 첫 필터를 만들어 보세요!";
-"tip.addFilter.action" = "필터 추가";
-
 // RuleDetailScreen
 "Rule Title" = "필터 이름";
 "Enter rule title" = "필터 이름을 입력하세요";

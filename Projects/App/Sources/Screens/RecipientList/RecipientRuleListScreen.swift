@@ -79,11 +79,7 @@ struct RecipientRuleListScreen: View {
                 .edgesIgnoringSafeArea(.all)
             
             if rules.isEmpty {
-                EmptyStateView {
-                    presentFullAdThen { @MainActor in
-                        state = .creatingRule
-                    }
-                }
+                EmptyStateView()
             } else {
                 List {
                     // 규칙 섹션 + 네이티브 광고 섞어 보여주기
@@ -165,7 +161,13 @@ struct RecipientRuleListScreen: View {
                     Image(systemName: "plus")
                 }
                 .tint(Color.accent)
-                .popoverTip(addRuleTip, arrowEdge: .top)
+                .popoverTip(addRuleTip, arrowEdge: .top) { _ in
+                    addRuleTip.logActionTaken()
+                    addRuleTip.invalidate(reason: .actionPerformed)
+                    presentFullAdThen { @MainActor in
+                        state = .creatingRule
+                    }
+                }
                 .task {
                     for await shouldDisplay in addRuleTip.shouldDisplayUpdates {
                         isAddRuleTipVisible = shouldDisplay

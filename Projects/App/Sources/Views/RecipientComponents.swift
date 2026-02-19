@@ -9,14 +9,9 @@ import SwiftUI
 import MessageUI
 import Foundation
 import Combine
-import TipKit
 
 // MARK: - Supporting Views
 struct EmptyStateView: View {
-	private let addFirstFilterTip = AddFirstFilterTip()
-	@AppStorage("LaunchCount") private var launchCount: Int = 0
-	let onAddFilter: () -> Void
-
 	var body: some View {
 		VStack(spacing: 20) {
 			Image(systemName: "person.3.fill")
@@ -30,20 +25,6 @@ struct EmptyStateView: View {
             Text("rules.empty.description".localized())
 				.font(.body)
 				.foregroundColor(.gray)
-
-			TipView(addFirstFilterTip, arrowEdge: .top) { _ in
-					addFirstFilterTip.logActionTaken()
-					addFirstFilterTip.invalidate(reason: .actionPerformed)
-					onAddFilter()
-				}
-				.padding(.horizontal, 20)
-				.task {
-					for await shouldDisplay in addFirstFilterTip.shouldDisplayUpdates {
-						if shouldDisplay {
-							addFirstFilterTip.logShown(isFirstLaunch: launchCount <= 1)
-						}
-					}
-				}
 		}
 	}
 }
