@@ -15,6 +15,7 @@ import TipKit
 struct EmptyStateView: View {
 	private let addFirstFilterTip = AddFirstFilterTip()
 	@AppStorage("LaunchCount") private var launchCount: Int = 0
+	let onAddFilter: () -> Void
 
 	var body: some View {
 		VStack(spacing: 20) {
@@ -32,6 +33,8 @@ struct EmptyStateView: View {
 
 			TipView(addFirstFilterTip, arrowEdge: .top) { _ in
 					addFirstFilterTip.logActionTaken()
+					addFirstFilterTip.invalidate(reason: .actionPerformed)
+					onAddFilter()
 				}
 				.padding(.horizontal, 20)
 				.task {

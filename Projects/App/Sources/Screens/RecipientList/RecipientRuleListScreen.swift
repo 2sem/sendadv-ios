@@ -79,7 +79,11 @@ struct RecipientRuleListScreen: View {
                 .edgesIgnoringSafeArea(.all)
             
             if rules.isEmpty {
-                EmptyStateView()
+                EmptyStateView {
+                    presentFullAdThen { @MainActor in
+                        state = .creatingRule
+                    }
+                }
             } else {
                 List {
                     // 규칙 섹션 + 네이티브 광고 섞어 보여주기
