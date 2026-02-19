@@ -16,23 +16,12 @@ import TipKit
 private struct AccentTipViewStyle: TipViewStyle {
 	func makeBody(configuration: TipViewStyleConfiguration) -> some View {
 		VStack(alignment: .leading, spacing: 10) {
-			HStack(alignment: .top) {
-				VStack(alignment: .leading, spacing: 4) {
-					configuration.title
-						.font(.headline)
-					configuration.message?
-						.font(.subheadline)
-						.foregroundStyle(.secondary)
-				}
-				Spacer()
-				Button {
-					configuration.tip.invalidate(reason: .tipClosed)
-				} label: {
-					Image(systemName: "xmark")
-						.imageScale(.small)
-						.foregroundStyle(.secondary)
-				}
-				.buttonStyle(.plain)
+			VStack(alignment: .leading, spacing: 4) {
+				configuration.title
+					.font(.headline)
+				configuration.message?
+					.font(.subheadline)
+					.foregroundStyle(.secondary)
 			}
 			if !configuration.actions.isEmpty {
 				HStack {
@@ -191,7 +180,6 @@ struct RecipientRuleListScreen: View {
                     if isAddFirstFilterTipVisible {
                         addFirstFilterTip.logActionTaken()
                     }
-                    addFirstFilterTip.invalidate(reason: .actionPerformed)
                     // 전면 광고 후 새 규칙 편집 화면으로 이동
                     presentFullAdThen { @MainActor in
                         print("select new rule.")
@@ -203,7 +191,6 @@ struct RecipientRuleListScreen: View {
                 .tint(Color.accent)
                 .popoverTip(addFirstFilterTip, arrowEdge: .top) { _ in
                     addFirstFilterTip.logActionTaken()
-                    addFirstFilterTip.invalidate(reason: .actionPerformed)
                     presentFullAdThen { @MainActor in
                         state = .creatingRule
                     }
@@ -219,6 +206,18 @@ struct RecipientRuleListScreen: View {
             }
         }
         .tipViewStyle(AccentTipViewStyle())
+        .onChange(of: rules.count) { oldValue, newValue in
+            // 필터 개수에 따라 팁 표시 조건 업데이트
+            Task { @MainActor in
+                AddFirstFilterTip.hasFilters = !rules.isEmpty
+            }
+        }
+        .onAppear {
+            // 초기 로드 시 필터 상태 설정
+            Task { @MainActor in
+                AddFirstFilterTip.hasFilters = !rules.isEmpty
+            }
+        }
         .sheet(isPresented: $showingMessageComposer) {
 			ZStack {
 				MessageComposerView(
