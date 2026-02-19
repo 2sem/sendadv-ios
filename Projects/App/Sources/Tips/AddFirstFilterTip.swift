@@ -1,7 +1,7 @@
 import TipKit
 import SwiftUI
 
-struct AddRuleTip: Tip {
+struct AddFirstFilterTip: Tip {
 	let analyticsManager: AnalyticsManager
 
 	init(analyticsManager: AnalyticsManager = .shared) {
@@ -26,15 +26,15 @@ struct AddRuleTip: Tip {
 
 	func logShown(isFirstLaunch: Bool = false) {
 		analyticsManager.logTipShown(
-			tipId: AnalyticsManager.TipID.addRule,
+			tipId: AnalyticsManager.TipID.addFirstFilter,
 			isFirstLaunch: isFirstLaunch
 		)
 	}
 
 	func logActionTaken() {
 		analyticsManager.logTipActionTaken(
-			tipId: AnalyticsManager.TipID.addRule,
-			actionType: "add_rule"
+			tipId: AnalyticsManager.TipID.addFirstFilter,
+			actionType: "add_first_filter"
 		)
 	}
 }

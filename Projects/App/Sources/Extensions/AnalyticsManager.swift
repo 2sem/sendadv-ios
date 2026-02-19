@@ -33,7 +33,7 @@ final class AnalyticsManager {
 	// MARK: - Tip IDs
 
 	enum TipID {
-		static let addRule = "add_rule"
+		static let addFirstFilter = "add_first_filter"
 	}
 
 	// MARK: - Log Methods

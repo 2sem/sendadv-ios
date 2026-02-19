@@ -45,8 +45,8 @@ struct RecipientRuleListScreen: View {
 	@State private var allPhoneNumbers: [String] = []
 	    @State private var currentBatchIndex: Int = 0
 	    private let batchSize: Int = 20
-	    private let addRuleTip = AddRuleTip()
-	    @State private var isAddRuleTipVisible = false
+	    private let addFirstFilterTip = AddFirstFilterTip()
+	    @State private var isAddFirstFilterTipVisible = false
 
 	    private func presentFullAdThen(_ action: @escaping () -> Void) {
 	        guard launchCount > 1 else {
@@ -148,10 +148,10 @@ struct RecipientRuleListScreen: View {
             
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-                    if isAddRuleTipVisible {
-                        addRuleTip.logActionTaken()
+                    if isAddFirstFilterTipVisible {
+                        addFirstFilterTip.logActionTaken()
                     }
-                    addRuleTip.invalidate(reason: .actionPerformed)
+                    addFirstFilterTip.invalidate(reason: .actionPerformed)
                     // 전면 광고 후 새 규칙 편집 화면으로 이동
                     presentFullAdThen { @MainActor in
                         print("select new rule.")
@@ -161,18 +161,18 @@ struct RecipientRuleListScreen: View {
                     Image(systemName: "plus")
                 }
                 .tint(Color.accent)
-                .popoverTip(addRuleTip, arrowEdge: .top) { _ in
-                    addRuleTip.logActionTaken()
-                    addRuleTip.invalidate(reason: .actionPerformed)
+                .popoverTip(addFirstFilterTip, arrowEdge: .top) { _ in
+                    addFirstFilterTip.logActionTaken()
+                    addFirstFilterTip.invalidate(reason: .actionPerformed)
                     presentFullAdThen { @MainActor in
                         state = .creatingRule
                     }
                 }
                 .task {
-                    for await shouldDisplay in addRuleTip.shouldDisplayUpdates {
-                        isAddRuleTipVisible = shouldDisplay
+                    for await shouldDisplay in addFirstFilterTip.shouldDisplayUpdates {
+                        isAddFirstFilterTipVisible = shouldDisplay
                         if shouldDisplay {
-                            addRuleTip.logShown(isFirstLaunch: launchCount <= 1)
+                            addFirstFilterTip.logShown(isFirstLaunch: launchCount <= 1)
                         }
                     }
                 }
