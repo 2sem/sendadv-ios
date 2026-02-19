@@ -11,6 +11,45 @@ import Contacts
 import SwiftData
 import StoreKit
 import Combine
+import TipKit
+
+private struct AccentTipViewStyle: TipViewStyle {
+	func makeBody(configuration: TipViewStyleConfiguration) -> some View {
+		VStack(alignment: .leading, spacing: 10) {
+			HStack(alignment: .top) {
+				VStack(alignment: .leading, spacing: 4) {
+					configuration.title
+						.font(.headline)
+					configuration.message?
+						.font(.subheadline)
+						.foregroundStyle(.secondary)
+				}
+				Spacer()
+				Button {
+					configuration.tip.invalidate(reason: .tipClosed)
+				} label: {
+					Image(systemName: "xmark")
+						.imageScale(.small)
+						.foregroundStyle(.secondary)
+				}
+				.buttonStyle(.plain)
+			}
+			if !configuration.actions.isEmpty {
+				HStack {
+					ForEach(configuration.actions) { action in
+						Button(action: action.handler) {
+							action.label()
+						}
+						.buttonStyle(.borderedProminent)
+						.tint(.accent)
+					}
+					Spacer()
+				}
+			}
+		}
+		.padding()
+	}
+}
 
 struct RecipientRuleListScreen: View {
     @Environment(\.modelContext) private var modelContext
@@ -135,6 +174,7 @@ struct RecipientRuleListScreen: View {
                 }
             }
         }
+        .tipViewStyle(AccentTipViewStyle())
         .navigationTitle("rules.title".localized())
         .navigationBarTitleDisplayMode(.large)
         .toolbar {
