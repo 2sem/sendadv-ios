@@ -40,7 +40,7 @@ private struct AccentTipViewStyle: TipViewStyle {
 						Button(action: action.handler) {
 							action.label()
 						}
-						.foregroundStyle(.accentButtonLabel)
+						.foregroundStyle(Color.accentButtonLabel)
 						.buttonStyle(.borderedProminent)
 						.tint(.accent)
 					}
