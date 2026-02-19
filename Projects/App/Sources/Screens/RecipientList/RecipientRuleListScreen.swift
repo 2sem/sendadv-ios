@@ -208,11 +208,15 @@ struct RecipientRuleListScreen: View {
         .tipViewStyle(AccentTipViewStyle())
         .onChange(of: rules.count) { oldValue, newValue in
             // 필터 개수에 따라 팁 표시 조건 업데이트
-            AddFirstFilterTip.hasFilters = !rules.isEmpty
+            Task { @MainActor in
+                AddFirstFilterTip.hasFilters = !rules.isEmpty
+            }
         }
         .onAppear {
             // 초기 로드 시 필터 상태 설정
-            AddFirstFilterTip.hasFilters = !rules.isEmpty
+            Task { @MainActor in
+                AddFirstFilterTip.hasFilters = !rules.isEmpty
+            }
         }
         .sheet(isPresented: $showingMessageComposer) {
 			ZStack {
