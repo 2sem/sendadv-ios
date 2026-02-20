@@ -272,12 +272,13 @@ struct RecipientRuleListScreen: View {
 					currentBatchIndex = 0
 				} else {
 					let isBatchComplete = presentNextBatch()
-					// 배치 마지막 전송 완료 시에만 카운트 증가 + 리뷰 요청
+					// 배치 마지막 전송 완료 시에만 카운트 증가 + 리뷰 요청 + 전면 광고
 					if isBatchComplete {
 						LSDefaults.increaseMessageSentCount()
 						if reviewManager.canShow {
 							reviewManager.show()
 						}
+						presentFullAdThen {}
 					}
 				}
 
@@ -302,6 +303,7 @@ struct RecipientRuleListScreen: View {
 				if reviewManager.canShow {
 					reviewManager.show()
 				}
+				presentFullAdThen {}
 			}
 			messageComposerState = .unknown
 		}
