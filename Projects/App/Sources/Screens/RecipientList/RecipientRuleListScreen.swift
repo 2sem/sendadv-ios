@@ -66,6 +66,7 @@ struct RecipientRuleListScreen: View {
     @State private var showingAlert = false
     @State private var alertMessage = ""
     @State private var showingSettingsAlert = false
+    @State private var showingNoContactsAlert = false
     @State private var viewModel = SARecipientListScreenModel()
     @State private var isEditing = false
     @State private var messageComposerState: MessageComposeState = .unknown
@@ -363,6 +364,11 @@ struct RecipientRuleListScreen: View {
         } message: {
             Text("Permission required to acess contacts for creating recipients list".localized())
         }
+        .alert("Warning".localized(), isPresented: $showingNoContactsAlert) {
+            Button("OK".localized(), role: .cancel) { }
+        } message: {
+            Text("There is no contact matched to the enabled rules".localized())
+        }
         .navigationDestination(item: $selectedRule) { rule in
             RuleDetailScreen(rule: rule)
         }
@@ -424,8 +430,7 @@ struct RecipientRuleListScreen: View {
                         alertMessage = "There is no activated Rules for Reciepients.\nAll Contacts will receive Message.".localized()
                         showingAlert = true
                     case .noContacts:
-                        alertMessage = "There is no contact matched to the enabled rules".localized()
-                        showingAlert = true
+                        showingNoContactsAlert = true
                     case .permissionDenied:
                         showingSettingsAlert = true
                 }
