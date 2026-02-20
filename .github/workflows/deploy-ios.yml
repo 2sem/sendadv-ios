@@ -68,9 +68,9 @@ jobs:
         run: |
           tuist auth login
 
-      - name: Disable Tuist Caching
+      - name: Setup Tuist Cache
         run: |
-          sed -i '' 's/enableCaching: true/enableCaching: false/' Tuist.swift
+          tuist setup cache
 
       - name: Generate Xcode Project
         run: |
