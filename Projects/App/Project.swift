@@ -23,10 +23,10 @@ let project = Project(
                      developmentRegion: "en"),
     packages: [
         .remote(url: "https://github.com/2sem/GADManager",
-                requirement: .upToNextMajor(from: "1.3.6")),
+                requirement: .upToNextMajor(from: "1.3.8")),
         // .local(path: "../../../../../pods/GADManager/src/GADManager"),
 //        .remote(url: "https://github.com/firebase/firebase-ios-sdk",
-//                requirement: .upToNextMajor(from: "10.4.0")),
+//                requirement: .upToNextMajor(from: "10.29.0")),
     ],
     settings: .settings(configurations: [
         .debug(
