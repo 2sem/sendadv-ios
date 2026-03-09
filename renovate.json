@@ -9,7 +9,7 @@
       "description": "Registry-based .package(id:) in Project.swift (github-releases)",
       "managerFilePatterns": ["/(^|/)Project\\.swift$/"],
       "matchStrings": [
-        "\\.package\\(id:\\s*\"(?<depName>[\\w\\-.]+?)\"[\\s\\S]*?(?:from|exact):\\s*\"(?<currentValue>[^\"]+)\"\\)"
+        "\\.package\\(id:\\s*\"(?<depName>[\\w\\-.]+?)\"(?:(?!\\.package\\().)*?(?:from|exact):\\s*\"(?<currentValue>[^\"]+)\"\\)"
       ],
       "datasourceTemplate": "github-releases",
       "packageNameTemplate": "{{{replace '\\.' '/' depName}}}"
@@ -19,7 +19,7 @@
       "description": "Registry-based .package(id:) in Project.swift (github-tags fallback)",
       "managerFilePatterns": ["/(^|/)Project\\.swift$/"],
       "matchStrings": [
-        "\\.package\\(id:\\s*\"(?<depName>[\\w\\-.]+?)\"[\\s\\S]*?(?:from|exact):\\s*\"(?<currentValue>[^\"]+)\"\\)"
+        "\\.package\\(id:\\s*\"(?<depName>[\\w\\-.]+?)\"(?:(?!\\.package\\().)*?(?:from|exact):\\s*\"(?<currentValue>[^\"]+)\"\\)"
       ],
       "datasourceTemplate": "github-tags",
       "packageNameTemplate": "{{{replace '\\.' '/' depName}}}"
@@ -29,7 +29,7 @@
       "description": "URL-based .remote(url:) with upToNextMajor/Minor in Project.swift (github-releases)",
       "managerFilePatterns": ["/(^|/)Project\\.swift$/"],
       "matchStrings": [
-        "\\.remote\\(url:\\s*\"(?:https?:\\/\\/)?github\\.com\\/(?<depName>[\\w\\-_]+\\/[\\w\\-_.]+?)(?:\\.git)?\"[\\s\\S]*?requirement:\\s*\\.(?:upToNextMajor|upToNextMinor)\\(from:\\s*\"(?<currentValue>[^\"]+)\"\\)"
+        "\\.remote\\(url:\\s*\"(?:https?:\\/\\/)?github\\.com\\/(?<depName>[\\w\\-_]+\\/[\\w\\-_.]+?)(?:\\.git)?\"(?:(?!\\.remote\\().)*?requirement:\\s*\\.(?:upToNextMajor|upToNextMinor)\\(from:\\s*\"(?<currentValue>[^\"]+)\"\\)"
       ],
       "datasourceTemplate": "github-releases"
     },
@@ -38,7 +38,7 @@
       "description": "URL-based .remote(url:) with upToNextMajor/Minor in Project.swift (github-tags fallback)",
       "managerFilePatterns": ["/(^|/)Project\\.swift$/"],
       "matchStrings": [
-        "\\.remote\\(url:\\s*\"(?:https?:\\/\\/)?github\\.com\\/(?<depName>[\\w\\-_]+\\/[\\w\\-_.]+?)(?:\\.git)?\"[\\s\\S]*?requirement:\\s*\\.(?:upToNextMajor|upToNextMinor)\\(from:\\s*\"(?<currentValue>[^\"]+)\"\\)"
+        "\\.remote\\(url:\\s*\"(?:https?:\\/\\/)?github\\.com\\/(?<depName>[\\w\\-_]+\\/[\\w\\-_.]+?)(?:\\.git)?\"(?:(?!\\.remote\\().)*?requirement:\\s*\\.(?:upToNextMajor|upToNextMinor)\\(from:\\s*\"(?<currentValue>[^\"]+)\"\\)"
       ],
       "datasourceTemplate": "github-tags"
     },
@@ -47,7 +47,7 @@
       "description": "URL-based .remote(url:) with .exact() in Project.swift (github-releases)",
       "managerFilePatterns": ["/(^|/)Project\\.swift$/"],
       "matchStrings": [
-        "\\.remote\\(url:\\s*\"(?:https?:\\/\\/)?github\\.com\\/(?<depName>[\\w\\-_]+\\/[\\w\\-_.]+?)(?:\\.git)?\"[\\s\\S]*?requirement:\\s*\\.exact\\(\"(?<currentValue>[^\"]+)\"\\)"
+        "\\.remote\\(url:\\s*\"(?:https?:\\/\\/)?github\\.com\\/(?<depName>[\\w\\-_]+\\/[\\w\\-_.]+?)(?:\\.git)?\"(?:(?!\\.remote\\().)*?requirement:\\s*\\.exact\\(\"(?<currentValue>[^\"]+)\"\\)"
       ],
       "datasourceTemplate": "github-releases"
     },
@@ -56,7 +56,7 @@
       "description": "URL-based .remote(url:) with .exact() in Project.swift (github-tags fallback)",
       "managerFilePatterns": ["/(^|/)Project\\.swift$/"],
       "matchStrings": [
-        "\\.remote\\(url:\\s*\"(?:https?:\\/\\/)?github\\.com\\/(?<depName>[\\w\\-_]+\\/[\\w\\-_.]+?)(?:\\.git)?\"[\\s\\S]*?requirement:\\s*\\.exact\\(\"(?<currentValue>[^\"]+)\"\\)"
+        "\\.remote\\(url:\\s*\"(?:https?:\\/\\/)?github\\.com\\/(?<depName>[\\w\\-_]+\\/[\\w\\-_.]+?)(?:\\.git)?\"(?:(?!\\.remote\\().)*?requirement:\\s*\\.exact\\(\"(?<currentValue>[^\"]+)\"\\)"
       ],
       "datasourceTemplate": "github-tags"
     }
