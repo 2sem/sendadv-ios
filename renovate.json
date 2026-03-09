@@ -1,0 +1,87 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "timezone": "Asia/Seoul",
+  "enabledManagers": ["mise", "custom.regex"],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Registry-based .package(id:) in Project.swift (github-releases)",
+      "managerFilePatterns": ["/(^|/)Project\\.swift$/"],
+      "matchStrings": [
+        "\\.package\\(id:\\s*\"(?<depName>[\\w\\-.]+?)\"[\\s\\S]*?(?:from|exact):\\s*\"(?<currentValue>[^\"]+)\"\\)"
+      ],
+      "datasourceTemplate": "github-releases",
+      "packageNameTemplate": "{{{replace '\\.' '/' depName}}}"
+    },
+    {
+      "customType": "regex",
+      "description": "Registry-based .package(id:) in Project.swift (github-tags fallback)",
+      "managerFilePatterns": ["/(^|/)Project\\.swift$/"],
+      "matchStrings": [
+        "\\.package\\(id:\\s*\"(?<depName>[\\w\\-.]+?)\"[\\s\\S]*?(?:from|exact):\\s*\"(?<currentValue>[^\"]+)\"\\)"
+      ],
+      "datasourceTemplate": "github-tags",
+      "packageNameTemplate": "{{{replace '\\.' '/' depName}}}"
+    },
+    {
+      "customType": "regex",
+      "description": "URL-based .remote(url:) with upToNextMajor/Minor in Project.swift (github-releases)",
+      "managerFilePatterns": ["/(^|/)Project\\.swift$/"],
+      "matchStrings": [
+        "\\.remote\\(url:\\s*\"(?:https?:\\/\\/)?github\\.com\\/(?<depName>[\\w\\-_]+\\/[\\w\\-_.]+?)(?:\\.git)?\"[\\s\\S]*?requirement:\\s*\\.(?:upToNextMajor|upToNextMinor)\\(from:\\s*\"(?<currentValue>[^\"]+)\"\\)"
+      ],
+      "datasourceTemplate": "github-releases"
+    },
+    {
+      "customType": "regex",
+      "description": "URL-based .remote(url:) with upToNextMajor/Minor in Project.swift (github-tags fallback)",
+      "managerFilePatterns": ["/(^|/)Project\\.swift$/"],
+      "matchStrings": [
+        "\\.remote\\(url:\\s*\"(?:https?:\\/\\/)?github\\.com\\/(?<depName>[\\w\\-_]+\\/[\\w\\-_.]+?)(?:\\.git)?\"[\\s\\S]*?requirement:\\s*\\.(?:upToNextMajor|upToNextMinor)\\(from:\\s*\"(?<currentValue>[^\"]+)\"\\)"
+      ],
+      "datasourceTemplate": "github-tags"
+    },
+    {
+      "customType": "regex",
+      "description": "URL-based .remote(url:) with .exact() in Project.swift (github-releases)",
+      "managerFilePatterns": ["/(^|/)Project\\.swift$/"],
+      "matchStrings": [
+        "\\.remote\\(url:\\s*\"(?:https?:\\/\\/)?github\\.com\\/(?<depName>[\\w\\-_]+\\/[\\w\\-_.]+?)(?:\\.git)?\"[\\s\\S]*?requirement:\\s*\\.exact\\(\"(?<currentValue>[^\"]+)\"\\)"
+      ],
+      "datasourceTemplate": "github-releases"
+    },
+    {
+      "customType": "regex",
+      "description": "URL-based .remote(url:) with .exact() in Project.swift (github-tags fallback)",
+      "managerFilePatterns": ["/(^|/)Project\\.swift$/"],
+      "matchStrings": [
+        "\\.remote\\(url:\\s*\"(?:https?:\\/\\/)?github\\.com\\/(?<depName>[\\w\\-_]+\\/[\\w\\-_.]+?)(?:\\.git)?\"[\\s\\S]*?requirement:\\s*\\.exact\\(\"(?<currentValue>[^\"]+)\"\\)"
+      ],
+      "datasourceTemplate": "github-tags"
+    }
+  ],
+  "packageRules": [
+    {
+      "matchManagers": ["custom.regex"],
+      "groupName": "Swift dependencies",
+      "schedule": ["before 9am on Monday"]
+    },
+    {
+      "matchManagers": ["mise"],
+      "groupName": "Dev tools",
+      "schedule": ["before 9am on Monday"]
+    },
+    {
+      "matchUpdateTypes": ["patch"],
+      "automerge": true,
+      "automergeType": "branch"
+    },
+    {
+      "matchUpdateTypes": ["minor", "major"],
+      "automerge": false
+    }
+  ],
+  "prConcurrentLimit": 3,
+  "prHourlyLimit": 2
+}
