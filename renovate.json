@@ -1,0 +1,52 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "labels": ["dependencies"],
+  "prConcurrentLimit": 5,
+  "prHourlyLimit": 2,
+  "schedule": ["before 9am on Monday"],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Tuist Project.swift - GitHub remote packages (range versions)",
+      "fileMatch": ["Projects/.+/Project\\.swift"],
+      "matchStrings": [
+        "\\.remote\\(\\s*url:\\s*\"https://github\\.com/(?<depName>[^\"./ ]+/[^\"./ ]+?)(?:\\.git)?\"\\s*,\\s*requirement:\\s*\\.upToNext(?:Major|Minor)\\(from:\\s*\"(?<currentValue>[\\d.]+)\"\\)"
+      ],
+      "datasourceTemplate": "github-releases",
+      "extractVersionTemplate": "^v?(?<version>.+)$"
+    },
+    {
+      "customType": "regex",
+      "description": "Tuist Project.swift - GitHub exact version packages",
+      "fileMatch": ["Projects/.+/Project\\.swift"],
+      "matchStrings": [
+        "\\.remote\\(\\s*url:\\s*\"https://github\\.com/(?<depName>[^\"./ ]+/[^\"./ ]+?)(?:\\.git)?\"\\s*,\\s*requirement:\\s*\\.exact\\(\"(?<currentValue>[\\d.]+)\"\\)"
+      ],
+      "datasourceTemplate": "github-releases",
+      "extractVersionTemplate": "^v?(?<version>.+)$"
+    },
+    {
+      "customType": "regex",
+      "description": "Tuist Project.swift - Tuist registry packages",
+      "fileMatch": ["Projects/.+/Project\\.swift"],
+      "matchStrings": [
+        "\\.package\\(id:\\s*\"(?<depName>[\\w][\\w.-]*)\"\\s*,\\s*from:\\s*\"(?<currentValue>[\\d.]+)\""
+      ],
+      "datasourceTemplate": "swiftpm",
+      "registryUrls": ["https://registry.tuist.io"]
+    }
+  ],
+  "packageRules": [
+    {
+      "description": "Group Firebase SDK updates together",
+      "matchPackageNames": ["firebase.firebase-ios-sdk"],
+      "groupName": "Firebase iOS SDK"
+    },
+    {
+      "description": "Disable updates for unmaintained CosmicMind/Material",
+      "matchPackageNames": ["CosmicMind/Material"],
+      "enabled": false
+    }
+  ]
+}
