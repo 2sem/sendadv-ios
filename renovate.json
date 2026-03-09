@@ -1,52 +1,80 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
-  "labels": ["dependencies"],
-  "prConcurrentLimit": 5,
-  "prHourlyLimit": 2,
-  "schedule": ["before 9am on Monday"],
+  "enabledManagers": ["mise", "custom.regex"],
   "customManagers": [
     {
       "customType": "regex",
-      "description": "Tuist Project.swift - GitHub remote packages (range versions)",
-      "fileMatch": ["Projects/.+/Project\\.swift"],
+      "managerFilePatterns": ["/(^|/)Project\\.swift$/"],
       "matchStrings": [
-        "\\.remote\\(\\s*url:\\s*\"https://github\\.com/(?<depName>[^\"./ ]+/[^\"./ ]+?)(?:\\.git)?\"\\s*,\\s*requirement:\\s*\\.upToNext(?:Major|Minor)\\(from:\\s*\"(?<currentValue>[\\d.]+)\"\\)"
+        "\\.remote\\(url:\\s*\"(?:https?:\\/\\/)?github\\.com\\/(?<depName>[\\w\\-_]+\\/[\\w\\-_.]+?)(?:\\.git)?\"[\\s\\S]*?requirement:\\s*\\.(?:upToNextMajor|upToNextMinor)\\(from:\\s*\"(?<currentValue>[^\"]+)\"\\)"
       ],
-      "datasourceTemplate": "github-releases",
-      "extractVersionTemplate": "^v?(?<version>.+)$"
+      "datasourceTemplate": "github-releases"
     },
     {
       "customType": "regex",
-      "description": "Tuist Project.swift - GitHub exact version packages",
-      "fileMatch": ["Projects/.+/Project\\.swift"],
+      "managerFilePatterns": ["/(^|/)Project\\.swift$/"],
       "matchStrings": [
-        "\\.remote\\(\\s*url:\\s*\"https://github\\.com/(?<depName>[^\"./ ]+/[^\"./ ]+?)(?:\\.git)?\"\\s*,\\s*requirement:\\s*\\.exact\\(\"(?<currentValue>[\\d.]+)\"\\)"
+        "\\.remote\\(url:\\s*\"(?:https?:\\/\\/)?github\\.com\\/(?<depName>[\\w\\-_]+\\/[\\w\\-_.]+?)(?:\\.git)?\"[\\s\\S]*?requirement:\\s*\\.(?:upToNextMajor|upToNextMinor)\\(from:\\s*\"(?<currentValue>[^\"]+)\"\\)"
       ],
-      "datasourceTemplate": "github-releases",
-      "extractVersionTemplate": "^v?(?<version>.+)$"
+      "datasourceTemplate": "github-tags"
     },
     {
       "customType": "regex",
-      "description": "Tuist Project.swift - Tuist registry packages",
-      "fileMatch": ["Projects/.+/Project\\.swift"],
+      "managerFilePatterns": ["/(^|/)Project\\.swift$/"],
       "matchStrings": [
-        "\\.package\\(id:\\s*\"(?<depName>[\\w][\\w.-]*)\"\\s*,\\s*from:\\s*\"(?<currentValue>[\\d.]+)\""
+        "\\.remote\\(url:\\s*\"(?:https?:\\/\\/)?github\\.com\\/(?<depName>[\\w\\-_]+\\/[\\w\\-_.]+?)(?:\\.git)?\"[\\s\\S]*?requirement:\\s*\\.exact\\(\"(?<currentValue>[^\"]+)\"\\)"
       ],
-      "datasourceTemplate": "swiftpm",
-      "registryUrls": ["https://registry.tuist.io"]
+      "datasourceTemplate": "github-releases"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/(^|/)Project\\.swift$/"],
+      "matchStrings": [
+        "\\.remote\\(url:\\s*\"(?:https?:\\/\\/)?github\\.com\\/(?<depName>[\\w\\-_]+\\/[\\w\\-_.]+?)(?:\\.git)?\"[\\s\\S]*?requirement:\\s*\\.exact\\(\"(?<currentValue>[^\"]+)\"\\)"
+      ],
+      "datasourceTemplate": "github-tags"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/(^|/)Project\\.swift$/"],
+      "matchStrings": [
+        "\\.package\\(id:\\s*\"(?<depName>[\\w\\-.]+?)\"[\\s\\S]*?from:\\s*\"(?<currentValue>[^\"]+)\"\\)"
+      ],
+      "datasourceTemplate": "github-releases",
+      "packageNameTemplate": "{{{replace '\\.' '/' depName}}}"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/(^|/)Project\\.swift$/"],
+      "matchStrings": [
+        "\\.package\\(id:\\s*\"(?<depName>[\\w\\-.]+?)\"[\\s\\S]*?from:\\s*\"(?<currentValue>[^\"]+)\"\\)"
+      ],
+      "datasourceTemplate": "github-tags",
+      "packageNameTemplate": "{{{replace '\\.' '/' depName}}}"
     }
   ],
   "packageRules": [
     {
-      "description": "Group Firebase SDK updates together",
-      "matchPackageNames": ["firebase.firebase-ios-sdk"],
-      "groupName": "Firebase iOS SDK"
+      "matchManagers": ["mise"],
+      "groupName": "Dev tools",
+      "schedule": ["before 9am on monday"]
     },
     {
-      "description": "Disable updates for unmaintained CosmicMind/Material",
-      "matchPackageNames": ["CosmicMind/Material"],
-      "enabled": false
+      "matchManagers": ["custom.regex"],
+      "groupName": "Swift dependencies",
+      "schedule": ["before 9am on monday"]
+    },
+    {
+      "matchUpdateTypes": ["patch"],
+      "automerge": true,
+      "automergeType": "branch"
+    },
+    {
+      "matchUpdateTypes": ["minor", "major"],
+      "automerge": false
     }
-  ]
+  ],
+  "prConcurrentLimit": 3,
+  "prHourlyLimit": 2
 }
