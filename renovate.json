@@ -29,7 +29,7 @@
       "description": "URL-based .remote(url:) with upToNextMajor/Minor in Project.swift (github-releases)",
       "managerFilePatterns": ["/(^|/)Project\\.swift$/"],
       "matchStrings": [
-        "\\.remote\\(url:\\s*\"(?:https?:\\/\\/)?github\\.com\\/(?<depName>[\\w\\-_]+\\/[\\w\\-_.]+?)(?:\\.git)?\"[^\"]*requirement:\\s*\\.(?:upToNextMajor|upToNextMinor)\\(from:\\s*\"(?<currentValue>[^\"]+)\"\\)"
+        "\\.remote\\(\\s*url:\\s*\"(?:https?:\\/\\/)?github\\.com\\/(?<depName>[\\w\\-_]+\\/[\\w\\-_.]+?)(?:\\.git)?\"[^\"]*requirement:\\s*\\.(?:upToNextMajor|upToNextMinor)\\(from:\\s*\"(?<currentValue>[^\"]+)\"\\)"
       ],
       "datasourceTemplate": "github-releases"
     },
@@ -38,7 +38,7 @@
       "description": "URL-based .remote(url:) with upToNextMajor/Minor in Project.swift (github-tags fallback)",
       "managerFilePatterns": ["/(^|/)Project\\.swift$/"],
       "matchStrings": [
-        "\\.remote\\(url:\\s*\"(?:https?:\\/\\/)?github\\.com\\/(?<depName>[\\w\\-_]+\\/[\\w\\-_.]+?)(?:\\.git)?\"[^\"]*requirement:\\s*\\.(?:upToNextMajor|upToNextMinor)\\(from:\\s*\"(?<currentValue>[^\"]+)\"\\)"
+        "\\.remote\\(\\s*url:\\s*\"(?:https?:\\/\\/)?github\\.com\\/(?<depName>[\\w\\-_]+\\/[\\w\\-_.]+?)(?:\\.git)?\"[^\"]*requirement:\\s*\\.(?:upToNextMajor|upToNextMinor)\\(from:\\s*\"(?<currentValue>[^\"]+)\"\\)"
       ],
       "datasourceTemplate": "github-tags"
     },
@@ -47,7 +47,7 @@
       "description": "URL-based .remote(url:) with .exact() in Project.swift (github-releases)",
       "managerFilePatterns": ["/(^|/)Project\\.swift$/"],
       "matchStrings": [
-        "\\.remote\\(url:\\s*\"(?:https?:\\/\\/)?github\\.com\\/(?<depName>[\\w\\-_]+\\/[\\w\\-_.]+?)(?:\\.git)?\"[^\"]*requirement:\\s*\\.exact\\(\"(?<currentValue>[^\"]+)\"\\)"
+        "\\.remote\\(\\s*url:\\s*\"(?:https?:\\/\\/)?github\\.com\\/(?<depName>[\\w\\-_]+\\/[\\w\\-_.]+?)(?:\\.git)?\"[^\"]*requirement:\\s*\\.exact\\(\"(?<currentValue>[^\"]+)\"\\)"
       ],
       "datasourceTemplate": "github-releases"
     },
@@ -56,7 +56,7 @@
       "description": "URL-based .remote(url:) with .exact() in Project.swift (github-tags fallback)",
       "managerFilePatterns": ["/(^|/)Project\\.swift$/"],
       "matchStrings": [
-        "\\.remote\\(url:\\s*\"(?:https?:\\/\\/)?github\\.com\\/(?<depName>[\\w\\-_]+\\/[\\w\\-_.]+?)(?:\\.git)?\"[^\"]*requirement:\\s*\\.exact\\(\"(?<currentValue>[^\"]+)\"\\)"
+        "\\.remote\\(\\s*url:\\s*\"(?:https?:\\/\\/)?github\\.com\\/(?<depName>[\\w\\-_]+\\/[\\w\\-_.]+?)(?:\\.git)?\"[^\"]*requirement:\\s*\\.exact\\(\"(?<currentValue>[^\"]+)\"\\)"
       ],
       "datasourceTemplate": "github-tags"
     }
