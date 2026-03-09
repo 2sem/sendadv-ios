@@ -26,7 +26,7 @@ let project = Project(
                 requirement: .upToNextMajor(from: "1.3.6")),
         // .local(path: "../../../../../pods/GADManager/src/GADManager"),
 //        .remote(url: "https://github.com/firebase/firebase-ios-sdk",
-//                requirement: .upToNextMajor(from: "10.4.0")),
+//                requirement: .upToNextMajor(from: "12.10.0")),
     ],
     settings: .settings(configurations: [
         .debug(

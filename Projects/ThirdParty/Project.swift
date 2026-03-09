@@ -9,7 +9,7 @@ let project = Project(
         .remote(url: "https://github.com/jdg/MBProgressHUD.git",
                 requirement: .upToNextMajor(from: "1.2.0")),
         .remote(url: "https://github.com/2sem/LSExtensions",
-                requirement: .exact("0.1.22")),
+                requirement: .exact("2.27.2")),
         .remote(url: "https://github.com/CosmicMind/Material",
                 requirement: .upToNextMajor(from: "3.1.8")),
         .remote(url: "https://github.com/devxoul/UITextView-Placeholder",
