@@ -72,7 +72,8 @@ struct RecipientRuleListScreen: View {
     @State private var skipPhoneNumberWarning = false
 	@State private var isBatchSending = false
 	@State private var allPhoneNumbers: [String] = []
-	    @State private var currentBatchIndex: Int = 0
+	@State private var currentBatchIndex: Int = 0
+	@State private var batchProgressText: String = ""
 	    private let batchSize: Int = 20
 	    private let addFirstFilterTip = AddFirstFilterTip()
 	    @State private var isAddFirstFilterTipVisible = false
@@ -231,6 +232,13 @@ struct RecipientRuleListScreen: View {
 							.foregroundColor(.white)
 							.multilineTextAlignment(.center)
 							.font(.system(size: 14))
+
+						if !batchProgressText.isEmpty {
+							Text(batchProgressText)
+								.foregroundColor(.white.opacity(0.8))
+								.multilineTextAlignment(.center)
+								.font(.system(size: 12))
+						}
 					}
 				}
 			}
@@ -428,18 +436,17 @@ struct RecipientRuleListScreen: View {
 		guard isBatchSending else { return false }
 		let start = currentBatchIndex * batchSize
 		guard start < allPhoneNumbers.count else {
-			// 모든 배치 완료
-			print("Batch sending completed. total: \(allPhoneNumbers.count)")
 			isBatchSending = false
 			allPhoneNumbers = []
 			currentBatchIndex = 0
+			batchProgressText = ""
 			return true
 		}
 		let end = min(start + batchSize, allPhoneNumbers.count)
 		let batch = Array(allPhoneNumbers[start..<end])
 		let totalBatches = Int(ceil(Double(allPhoneNumbers.count) / Double(batchSize)))
 		let currentNumber = currentBatchIndex + 1
-		print("Presenting batch \(currentNumber)/\(totalBatches) [range: \(start)..<\(end), count: \(batch.count)]")
+		batchProgressText = String(format: "send.batch.progress".localized(), currentNumber, totalBatches, batch.count)
 		viewModel.phoneNumbers = batch
 		isMessageComposerLoading = true
 		showingMessageComposer = true
