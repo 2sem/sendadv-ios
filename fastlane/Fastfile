@@ -115,15 +115,14 @@ platform :ios do
   lane :upload do | options|
     loadiOSConfigs()
 
-    changelog = options[:description] || 'build from fastlane'
     isReleasing = options[:isReleasing] || false
+    changelog = options[:description] || 'build from fastlane'
 
     if isReleasing
         puts "iOS 심사 업로드 시작"
         upload_to_app_store(
           ipa: @ipa_path,
           api_key_path: @api_key_path,
-          release_notes: changelog,
           app_identifier: @package_name,
           submit_for_review: true,
         )

@@ -9,7 +9,7 @@ on:
             required: true
             default: true
         body:
-            description: 'Version changes'
+            description: 'TestFlight 변경사항'
             required: false
             default: '수정사항'
 
