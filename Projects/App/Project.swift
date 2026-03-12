@@ -59,7 +59,7 @@ let project = Project(
                     "NSUserTrackingUsageDescription": "Use location information to explore nearby attractions.",
                     "ITSAppUsesNonExemptEncryption": "NO",
                     "CFBundleShortVersionString": "${MARKETING_VERSION}",
-                    "CFBundleDisplayName": "Send Multi SMS",
+                    "CFBundleDisplayName": "Group SMS",
                     "NSAppTransportSecurity": [
                         "NSAllowsArbitraryLoads": true
                     ],
