@@ -122,7 +122,6 @@ struct RecipientRuleListScreen: View {
                                 RecipientRuleRowView(rule: rule) { isEnabled in
                                     toggleRule(rule, isEnabled: isEnabled)
                                 }
-                                .frame(height: 100)
                                 .onTapGesture {
                                     presentFullAdThen { @MainActor in
                                         state = .editingRule(rule)
