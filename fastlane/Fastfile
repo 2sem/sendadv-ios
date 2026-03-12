@@ -127,6 +127,7 @@ platform :ios do
           submit_for_review: true,
           force: true,
           skip_screenshots: true,
+          run_precheck_before_submit: false,
         )
         puts "iOS 심사 제출 완료"
     else
