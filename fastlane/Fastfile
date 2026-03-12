@@ -116,6 +116,7 @@ platform :ios do
     loadiOSConfigs()
 
     isReleasing = options[:isReleasing] || false
+    changelog = File.read("fastlane/metadata/ko/release_notes.txt").strip
 
     if isReleasing
         puts "iOS 심사 업로드 시작"
@@ -131,6 +132,7 @@ platform :ios do
         upload_to_testflight(
           ipa: @ipa_path,
           api_key_path: @api_key_path,
+          changelog: changelog,
           app_identifier: @package_name,
           skip_waiting_for_build_processing: true
         )
