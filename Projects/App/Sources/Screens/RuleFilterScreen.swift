@@ -49,7 +49,7 @@ struct RuleFilterScreen: View {
             }
         }
         .listStyle(PlainListStyle())
-//        .navigationTitle(viewModel.title)
+        .navigationTitle(viewModel.title)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
