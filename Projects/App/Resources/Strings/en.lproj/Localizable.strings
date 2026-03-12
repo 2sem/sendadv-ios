@@ -42,6 +42,7 @@
 
 // Sending warnings
 "send.warning.batchSending" = "You are about to send message to %d recipients.\nRecipients will be separated into groups of %d for sending.";
+"send.batch.progress" = "(Batch %d/%d — %d recipients)";
 
 // Success popup (review request after 5 sends)
 "success.popup.title" = "Congratulations!";

@@ -63,6 +63,7 @@
 
 // Sending warnings
 "send.warning.batchSending" = "메시지를 %d명의 수신자에게 전송하려고 합니다.\n수신자를 %d명씩 나누어 전송합니다.";
+"send.batch.progress" = "(배치 %d/%d — 수신자 %d명)";
 
 
 // SplashScreen
