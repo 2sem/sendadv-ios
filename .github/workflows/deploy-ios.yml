@@ -8,6 +8,10 @@ on:
             type: boolean
             required: true
             default: true
+        body:
+            description: 'TestFlight 변경사항'
+            required: false
+            default: '수정사항'
 
 concurrency:
   group: ${{ github.ref }}/ios/deploy
@@ -161,4 +165,4 @@ jobs:
           IOS_KEY_PATH: ${{ env.IOS_KEY_PATH }}
           IOS_IPA_PATH: ./Output/IPA/App.ipa
         run: |
-          fastlane ios upload isReleasing:${{ github.event.inputs.isReleasing }}
+          fastlane ios upload description:'${{ github.event.inputs.body }}' isReleasing:${{ github.event.inputs.isReleasing }}

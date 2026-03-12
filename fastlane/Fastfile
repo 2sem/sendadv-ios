@@ -116,7 +116,7 @@ platform :ios do
     loadiOSConfigs()
 
     isReleasing = options[:isReleasing] || false
-    changelog = File.read("fastlane/metadata/ko/release_notes.txt").strip
+    changelog = options[:description] || 'build from fastlane'
 
     if isReleasing
         puts "iOS 심사 업로드 시작"
