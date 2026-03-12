@@ -125,6 +125,8 @@ platform :ios do
           api_key_path: @api_key_path,
           app_identifier: @package_name,
           submit_for_review: true,
+          force: true,
+          skip_screenshots: true,
         )
         puts "iOS 심사 제출 완료"
     else
