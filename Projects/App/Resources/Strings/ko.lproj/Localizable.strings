@@ -49,6 +49,8 @@
 // RuleDetailScreen
 "Rule Title" = "필터 이름";
 "Enter rule title" = "필터 이름을 입력하세요";
+"unsaved.changes.title" = "변경사항을 저장하시겠습니까?";
+"unsaved.changes.discard" = "저장 안 함";
 
 // Common actions
 "Edit" = "편집";

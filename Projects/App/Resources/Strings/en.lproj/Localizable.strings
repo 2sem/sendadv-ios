@@ -57,6 +57,8 @@
 // RuleDetailScreen
 "Rule Title" = "Filter Title";
 "Enter rule title" = "Enter filter title";
+"unsaved.changes.title" = "Save Changes?";
+"unsaved.changes.discard" = "Don't Save";
 
 // Common actions
 "Edit" = "Edit";
