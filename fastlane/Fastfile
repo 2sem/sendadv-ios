@@ -115,7 +115,6 @@ platform :ios do
   lane :upload do | options|
     loadiOSConfigs()
 
-    changelog = options[:description] || 'build from fastlane'
     isReleasing = options[:isReleasing] || false
 
     if isReleasing
@@ -123,7 +122,6 @@ platform :ios do
         upload_to_app_store(
           ipa: @ipa_path,
           api_key_path: @api_key_path,
-          release_notes: changelog,
           app_identifier: @package_name,
           submit_for_review: true,
         )
@@ -133,7 +131,6 @@ platform :ios do
         upload_to_testflight(
           ipa: @ipa_path,
           api_key_path: @api_key_path,
-          changelog: changelog,
           app_identifier: @package_name,
           skip_waiting_for_build_processing: true
         )
