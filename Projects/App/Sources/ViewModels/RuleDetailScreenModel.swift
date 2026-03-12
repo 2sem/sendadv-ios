@@ -12,11 +12,15 @@ import SwiftData
 class RuleDetailScreenModel {
 	var rule: RecipientsRule?
 	var title: String = ""
-    var isSaved: Bool = false
-	
+	var isSaved: Bool = false
+
+	var hasChanges: Bool {
+		title != (rule?.title ?? "");
+	}
+
 	init(rule: RecipientsRule?) {
-		self.rule = rule
-        self.title = rule?.title ?? ""
+		self.rule = rule;
+		self.title = rule?.title ?? "";
 	}
 	
     func save(using context: ModelContext) {

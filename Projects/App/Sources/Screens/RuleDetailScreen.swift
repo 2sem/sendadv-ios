@@ -16,6 +16,7 @@ struct RuleDetailScreen: View {
 	
 	@State private var viewModel: RuleDetailScreenModel
 	@State private var selectedFilter: RecipientsFilter?
+	@State private var showDiscardConfirmation: Bool = false
 	
 	init(rule: RecipientsRule?) {
 		_viewModel = State(initialValue: RuleDetailScreenModel(rule: rule))
@@ -77,13 +78,14 @@ struct RuleDetailScreen: View {
 		.toolbar {
 			ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
-                    print("커스텀 뒤로 가기 버튼이 눌렸습니다.")
-                    
-                    if let undoManager {
-                        viewModel.rollback(withUndoManager: undoManager)
+                    if viewModel.hasChanges {
+                        showDiscardConfirmation = true;
+                    } else {
+                        if let undoManager {
+                            viewModel.rollback(withUndoManager: undoManager);
+                        }
+                        dismiss();
                     }
-                    
-                    dismiss()
                 }) {
                     HStack(alignment: .center, spacing: 4) {
                         Image(systemName: "chevron.left")
@@ -107,9 +109,26 @@ struct RuleDetailScreen: View {
 //			case "org": title = "조직 필터"
 //			default: title = "필터"
 //			}
-			
+
             RuleFilterScreen(filter: filter)
         }
+		.confirmationDialog(
+			"unsaved.changes.title".localized(),
+			isPresented: $showDiscardConfirmation,
+			titleVisibility: .visible
+		) {
+			Button("Save".localized()) {
+				viewModel.save(using: modelContext);
+				dismiss();
+			}
+			Button("unsaved.changes.discard".localized(), role: .destructive) {
+				if let undoManager {
+					viewModel.rollback(withUndoManager: undoManager);
+				}
+				dismiss();
+			}
+			Button("Cancel".localized(), role: .cancel) {}
+		}
 	}
 }
 
