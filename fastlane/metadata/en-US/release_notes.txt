@@ -1,1 +1,3 @@
--
+- App stability improvements
+- Renamed app to Group SMS
+- Fixed navigation title in filter screens
