@@ -12,19 +12,27 @@ import Combine
 
 // MARK: - Supporting Views
 struct EmptyStateView: View {
+	let onAddTapped: () -> Void
+
 	var body: some View {
 		VStack(spacing: 20) {
 			Image(systemName: "person.3.fill")
 				.font(.system(size: 60))
-				.foregroundColor(.gray)
+				.foregroundStyle(.secondary)
 
-            Text("rules.empty".localized())
+			Text("rules.empty".localized())
 				.font(.title2)
-				.foregroundColor(.gray)
+				.foregroundStyle(.secondary)
 
-            Text("rules.empty.description".localized())
+			Text("rules.empty.description".localized())
 				.font(.body)
-				.foregroundColor(.gray)
+				.foregroundStyle(.secondary)
+
+			Button(action: onAddTapped) {
+				Text("rules.empty.cta".localized())
+			}
+			.buttonStyle(.borderedProminent)
+			.tint(.accent)
 		}
 	}
 }

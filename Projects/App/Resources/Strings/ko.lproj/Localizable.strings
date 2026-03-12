@@ -44,6 +44,7 @@
 "rule.row.allContacts" = "모든 연락처";
 "rules.empty" = "연락처 필터가 없습니다";
 "rules.empty.description" = "새로운 연락처 필터를 추가해보세요";
+"rules.empty.cta" = "+ 첫 번째 필터 추가";
 "rules.title" = "연락처 필터 목록";
 "rules.add" = "새 필터 추가";
 
