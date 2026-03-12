@@ -110,9 +110,7 @@ struct RecipientRuleListScreen: View {
 
             if rules.isEmpty {
                 EmptyStateView {
-                    presentFullAdThen { @MainActor in
-                        state = .creatingRule
-                    }
+                    state = .creatingRule
                 }
             } else {
                 List {
@@ -128,9 +126,7 @@ struct RecipientRuleListScreen: View {
                                     toggleRule(rule, isEnabled: isEnabled)
                                 }
                                 .onTapGesture {
-                                    presentFullAdThen { @MainActor in
-                                        state = .editingRule(rule)
-                                    }
+                                    state = .editingRule(rule)
                                 }
                                 .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                                     Button(role: .destructive) {
@@ -172,20 +168,14 @@ struct RecipientRuleListScreen: View {
                     if isAddFirstFilterTipVisible {
                         addFirstFilterTip.logActionTaken()
                     }
-                    // 전면 광고 후 새 규칙 편집 화면으로 이동
-                    presentFullAdThen { @MainActor in
-                        print("select new rule.")
-                        state = .creatingRule
-                    }
+                    state = .creatingRule
                 } label: {
                     Image(systemName: "plus")
                 }
                 .tint(Color.accent)
                 .popoverTip(addFirstFilterTip, arrowEdge: .top) { _ in
                     addFirstFilterTip.logActionTaken()
-                    presentFullAdThen { @MainActor in
-                        state = .creatingRule
-                    }
+                    state = .creatingRule
                 }
                 .task {
                     var previousShouldDisplay = false
