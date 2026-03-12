@@ -68,7 +68,6 @@ struct RecipientRuleListScreen: View {
     @State private var showingSettingsAlert = false
     @State private var showingNoContactsAlert = false
     @State private var viewModel = SARecipientListScreenModel()
-    @State private var isEditing = false
     @State private var messageComposerState: MessageComposeState = .unknown
     @State private var skipPhoneNumberWarning = false
 	@State private var isBatchSending = false
@@ -125,21 +124,17 @@ struct RecipientRuleListScreen: View {
                                 }
                                 .frame(height: 100)
                                 .onTapGesture {
-                                    guard isEditing else { return }
-
                                     presentFullAdThen { @MainActor in
                                         state = .editingRule(rule)
                                     }
                                 }
-                                .if(isEditing) { view in
-                                    view.swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                                        Button(role: .destructive) {
-                                            // Added print statement before deletion
-                                            print("Deleting rule - id: \(rule.id), title: \(rule.title ?? "")")
-                                            deleteRule(rule)
-                                        } label: {
-                                            Label("Delete".localized(), systemImage: "trash")
-                                        }
+                                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                    Button(role: .destructive) {
+                                        // Added print statement before deletion
+                                        print("Deleting rule - id: \(rule.id), title: \(rule.title ?? "")")
+                                        deleteRule(rule)
+                                    } label: {
+                                        Label("Delete".localized(), systemImage: "trash")
                                     }
                                 }
                             }
@@ -168,14 +163,6 @@ struct RecipientRuleListScreen: View {
         .navigationTitle("rules.title".localized())
         .navigationBarTitleDisplayMode(.large)
         .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                if !rules.isEmpty {
-                    Button(isEditing ? "Cancel".localized() : "Edit".localized()) {
-                        isEditing.toggle()
-                    }.tint(Color.accent)
-                }
-            }
-
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
                     if isAddFirstFilterTipVisible {
