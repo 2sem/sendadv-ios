@@ -116,10 +116,9 @@ struct RecipientRuleListScreen: View {
                 List {
                     // 규칙 섹션 + 네이티브 광고 섞어 보여주기
                     Section {
-                        let interval = 5
                         ForEach(Array(rules.enumerated()), id: \.element.id) { index, rule in
                             Group {
-                                NativeAdRowView(index: index, interval: interval)
+                                NativeAdRowView(index: index)
                                 // Added print statement for lifecycle tracking
                                 let _ = print("RecipientRuleRowView init - rule id: \(rule.id), title: \(rule.title ?? "")")
                                 RecipientRuleRowView(rule: rule) { isEnabled in
