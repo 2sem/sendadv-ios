@@ -14,7 +14,7 @@ class ReviewManager : ObservableObject {
     /// 발송 5회 성공 시에만 리뷰 요청 가능 (이후 노출하지 않음)
     var canShow : Bool {
         get {
-            !LSDefaults.isReviewRequested && LSDefaults.MessageSentCount == 5
+            !LSDefaults.isReviewRequested && LSDefaults.MessageSentCount >= 3
         }
     }
 
