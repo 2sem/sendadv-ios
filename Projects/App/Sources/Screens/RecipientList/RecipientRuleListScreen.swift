@@ -108,33 +108,36 @@ struct RecipientRuleListScreen: View {
             Color.background
                 .edgesIgnoringSafeArea(.all)
 
-            if rules.isEmpty {
-                EmptyStateView {
-                    state = .creatingRule
-                }
-            } else {
-                List {
-                    Section {
+            List {
+                Section {
+                    if !rules.isEmpty {
                         NativeAdRowView()
-                        ForEach(rules) { rule in
-                            RecipientRuleRowView(rule: rule) { isEnabled in
-                                toggleRule(rule, isEnabled: isEnabled)
-                            }
-                            .onTapGesture {
-                                state = .editingRule(rule)
-                            }
-                            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                                Button(role: .destructive) {
-                                    deleteRule(rule)
-                                } label: {
-                                    Label("Delete".localized(), systemImage: "trash")
-                                }
+                    }
+                    ForEach(rules) { rule in
+                        RecipientRuleRowView(rule: rule) { isEnabled in
+                            toggleRule(rule, isEnabled: isEnabled)
+                        }
+                        .onTapGesture {
+                            state = .editingRule(rule)
+                        }
+                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                            Button(role: .destructive) {
+                                deleteRule(rule)
+                            } label: {
+                                Label("Delete".localized(), systemImage: "trash")
                             }
                         }
                     }
-                    .listRowBackground(Color.clear)
                 }
-                .listStyle(.plain)
+                .listRowBackground(Color.clear)
+            }
+            .listStyle(.plain)
+            .overlay {
+                if rules.isEmpty {
+                    EmptyStateView {
+                        state = .creatingRule
+                    }
+                }
             }
 
             // 전송 버튼
