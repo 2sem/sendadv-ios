@@ -74,6 +74,7 @@ struct RecipientRuleListScreen: View {
 	@State private var allPhoneNumbers: [String] = []
 	@State private var currentBatchIndex: Int = 0
 	@State private var batchProgressText: String = ""
+	@State private var listHeight: CGFloat = 0
 	    private let batchSize: Int = 20
 	    private let addFirstFilterTip = AddFirstFilterTip()
 	    @State private var isAddFirstFilterTipVisible = false
@@ -116,7 +117,8 @@ struct RecipientRuleListScreen: View {
                 List {
                     // 규칙 섹션 + 네이티브 광고 섞어 보여주기
                     Section {
-                        let interval = 5
+                        let rowHeight: CGFloat = 60
+                        let interval = max(3, Int(listHeight / rowHeight))
                         ForEach(Array(rules.enumerated()), id: \.element.id) { index, rule in
                             Group {
                                 NativeAdRowView(index: index, interval: interval)
@@ -143,6 +145,11 @@ struct RecipientRuleListScreen: View {
                     .listRowBackground(Color.clear)
                 }
                 .listStyle(.plain)
+                .onGeometryChange(for: CGFloat.self) { proxy in
+                    proxy.size.height
+                } action: { newHeight in
+                    listHeight = newHeight
+                }
             }
 
             // 전송 버튼
