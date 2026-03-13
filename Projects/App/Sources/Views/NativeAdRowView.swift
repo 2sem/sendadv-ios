@@ -11,80 +11,76 @@ import SwiftUI
 struct NativeAdRowView: View {
     @EnvironmentObject private var adManager: SwiftUIAdManager
 
-    let index: Int
-
     var body: some View {
-        if index == 0 {
-            NativeAdSwiftUIView() { nativeAd in
-                Group {
-                    if let ad = nativeAd {
-                        HStack(spacing: 12) {
-                            MediaViewSwiftUIView(mediaContent: ad.mediaContent)
-                                .frame(width: 64, height: 64)
-                                .clipShape(RoundedRectangle(cornerRadius: 8))
-                            VStack(alignment: .leading, spacing: 6) {
-                                Text(ad.headline ?? "")
-                                    .font(.headline)
-                                if let body = ad.body {
-                                    Text(body)
-                                        .font(.subheadline)
-                                        .foregroundStyle(.secondary)
-                                }
-                                if let advertiser = ad.advertiser {
-                                    Text(advertiser)
-                                        .font(.caption)
-                                        .foregroundStyle(.tertiary)
-                                }
-                            }.task {
-                                await adManager.requestAppTrackingIfNeed()
-                            }
-                            Spacer()
-                            if let cta = ad.callToAction {
-                                Button(cta) {}
-                                    .buttonStyle(.borderedProminent)
-                            }
-                        }
-                    } else {
-                        HStack(spacing: 12) {
-                            Image("otherapp")
-                                .renderingMode(.original)
-                                .resizable()
-                                .scaledToFit()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: 64, height: 64)
-                                .clipShape(RoundedRectangle(cornerRadius: 8))
-                            VStack(alignment: .leading, spacing: 6) {
-                                Text("ads header".localized())
-                                    .font(.headline)
-                                Text("ads description".localized())
+        NativeAdSwiftUIView() { nativeAd in
+            Group {
+                if let ad = nativeAd {
+                    HStack(spacing: 12) {
+                        MediaViewSwiftUIView(mediaContent: ad.mediaContent)
+                            .frame(width: 64, height: 64)
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text(ad.headline ?? "")
+                                .font(.headline)
+                            if let body = ad.body {
+                                Text(body)
                                     .font(.subheadline)
                                     .foregroundStyle(.secondary)
                             }
-                            Spacer()
-                            Button("ads action".localized()) {
-                                //
+                            if let advertiser = ad.advertiser {
+                                Text(advertiser)
+                                    .font(.caption)
+                                    .foregroundStyle(.tertiary)
                             }
-                            .buttonStyle(.borderedProminent)
-                        }.onTapGesture {
-                            guard let url = URL(string: "https://apps.apple.com/us/developer/young-jun-lee/id1225480114") else {
-                                return
-                            }
-                            UIApplication.shared.open(url, options: [.universalLinksOnly : false], completionHandler: nil)
+                        }.task {
+                            await adManager.requestAppTrackingIfNeed()
+                        }
+                        Spacer()
+                        if let cta = ad.callToAction {
+                            Button(cta) {}
+                                .buttonStyle(.borderedProminent)
                         }
                     }
-                }
-                .frame(height: 120)
-                .background(Color(.secondarySystemBackground))
-                .clipShape(RoundedRectangle(cornerRadius: 10))
-                // 'Ad' badge required by AdMob policy
-                .overlay(alignment: .topLeading) {
-                    if nativeAd != nil {
-                        AdMarkView()
+                } else {
+                    HStack(spacing: 12) {
+                        Image("otherapp")
+                            .renderingMode(.original)
+                            .resizable()
+                            .scaledToFit()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 64, height: 64)
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text("ads header".localized())
+                                .font(.headline)
+                            Text("ads description".localized())
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                        }
+                        Spacer()
+                        Button("ads action".localized()) {
+                            //
+                        }
+                        .buttonStyle(.borderedProminent)
+                    }.onTapGesture {
+                        guard let url = URL(string: "https://apps.apple.com/us/developer/young-jun-lee/id1225480114") else {
+                            return
+                        }
+                        UIApplication.shared.open(url, options: [.universalLinksOnly : false], completionHandler: nil)
                     }
                 }
-                .padding(.vertical, 4)
-                .padding(.horizontal, 16)
             }
+            .frame(height: 120)
+            .background(Color(.secondarySystemBackground))
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+            // 'Ad' badge required by AdMob policy
+            .overlay(alignment: .topLeading) {
+                if nativeAd != nil {
+                    AdMarkView()
+                }
+            }
+            .padding(.vertical, 4)
+            .padding(.horizontal, 16)
         }
     }
 }

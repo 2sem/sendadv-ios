@@ -108,40 +108,36 @@ struct RecipientRuleListScreen: View {
             Color.background
                 .edgesIgnoringSafeArea(.all)
 
-            if rules.isEmpty {
-                EmptyStateView {
-                    state = .creatingRule
-                }
-            } else {
-                List {
-                    // 규칙 섹션 + 네이티브 광고 섞어 보여주기
-                    Section {
-                        ForEach(Array(rules.enumerated()), id: \.element.id) { index, rule in
-                            Group {
-                                NativeAdRowView(index: index)
-                                // Added print statement for lifecycle tracking
-                                let _ = print("RecipientRuleRowView init - rule id: \(rule.id), title: \(rule.title ?? "")")
-                                RecipientRuleRowView(rule: rule) { isEnabled in
-                                    toggleRule(rule, isEnabled: isEnabled)
-                                }
-                                .onTapGesture {
-                                    state = .editingRule(rule)
-                                }
-                                .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                                    Button(role: .destructive) {
-                                        // Added print statement before deletion
-                                        print("Deleting rule - id: \(rule.id), title: \(rule.title ?? "")")
-                                        deleteRule(rule)
-                                    } label: {
-                                        Label("Delete".localized(), systemImage: "trash")
-                                    }
-                                }
+            List {
+                Section {
+                    if !rules.isEmpty {
+                        NativeAdRowView()
+                    }
+                    ForEach(rules) { rule in
+                        RecipientRuleRowView(rule: rule) { isEnabled in
+                            toggleRule(rule, isEnabled: isEnabled)
+                        }
+                        .onTapGesture {
+                            state = .editingRule(rule)
+                        }
+                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                            Button(role: .destructive) {
+                                deleteRule(rule)
+                            } label: {
+                                Label("Delete".localized(), systemImage: "trash")
                             }
                         }
                     }
-                    .listRowBackground(Color.clear)
                 }
-                .listStyle(.plain)
+                .listRowBackground(Color.clear)
+            }
+            .listStyle(.plain)
+            .overlay {
+                if rules.isEmpty {
+                    EmptyStateView {
+                        state = .creatingRule
+                    }
+                }
             }
 
             // 전송 버튼
