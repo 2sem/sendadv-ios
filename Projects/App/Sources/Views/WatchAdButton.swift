@@ -22,11 +22,11 @@ struct WatchAdButton: View {
 			}) {
 				ZStack {
 					Circle()
-						.fill(Color(.secondarySystemGroupedBackground))
-						.shadow(color: .black.opacity(0.15), radius: 6, x: 0, y: 3)
+						.fill(Color(.tertiarySystemBackground))
+						.shadow(color: .black.opacity(0.25), radius: 6, x: 0, y: 3)
 					Image(systemName: "gift.fill")
 						.font(.system(size: 18, weight: .medium))
-						.foregroundStyle(Color.accentColor)
+						.foregroundStyle(Color.accent)
 				}
 				.frame(width: 44, height: 44)
 			}
