@@ -26,7 +26,7 @@ struct WatchAdButton: View {
 						.shadow(color: .black.opacity(0.25), radius: 6, x: 0, y: 3)
 					Image(systemName: "gift.fill")
 						.font(.system(size: 18, weight: .medium))
-						.foregroundStyle(Color.accent)
+						.foregroundStyle(Color.yellow)
 				}
 				.frame(width: 44, height: 44)
 			}
