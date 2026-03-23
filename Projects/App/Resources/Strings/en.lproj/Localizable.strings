@@ -94,3 +94,8 @@
 "message_add_rule_tip" = "Tap here to create your first contact filter.";
 
 
+
+"watch.ad.title" = "Remove ads for 1 hour?";
+"watch.ad.action" = "Watch Ad";
+"watch.ad.message" = "Watch a short ad to enjoy 1 hour ad-free.";
+"watch.ad.toast" = "Ad-free for 1 hour";
