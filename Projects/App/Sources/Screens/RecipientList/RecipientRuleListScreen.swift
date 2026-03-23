@@ -146,7 +146,7 @@ struct RecipientRuleListScreen: View {
             if !rules.isEmpty {
                 VStack {
                     Spacer()
-                    HStack {
+                    HStack(alignment: .bottom, spacing: 12) {
                         Spacer()
                         WatchAdButton(isAdFree: $isAdFree) {
                             showAdFreeToast = true

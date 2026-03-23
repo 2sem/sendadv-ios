@@ -20,13 +20,20 @@ struct WatchAdButton: View {
 			Button(action: {
 				showConfirmation = true
 			}) {
-				Image(systemName: "gift")
-					.font(.system(size: 20, weight: .medium))
-					.frame(width: 44, height: 44)
-					.foregroundColor(.accent)
+				ZStack {
+					Circle()
+						.fill(Color(.secondarySystemGroupedBackground))
+						.shadow(color: .black.opacity(0.15), radius: 6, x: 0, y: 3)
+					Image(systemName: "gift.fill")
+						.font(.system(size: 18, weight: .medium))
+						.foregroundStyle(Color.accentColor)
+				}
+				.frame(width: 44, height: 44)
 			}
 			.buttonStyle(.plain)
-			.transition(.opacity.combined(with: .scale(scale: 0.8)))
+			.accessibilityLabel("watch.ad.accessibility.label".localized())
+			.accessibilityHint("watch.ad.accessibility.hint".localized())
+			.transition(.opacity.combined(with: .scale(scale: 0.85)))
 			.confirmationDialog(
 				"watch.ad.title".localized(),
 				isPresented: $showConfirmation,
