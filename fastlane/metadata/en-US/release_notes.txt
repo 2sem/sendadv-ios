@@ -1,1 +1,7 @@
--
+- Tap filter row to edit directly
+- Warning when leaving with unsaved changes
+- Filter condition summary shown in list
+- Batch send progress indicator
+- Add first filter button on empty state
+- Removed ad on filter edit entry
+- App stability improvements
