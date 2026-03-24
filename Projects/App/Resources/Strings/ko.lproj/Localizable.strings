@@ -89,3 +89,10 @@
 "title_add_rule_tip" = "첫 번째 필터 추가";
 "message_add_rule_tip" = "연락처 필터를 만들려면 여기를 누르세요.";
 
+
+"watch.ad.title" = "1시간 광고 없애기";
+"watch.ad.action" = "광고 보기";
+"watch.ad.message" = "짧은 광고를 시청하면 1시간 동안 광고 없이 이용할 수 있어요.";
+"watch.ad.toast" = "1시간 광고 없음";
+"watch.ad.accessibility.label" = "광고 보고 1시간 광고 없애기";
+"watch.ad.accessibility.hint" = "두 번 탭하면 짧은 광고를 보고 1시간 동안 광고 없이 이용할 수 있어요";

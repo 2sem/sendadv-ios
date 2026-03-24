@@ -146,6 +146,17 @@ extension LSDefaults{
     static func updateReviewRequestDate() {
         ReviewRequestedDate = Date()
     }
-    
+
+    static var isAdFree: Bool {
+        #if DEBUG
+        return Date().timeIntervalSince(LastRewardShown) < 5 * 60
+        #else
+        return Date().timeIntervalSince(LastRewardShown) < 60 * 60
+        #endif
+    }
+
+    static func activateAdFree() {
+        LastRewardShown = Date()
+    }
 }
 

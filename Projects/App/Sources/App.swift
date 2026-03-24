@@ -18,7 +18,6 @@ struct SendadvApp: App {
     // SceneDelegate의 기능을 SwiftUI ObservableObject로 마이그레이션
     @StateObject private var adManager = SwiftUIAdManager()
     @StateObject private var reviewManager = ReviewManager()
-    @StateObject private var rewardAd = SwiftUIRewardAdManager()
     
     var body: some Scene {
         WindowGroup {
@@ -63,15 +62,14 @@ struct SendadvApp: App {
             return
         }
         
-        MobileAds.shared.start { [weak adManager, weak rewardAd] status in
-            guard let adManager = adManager,
-                  let rewardAd = rewardAd else { return }
-            
-            rewardAd.setup(unitId: InterstitialAd.loadUnitId(name: "RewardAd") ?? "", interval: 60.0 * 60.0 * 24)
+        MobileAds.shared.start { [weak adManager] status in
+            guard let adManager = adManager else { return }
+
             adManager.setup()
             
             MobileAds.shared.requestConfiguration.testDeviceIdentifiers = ["8a00796a760e384800262e0b7c3d08fe"]
 
+            adManager.prepare(rewardUnit: .rewarded)
             adManager.prepare(interstitialUnit: .full, interval: 60.0)
             #if DEBUG
             adManager.prepare(openingUnit: .launch, interval: 60.0)
@@ -125,13 +123,15 @@ class SwiftUIAdManager: NSObject, ObservableObject {
         case full = "FullAd"
         case launch = "Launch"
         case native = "Native"
+        case rewarded = "RewardAd"
     }
-    
+
 #if DEBUG
     var testUnits: [GADUnitName] = [
         .full,
         .launch,
         .native,
+        .rewarded,
     ]
 #else
     var testUnits: [GADUnitName] = []
@@ -164,6 +164,10 @@ class SwiftUIAdManager: NSObject, ObservableObject {
     func prepare(openingUnit unit: GADUnitName, interval: TimeInterval) {
         gadManager?.prepare(openingUnit: unit, isTesting: self.isTesting(unit: unit), interval: interval)
     }
+
+    func prepare(rewardUnit unit: GADUnitName) {
+        gadManager?.prepare(rewardUnit: unit, isTesting: self.isTesting(unit: unit))
+    }
     
     /// Shows an ad for the specified unit.
     /// 
@@ -172,19 +176,29 @@ class SwiftUIAdManager: NSObject, ObservableObject {
     @MainActor
     @discardableResult
     func show(unit: GADUnitName) async -> Bool {
-        await withCheckedContinuation { continuation in
+        guard !LSDefaults.isAdFree else { return false }
+        return await withCheckedContinuation { continuation in
             guard let gadManager else {
                 continuation.resume(returning: false)
                 return
             }
-            
-            gadManager.show(unit: unit, isTesting: self.isTesting(unit: unit) ){ unit, _,result  in
+
+            gadManager.show(unit: unit, isTesting: self.isTesting(unit: unit)) { unit, _, result in
                 continuation.resume(returning: result)
             }
         }
     }
-    
+
+    @MainActor
+    func showRewarded(completion: @escaping (Bool) -> Void) {
+        guard let gadManager else { completion(false); return }
+        gadManager.show(unit: .rewarded, needToWait: true, isTesting: isTesting(unit: .rewarded)) { _, _, rewarded in
+            completion(rewarded)
+        }
+    }
+
     func createAdLoader(forUnit unit: GADUnitName, options: [NativeAdViewAdOptions] = []) -> AdLoader? {
+        guard !LSDefaults.isAdFree else { return nil }
         return gadManager?.createNativeLoader(forAd: unit, isTesting: self.isTesting(unit: unit))
     }
     

@@ -74,6 +74,8 @@ struct RecipientRuleListScreen: View {
 	@State private var allPhoneNumbers: [String] = []
 	@State private var currentBatchIndex: Int = 0
 	@State private var batchProgressText: String = ""
+	@State private var isAdFree: Bool = LSDefaults.isAdFree
+	@State private var showAdFreeToast = false
 	    private let batchSize: Int = 20
 	    private let addFirstFilterTip = AddFirstFilterTip()
 	    @State private var isAddFirstFilterTipVisible = false
@@ -110,7 +112,7 @@ struct RecipientRuleListScreen: View {
 
             List {
                 Section {
-                    if !rules.isEmpty {
+                    if !rules.isEmpty && !isAdFree {
                         NativeAdRowView()
                     }
                     ForEach(rules) { rule in
@@ -144,8 +146,15 @@ struct RecipientRuleListScreen: View {
             if !rules.isEmpty {
                 VStack {
                     Spacer()
-                    HStack {
+                    HStack(alignment: .bottom, spacing: 12) {
                         Spacer()
+                        WatchAdButton(isAdFree: $isAdFree) {
+                            showAdFreeToast = true
+                            Task {
+                                try? await Task.sleep(for: .seconds(2))
+                                showAdFreeToast = false
+                            }
+                        }
                         SendButton {
                             onSendMessage()
                         }
@@ -153,6 +162,21 @@ struct RecipientRuleListScreen: View {
                     .padding(.trailing, 20)
                     .padding(.bottom, 20)
                 }
+            }
+
+            // 광고 없음 토스트
+            if showAdFreeToast {
+                VStack {
+                    Spacer()
+                    Text("watch.ad.toast".localized())
+                        .font(.subheadline.weight(.medium))
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 10)
+                        .background(Color.accent.opacity(0.9), in: Capsule())
+                        .padding(.bottom, 90)
+                }
+                .transition(.opacity.combined(with: .move(edge: .bottom)))
             }
         }
         .navigationTitle("rules.title".localized())
@@ -200,6 +224,11 @@ struct RecipientRuleListScreen: View {
                 AddFirstFilterTip.hasFilters = !rules.isEmpty
             }
         }
+        .onReceive(Timer.publish(every: 30, on: .main, in: .common).autoconnect()) { _ in
+            isAdFree = LSDefaults.isAdFree
+        }
+        .animation(.easeInOut(duration: 0.25), value: isAdFree)
+        .animation(.easeInOut(duration: 0.3), value: showAdFreeToast)
         .sheet(isPresented: $showingMessageComposer) {
 			ZStack {
 				MessageComposerView(
