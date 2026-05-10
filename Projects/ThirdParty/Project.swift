@@ -5,11 +5,11 @@ let project = Project(
     name: "ThirdParty",
     packages: [
         .remote(url: "https://github.com/kakao/kakao-ios-sdk",
-                requirement: .upToNextMajor(from: "2.27.2")),
+                requirement: .upToNextMajor(from: "2.27.3")),
         .remote(url: "https://github.com/jdg/MBProgressHUD.git",
                 requirement: .upToNextMajor(from: "1.2.0")),
         .remote(url: "https://github.com/2sem/LSExtensions",
-                requirement: .exact("0.1.23")),
+                requirement: .exact("0.1.24")),
         .remote(url: "https://github.com/CosmicMind/Material",
                 requirement: .upToNextMajor(from: "3.1.8")),
         .remote(url: "https://github.com/devxoul/UITextView-Placeholder",
