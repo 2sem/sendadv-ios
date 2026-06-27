@@ -1,7 +1,2 @@
-- Tap filter row to edit directly
-- Warning when leaving with unsaved changes
-- Filter condition summary shown in list
-- Batch send progress indicator
-- Add first filter button on empty state
-- Removed ad on filter edit entry
-- App stability improvements
+Watch an ad to enjoy 1 hour ad-free.
+Tap the gift button at the bottom of the filter list, watch a short ad, and use the app without ads for 1 hour.
