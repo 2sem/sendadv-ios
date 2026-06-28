@@ -72,12 +72,6 @@ class SARecipientListScreenModel: RecipientListScreenModel {
     func createRule(modelContext: ModelContext, undoManager: UndoManager?) -> RecipientsRule? {
         let newRule = RecipientsRule(title: "New Rule".localized(), enabled: true)
 
-        modelContext.insert(newRule)
-//        undoManager?.registerUndo(withTarget: modelContext) { context in
-//            context.delete(newRule)
-//        }
-//        try modelContext.save()
-
         return newRule
     }
 }

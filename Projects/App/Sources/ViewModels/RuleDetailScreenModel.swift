@@ -24,6 +24,10 @@ class RuleDetailScreenModel {
 	}
 	
     func save(using context: ModelContext) {
+        if rule?.modelContext == nil, let rule {
+            context.insert(rule)
+        }
+
         rule?.title = title
         try? context.save()
         isSaved = true
