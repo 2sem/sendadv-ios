@@ -72,7 +72,7 @@ let project = Project(
             sources: ["Sources/**"],
             resources: [
                 .glob(pattern: "Resources/**",
-                      excluding: ["Resources/Datas/sendadv.xcdatamodeld/**"])
+                      excluding: ["Resources/Datas/sendadv.xcdatamodeld/sendadv.xcdatamodel"])
             ],
             //            entitlements: .file(path: .relativeToCurrentFile("Sources/gersanghelper.entitlements")),
             scripts: [
