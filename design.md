@@ -278,30 +278,75 @@ Current app file candidates:
 - `RuleFilterScreen.swift`
 - `RuleFilterScreenModel.swift`
 
+Source design reference:
+- `design/project/SendAdv Soft Friendly.dc.html`
+  - Light: `<!-- L3 Sub-filter detail (NEW) -->`, around lines 126–169
+  - Dark: `<!-- D3 Sub-filter detail -->`, around lines 303–343
+
+Current mismatch notes:
+- The current `RuleFilterScreen` is still a plain `List` with a default navigation title.
+- It is missing the custom top bar, category icon in the title, helper copy, search field, select-all explanatory card, count summary row, and rounded grouped item panel.
+- The visual selection state should use filled circular checkmarks and selected-row backgrounds, not a trailing plain checkmark.
+
 Design requirements:
-- Top bar includes:
-  - circular back button
-  - category icon + category title
-  - Done action
+- Use `Color.softBackground` as the full-screen background.
+- Hide the default navigation bar and build a custom top bar inside the screen.
+- Top bar layout:
+  - horizontal row with outer padding 22 pt
+  - left: 36×36 circular surface back button
+  - center: category title with a compact icon tile
+    - icon tile: 22×22, radius 7 pt
+    - title: 16 pt, weight 700
+  - right: `Done`, 15.5 pt, weight 700, category accent color
 - Helper copy:
   - `Pick which job titles this filter includes`
   - Adapt wording by category.
 - Add search field:
-  - Rounded surface
-  - Search icon
+  - white / dark rounded surface
+  - radius: 14 pt
+  - padding: horizontal 14 pt, vertical 11 pt
+  - search icon, 17 pt
   - Placeholder changes by category, e.g. `Search titles`
 - Select all row:
   - title: `Select all titles`
   - subtitle: `Match everyone regardless of title`
-  - toggle
+  - toggle on the trailing side
+  - card radius: 16 pt
+  - padding: horizontal 18 pt, vertical 15 pt
 - Section summary row:
   - left: item count, e.g. `7 titles`
   - right: selected count, e.g. `3 selected`
+  - margin: top 20 pt, horizontal 4 pt, bottom 10 pt
 - Item list:
   - rounded grouped panel
+  - panel radius: 18 pt
   - selected rows use subtle accent background
   - selected indicator is filled circle with checkmark
   - unselected indicator is outlined circle
+  - row padding: horizontal 18 pt, vertical 14 pt
+  - row title: 15.5 pt
+  - selected row title weight: 600
+  - divider color: `#F3F0F6` light / `#2C2839` dark
+- Preserve existing behavior:
+  - Back dismisses without saving pending changes.
+  - Done calls `RuleFilterScreenModel.save(context:)` then dismisses.
+  - Select All keeps the existing select-all semantics.
+  - Tapping an item toggles only the local ViewModel state until Done.
+
+Expected screen flow:
+
+```mermaid
+flowchart TD
+  A[RuleDetailScreen category card] --> B[RuleFilterScreen]
+  B --> C[Search available items]
+  B --> D[Toggle Select All]
+  B --> E[Toggle individual item]
+  D --> F[Update selected count]
+  E --> F
+  B --> G{Tap Done?}
+  G -->|Yes| H[Save filter includes/all and dismiss]
+  G -->|Back| I[Dismiss without saving]
+```
 
 ### 4. Send Confirmation / Messages Handoff
 

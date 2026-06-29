@@ -71,6 +71,28 @@
 "unsaved.changes.title" = "Save Changes?";
 "unsaved.changes.discard" = "Don't Save";
 
+// RuleFilterScreen
+"rule.filter.helper.job" = "Pick which job titles this filter includes";
+"rule.filter.helper.department" = "Pick which departments this filter includes";
+"rule.filter.helper.organization" = "Pick which organizations this filter includes";
+"rule.filter.helper.default" = "Pick which items this filter includes";
+"rule.filter.search.job" = "Search titles";
+"rule.filter.search.department" = "Search departments";
+"rule.filter.search.organization" = "Search organizations";
+"rule.filter.search.default" = "Search items";
+"rule.filter.selectAll.job" = "Select all titles";
+"rule.filter.selectAll.department" = "Select all departments";
+"rule.filter.selectAll.organization" = "Select all organizations";
+"rule.filter.selectAll.job.subtitle" = "Match everyone regardless of title";
+"rule.filter.selectAll.department.subtitle" = "Match everyone regardless of department";
+"rule.filter.selectAll.organization.subtitle" = "Match everyone regardless of organization";
+"rule.filter.selectAll.default.subtitle" = "Match everyone regardless of this filter";
+"rule.filter.count.job" = "%d titles";
+"rule.filter.count.department" = "%d departments";
+"rule.filter.count.organization" = "%d organizations";
+"rule.filter.count.default" = "%d items";
+"rule.filter.selected.count" = "%d selected";
+
 // Common actions
 "Back" = "Back";
 "Edit" = "Edit";

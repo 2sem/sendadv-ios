@@ -12,12 +12,30 @@ class RuleFilterScreenModel {
     var selectAll: Bool = false
     var availableItems: [String] = []
     var selectedItems: Set<String> = []
+    var searchText: String = ""
     
     private(set) var filter: RecipientsFilter
     private(set) var isSaved = false
     
     var title: String {
         FilterTarget(rawValue: filter.target ?? "")?.displayName.localized() ?? ""
+    }
+
+    var target: FilterTarget? {
+        FilterTarget(rawValue: filter.target ?? "")
+    }
+
+    var filteredItems: [String] {
+        let trimmedSearchText = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedSearchText.isEmpty else { return availableItems }
+
+        return availableItems.filter { item in
+            item.localizedCaseInsensitiveContains(trimmedSearchText)
+        }
+    }
+
+    var selectedCount: Int {
+        selectedItems.count
     }
     
     init(filter: RecipientsFilter) {
