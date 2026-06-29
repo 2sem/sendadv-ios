@@ -64,10 +64,15 @@
 // RuleDetailScreen
 "Rule Title" = "Filter Title";
 "Enter rule title" = "Enter filter title";
+"rule.detail.title.new" = "New filter";
+"rule.detail.name.label" = "Give it a name";
+"rule.detail.match.section" = "Who should match?";
+"Anyone" = "Anyone";
 "unsaved.changes.title" = "Save Changes?";
 "unsaved.changes.discard" = "Don't Save";
 
 // Common actions
+"Back" = "Back";
 "Edit" = "Edit";
 "Delete" = "Delete";
 

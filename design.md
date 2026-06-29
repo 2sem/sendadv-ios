@@ -173,23 +173,104 @@ Current app file candidates:
 - `RuleDetailScreen.swift`
 - `RuleDetailScreenModel.swift`
 
+Source design reference:
+- `design/project/SendAdv Soft Friendly.dc.html`
+  - Light: `<!-- L2 Build filter -->`, around lines 84–124
+  - Dark: `<!-- D2 Build filter -->`, around lines 261–301
+
+Current mismatch notes:
+- The current `RuleDetailScreen` still uses the old plain layout:
+  - `Color.background` instead of `Color.softBackground`
+  - default large navigation title (`Edit Recipients Rule`) instead of the custom compact top bar
+  - `RoundedBorderTextFieldStyle` instead of a large rounded title card
+  - small system-style category rows instead of Soft Friendly cards
+  - generic icons/colors instead of category-specific icon tiles
+- This screen should be updated after the first-screen PR so the edit flow visually matches the refreshed list screen.
+
 Design requirements:
-- Use custom compact top bar instead of relying only on default navigation title.
-- Back button: circular surface button.
-- Center title: `New filter` or edit title.
-- Save action: primary accent text.
-- Name field is a rounded card:
+- Use `Color.softBackground` as the full-screen background.
+- Hide the default navigation title and build a custom top bar inside the screen.
+- Top bar layout:
+  - horizontal row with `padding(.horizontal, 22)` and compact vertical spacing below the status bar / safe area
+  - left: 36×36 circular surface back button
+    - light surface: white
+    - subtle shadow: `0 2 6 rgba(0,0,0,.06)`
+    - icon: `chevron.left`, primary text color
+  - center: title `New filter` for new filters, edit title/state equivalent for existing filters
+    - font: 16 pt, weight 700
+  - right: `Save`
+    - font: 15.5 pt, weight 700
+    - light accent `#5B5BD6`, dark accent `#9B8BF5`
+- Content layout:
+  - outer horizontal padding: 22 pt
+  - starts shortly below the top bar; prototype uses about 8 pt top padding
+- Name field card:
+  - white / dark card surface
+  - radius: 20 pt
+  - padding: horizontal 20 pt, vertical 18 pt
+  - soft card shadow: `0 6 18 rgba(91,91,214,.07)` in Light
   - label: `Give it a name`
-  - title value in large bold text
-- Filter categories shown as rounded cards:
-  - Job
-  - Department
-  - Organization
+    - font: 12.5 pt, weight 600
+    - secondary text color
+  - editable title value:
+    - font: 22 pt, weight 700
+    - top spacing: 8 pt
+    - active cursor/accent uses primary accent
+  - Implementation note: do not use `RoundedBorderTextFieldStyle`; use a plain `TextField` inside the card.
+- Section label between name card and category cards:
+  - text: `Who should match?`
+  - font: 13 pt, weight 600
+  - color: secondary text
+  - margin: top 26 pt, horizontal 6 pt, bottom 14 pt
+- Category cards:
+  - vertical stack spacing: 13 pt
+  - card background: white / dark card surface
+  - radius: 20 pt
+  - padding: horizontal 18 pt, vertical 16 pt
+  - soft card shadow matching the name card
+  - row layout: `HStack(spacing: 14)`
 - Each category card includes:
-  - colored icon tile
-  - category title
-  - current selection summary
-  - chevron
+  - 46×46 rounded icon tile, radius 15 pt
+  - category title: 16 pt, weight 700
+  - current selection summary: 12.5 pt, top spacing 3 pt
+  - trailing chevron: 18 pt icon, stroke/foreground `#cdc8d8` in Light
+- Category-specific visual treatment:
+  - Job:
+    - icon: briefcase
+    - tile bg: `#EEF0FF` light / `#272338` dark
+    - summary/accent fg: `#5B5BD6` light / `#9B8BF5` dark
+    - example summary: `Manager, Team Lead +1`
+  - Department:
+    - icon: building/house outline matching the prototype
+    - tile bg: `#FFF0E8` light / dark peach surface
+    - summary/accent fg: `#E8895B` light / `#E8A07B` dark
+    - example summary: `Sales`
+  - Organization:
+    - icon: office/building outline
+    - neutral tile bg when set to Any/Anyone: `#F0EEF4` light
+    - neutral fg: `#9B93A8` / muted dark equivalent
+    - example summary: `Anyone`
+- Preserve existing behavior:
+  - New filter is transient until Save.
+  - Back with unsaved changes shows the existing discard confirmation.
+  - Save inserts/updates via `RuleDetailScreenModel.save(using:)`.
+  - Tapping a category opens `RuleFilterScreen` with the existing filter model.
+
+Expected screen flow:
+
+```mermaid
+flowchart TD
+  A[Contact Filter List] --> B[Open RuleDetailScreen]
+  B --> C[Custom top bar: Back / New filter / Save]
+  C --> D[Name card: Give it a name]
+  D --> E[Who should match?]
+  E --> F[Job card]
+  E --> G[Department card]
+  E --> H[Organization card]
+  F --> I[RuleFilterScreen]
+  G --> I
+  H --> I
+```
 
 ### 3. Sub-filter Item Picker
 
