@@ -53,10 +53,15 @@
 // RuleDetailScreen
 "Rule Title" = "필터 이름";
 "Enter rule title" = "필터 이름을 입력하세요";
+"rule.detail.title.new" = "새 필터";
+"rule.detail.name.label" = "이름 지정";
+"rule.detail.match.section" = "누가 포함되나요?";
+"Anyone" = "누구나";
 "unsaved.changes.title" = "변경사항을 저장하시겠습니까?";
 "unsaved.changes.discard" = "저장 안 함";
 
 // Common actions
+"Back" = "뒤로";
 "Edit" = "편집";
 "Delete" = "삭제";
 
