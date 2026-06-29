@@ -29,9 +29,9 @@ private struct AccentTipViewStyle: TipViewStyle {
 						Button(action: action.handler) {
 							action.label()
 						}
-						.foregroundStyle(Color.accentButtonLabel)
+						.foregroundStyle(Color.softAccentLabel)
 						.buttonStyle(.borderedProminent)
-						.tint(.accent)
+						.tint(.softAccent)
 					}
 					Spacer()
 				}
@@ -80,6 +80,10 @@ struct RecipientRuleListScreen: View {
 	    private let addFirstFilterTip = AddFirstFilterTip()
 	    @State private var isAddFirstFilterTipVisible = false
 
+	private var enabledRuleCount: Int {
+		rules.filter(\.enabled).count
+	}
+
 	    private func presentFullAdThen(_ action: @escaping () -> Void) {
 	        guard launchCount > 1 else {
 	            action()
@@ -105,93 +109,101 @@ struct RecipientRuleListScreen: View {
         }
     }
 
-    var body: some View {
-        ZStack {
-            Color.background
-                .edgesIgnoringSafeArea(.all)
+	var body: some View {
+		ZStack {
+			Color.softBackground
+				.ignoresSafeArea()
 
-            List {
-                Section {
-                    if !rules.isEmpty && !isAdFree {
-                        NativeAdRowView()
-                    }
-                    ForEach(rules) { rule in
-                        RecipientRuleRowView(rule: rule) { isEnabled in
-                            toggleRule(rule, isEnabled: isEnabled)
-                        }
-                        .onTapGesture {
-                            state = .editingRule(rule)
-                        }
-                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                            Button(role: .destructive) {
-                                deleteRule(rule)
-                            } label: {
-                                Label("Delete".localized(), systemImage: "trash")
-                            }
-                        }
-                    }
-                }
-                .listRowBackground(Color.clear)
-            }
-            .listStyle(.plain)
-            .overlay {
-                if rules.isEmpty {
-                    EmptyStateView {
-                        state = .creatingRule
-                    }
-                }
-            }
+			ScrollView {
+				LazyVStack(spacing: 12) {
+					RuleListHeaderView(enabledCount: enabledRuleCount)
+						.padding(.bottom, 0)
 
-            // 전송 버튼
-            if !rules.isEmpty {
-                VStack {
-                    Spacer()
-                    HStack(alignment: .bottom, spacing: 12) {
-                        Spacer()
-                        WatchAdButton(isAdFree: $isAdFree) {
-                            showAdFreeToast = true
-                            Task {
-                                try? await Task.sleep(for: .seconds(2))
-                                showAdFreeToast = false
-                            }
-                        }
-                        SendButton {
-                            onSendMessage()
-                        }
-                    }
-                    .padding(.trailing, 20)
-                    .padding(.bottom, 20)
-                }
-            }
+					ForEach(rules) { rule in
+						RecipientRuleRowView(rule: rule) { isEnabled in
+							toggleRule(rule, isEnabled: isEnabled)
+						}
+						.onTapGesture {
+							state = .editingRule(rule)
+						}
+						.contextMenu {
+							Button(role: .destructive) {
+								deleteRule(rule)
+							} label: {
+								Label("Delete".localized(), systemImage: "trash")
+							}
+						}
+					}
 
-            // 광고 없음 토스트
-            if showAdFreeToast {
-                VStack {
-                    Spacer()
-                    Text("watch.ad.toast".localized())
-                        .font(.subheadline.weight(.medium))
-                        .foregroundStyle(.white)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 10)
-                        .background(Color.accent.opacity(0.9), in: Capsule())
-                        .padding(.bottom, 90)
-                }
-                .transition(.opacity.combined(with: .move(edge: .bottom)))
-            }
-        }
-        .navigationTitle("rules.title".localized())
-        .navigationBarTitleDisplayMode(.large)
+					if !rules.isEmpty && !isAdFree {
+						NativeAdRowView()
+							.padding(.top, 58)
+					}
+				}
+				.padding(.top, 0)
+				.padding(.horizontal, 30)
+				.padding(.bottom, 146)
+			}
+			.scrollIndicators(.hidden)
+			.overlay {
+				if rules.isEmpty {
+					EmptyStateView {
+						state = .creatingRule
+					}
+				}
+			}
+
+			// 전송 버튼
+			if !rules.isEmpty {
+				VStack {
+					Spacer()
+					HStack(alignment: .center, spacing: 14) {
+						WatchAdButton(isAdFree: $isAdFree) {
+							showAdFreeToast = true
+							Task {
+								try? await Task.sleep(for: .seconds(2))
+								showAdFreeToast = false
+							}
+						}
+						SendButton(title: String(format: "send.action.with.count".localized(), enabledRuleCount)) {
+							onSendMessage()
+						}
+					}
+					.frame(maxWidth: .infinity)
+					.padding(.horizontal, 30)
+					.padding(.bottom, 24)
+				}
+			}
+
+			// 광고 없음 토스트
+			if showAdFreeToast {
+				VStack {
+					Spacer()
+					Text("watch.ad.toast".localized())
+						.font(.subheadline.weight(.medium))
+						.foregroundStyle(Color.softAccentLabel)
+						.padding(.horizontal, 16)
+						.padding(.vertical, 10)
+						.background(Color.softAccent.opacity(0.95), in: Capsule())
+						.padding(.bottom, 90)
+				}
+				.transition(.opacity.combined(with: .move(edge: .bottom)))
+			}
+		}
+		.navigationTitle("")
+		.toolbarVisibility(.hidden, for: .navigationBar)
+		.navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    if isAddFirstFilterTipVisible {
-                        addFirstFilterTip.logActionTaken()
-                    }
-                    state = .creatingRule
-                } label: {
-                    Image(systemName: "plus")
-                }
-                .tint(Color.accent)
+				Button {
+					if isAddFirstFilterTipVisible {
+						addFirstFilterTip.logActionTaken()
+					}
+					state = .creatingRule
+				} label: {
+					Image(systemName: "plus")
+				}
+				.tint(Color.softAccent)
                 .popoverTip(addFirstFilterTip, arrowEdge: .top) { _ in
                     addFirstFilterTip.logActionTaken()
                     state = .creatingRule
@@ -345,9 +357,9 @@ struct RecipientRuleListScreen: View {
 //        .onChange(of: state, handleStateChange)
         .overlay {
             if isPreparingMessageView {
-                ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle(tint: .accent))
-                    .scaleEffect(1.5)
+	                ProgressView()
+	                    .progressViewStyle(CircularProgressViewStyle(tint: .softAccent))
+	                    .scaleEffect(1.5)
             }
         }
 
@@ -474,6 +486,26 @@ struct RecipientRuleListScreen: View {
 }
 
 
+private struct RuleListHeaderView: View {
+	let enabledCount: Int
+
+	var body: some View {
+		VStack(alignment: .leading, spacing: 8) {
+			Text("rules.header.title".localized())
+				.font(.system(size: 40, weight: .bold, design: .rounded))
+				.foregroundStyle(Color.softPrimaryText)
+				.tracking(-1.2)
+
+			Text(String(format: "rules.header.summary".localized(), enabledCount))
+				.font(.title3.weight(.bold))
+				.foregroundStyle(Color.softSecondaryText)
+		}
+		.frame(maxWidth: .infinity, alignment: .leading)
+	}
+}
+
+
+
 
 #Preview {
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
@@ -495,4 +527,3 @@ struct RecipientRuleListScreen: View {
     .modelContainer(container)
     .environmentObject(adManager)
 }
-

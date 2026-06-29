@@ -15,43 +15,55 @@ struct EmptyStateView: View {
 	let onAddTapped: () -> Void
 
 	var body: some View {
-		VStack(spacing: 20) {
-			Image(systemName: "person.3.fill")
-				.font(.system(size: 60))
-				.foregroundStyle(.secondary)
+		VStack(spacing: 22) {
+			ZStack {
+				Circle()
+					.fill(Color.softAccent.opacity(0.12))
+					.frame(width: 92, height: 92)
+
+				Image(systemName: "person.crop.circle.badge.plus")
+					.font(.system(size: 42, weight: .semibold))
+					.foregroundStyle(Color.softAccent)
+			}
 
 			Text("rules.empty".localized())
-				.font(.title2)
-				.foregroundStyle(.secondary)
+				.font(.title2.weight(.bold))
+				.foregroundStyle(Color.softPrimaryText)
 
 			Text("rules.empty.description".localized())
 				.font(.body)
-				.foregroundStyle(.secondary)
+				.foregroundStyle(Color.softSecondaryText)
+				.multilineTextAlignment(.center)
+				.padding(.horizontal, 12)
 
 			Button(action: onAddTapped) {
 				Text("rules.empty.cta".localized())
 			}
-			.buttonStyle(.borderedProminent)
-			.tint(.accent)
+			.buttonStyle(SoftFriendlyPrimaryButtonStyle())
 		}
+		.padding(28)
+		.frame(maxWidth: 340)
+		.softFriendlyCard()
+		.padding(.horizontal, 24)
 	}
 }
 
 
 
 struct SendButton: View {
+	var title: String = "send.action".localized()
 	let action: () -> Void
 	
 	var body: some View {
 		Button(action: action) {
-			Image(systemName: "paperplane.fill")
-				.font(.title2)
-				.foregroundColor(.black)
-				.frame(width: 56, height: 56)
-				.background(Color.yellow)
-				.clipShape(Circle())
-				.shadow(radius: 4)
+			HStack(spacing: 12) {
+				Image(systemName: "paperplane.fill")
+					.font(.headline.weight(.bold))
+				Text(title)
+			}
 		}
+		.buttonStyle(SoftFriendlyPrimaryButtonStyle())
+		.accessibilityLabel(title)
 	}
 }
 
@@ -86,4 +98,3 @@ struct RuleEditView: View {
 			}
 	}
 } 
-
