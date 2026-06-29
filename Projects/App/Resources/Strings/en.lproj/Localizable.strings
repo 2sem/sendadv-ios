@@ -41,6 +41,8 @@
 "New Rule" = "New Filter";
 
 // Sending warnings
+"send.action" = "Send";
+"send.action.with.count" = "Send to %d people";
 "send.warning.batchSending" = "You are about to send message to %d recipients.\nRecipients will be separated into groups of %d for sending.";
 "send.batch.progress" = "(Batch %d/%d — %d recipients)";
 
@@ -56,6 +58,8 @@
 "rules.empty.cta" = "+ Add First Filter";
 "rules.title" = "Contact Filter List";
 "rules.add" = "Add New Filter";
+"rules.header.title" = "Your filters";
+"rules.header.summary" = "%d turned on · ready to reach people";
 
 // RuleDetailScreen
 "Rule Title" = "Filter Title";

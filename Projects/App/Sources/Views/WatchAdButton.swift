@@ -22,13 +22,26 @@ struct WatchAdButton: View {
 			}) {
 				ZStack {
 					Circle()
-						.fill(Color(.tertiarySystemBackground))
-						.shadow(color: .black.opacity(0.25), radius: 6, x: 0, y: 3)
+						.fill(Color.softSurfaceElevated)
+						.overlay {
+							Circle()
+								.stroke(Color.softDivider.opacity(0.75), lineWidth: 1)
+						}
+						.shadow(color: .black.opacity(0.08), radius: 12, x: 0, y: 6)
 					Image(systemName: "gift.fill")
 						.font(.system(size: 18, weight: .medium))
-						.foregroundStyle(Color.accent)
+						.foregroundStyle(Color.softAccent)
 				}
-				.frame(width: 44, height: 44)
+				.frame(width: 64, height: 64)
+				.overlay(alignment: .topTrailing) {
+					Text("1h")
+						.font(.caption2.weight(.bold))
+						.foregroundStyle(.white)
+						.padding(.horizontal, 7)
+						.padding(.vertical, 4)
+						.background(Color.dynamic(light: "#F2855F", dark: "#FF9D78"), in: .capsule)
+						.offset(x: 7, y: -6)
+				}
 			}
 			.buttonStyle(.plain)
 			.accessibilityLabel("watch.ad.accessibility.label".localized())

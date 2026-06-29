@@ -47,6 +47,8 @@
 "rules.empty.cta" = "+ 첫 번째 필터 추가";
 "rules.title" = "연락처 필터 목록";
 "rules.add" = "새 필터 추가";
+"rules.header.title" = "내 필터";
+"rules.header.summary" = "%d개 켜짐 · 바로 전송 준비됨";
 
 // RuleDetailScreen
 "Rule Title" = "필터 이름";
@@ -63,6 +65,8 @@
 "Permission required to acess contacts for creating recipients list" = "수신자 목록 생성을 위해 연락처 접근 권한이 필요합니다";
 
 // Sending warnings
+"send.action" = "전송";
+"send.action.with.count" = "%d개 필터로 전송";
 "send.warning.batchSending" = "메시지를 %d명의 수신자에게 전송하려고 합니다.\n수신자를 %d명씩 나누어 전송합니다.";
 "send.batch.progress" = "(배치 %d/%d — 수신자 %d명)";
 
