@@ -29,15 +29,6 @@ struct RuleDetailScreen: View {
 				.ignoresSafeArea()
 
 			VStack(spacing: 0) {
-				RuleDetailTopBar(
-					title: "rule.detail.title.new".localized(),
-					onBack: handleBack,
-					onSave: saveAndDismiss
-				)
-				.padding(.horizontal, 22)
-				.padding(.top, 0)
-				.padding(.bottom, 8)
-
 				ScrollView {
 					VStack(alignment: .leading, spacing: 0) {
 						RuleNameCard(title: $viewModel.title, isFocused: $isTitleFocused)
@@ -82,10 +73,25 @@ struct RuleDetailScreen: View {
 				.scrollIndicators(.hidden)
 			}
 		}
-		.navigationTitle("")
+		.navigationTitle("rule.detail.title.new".localized())
 		.navigationBarTitleDisplayMode(.inline)
 		.navigationBarBackButtonHidden(true)
-		.toolbarVisibility(.hidden, for: .navigationBar)
+		.toolbar {
+			ToolbarItem(placement: .topBarLeading) {
+				Button(action: handleBack) {
+					Image(systemName: "chevron.left")
+						.font(.system(size: 16, weight: .bold))
+						.foregroundStyle(Color.softPrimaryText)
+				}
+				.accessibilityLabel("Back".localized())
+			}
+
+			ToolbarItem(placement: .topBarTrailing) {
+				Button("Save".localized(), action: saveAndDismiss)
+					.font(.system(size: 15.5, weight: .bold, design: .rounded))
+					.foregroundStyle(Color.softAccent)
+			}
+		}
 		.navigationDestination(item: $selectedFilter) { filter in
 //			let title: String
 //			switch filter.target {
@@ -134,39 +140,6 @@ struct RuleDetailScreen: View {
 
 	private func detailSubtitle(_ value: String) -> String {
 		value == "All".localized() ? "Anyone".localized() : value
-	}
-}
-
-private struct RuleDetailTopBar: View {
-	let title: String
-	let onBack: () -> Void
-	let onSave: () -> Void
-
-	var body: some View {
-		ZStack {
-			Text(title)
-				.font(.system(size: 16, weight: .bold, design: .rounded))
-				.foregroundStyle(Color.softPrimaryText)
-
-			HStack {
-				Button(action: onBack) {
-					Image(systemName: "chevron.left")
-						.font(.system(size: 16, weight: .bold))
-						.foregroundStyle(Color.softPrimaryText)
-						.frame(width: 36, height: 36)
-						.background(Color.softSurface, in: Circle())
-						.shadow(color: .black.opacity(0.06), radius: 6, x: 0, y: 2)
-				}
-				.accessibilityLabel("Back".localized())
-
-				Spacer()
-
-				Button("Save".localized(), action: onSave)
-					.font(.system(size: 15.5, weight: .bold, design: .rounded))
-					.foregroundStyle(Color.softAccent)
-			}
-		}
-		.frame(height: 36)
 	}
 }
 
