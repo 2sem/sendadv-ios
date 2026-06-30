@@ -75,7 +75,7 @@ struct SendadvApp: App {
             adManager.prepare(openingUnit: .launch, interval: 60.0)
             #else
             adManager.prepare(interstitialUnit: .full, interval: 60.0 * 60)
-            adManager.prepare(openingUnit: .launch, interval: 60.0 * 5)
+            adManager.prepare(openingUnit: .launch, interval: 60.0 * 30)
             #endif
             adManager.canShowFirstTime = true
         }
@@ -295,4 +295,3 @@ extension SwiftUIRewardAdManager: GADRewardManagerDelegate {
         // 필요한 경우 추가 로직
     }
 }
-
