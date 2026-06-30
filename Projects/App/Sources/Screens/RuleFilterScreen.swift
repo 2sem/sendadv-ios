@@ -26,16 +26,6 @@ struct RuleFilterScreen: View {
 				.ignoresSafeArea()
 
 			VStack(spacing: 0) {
-				RuleFilterTopBar(
-					title: viewModel.title,
-					style: style,
-					onBack: { dismiss() },
-					onDone: saveAndDismiss
-				)
-				.padding(.horizontal, 22)
-				.padding(.top, 0)
-				.padding(.bottom, 10)
-
 				ScrollView {
 					VStack(alignment: .leading, spacing: 0) {
 						Text(helperText(for: viewModel.target))
@@ -91,10 +81,32 @@ struct RuleFilterScreen: View {
 				.scrollIndicators(.hidden)
 			}
 		}
-		.navigationTitle("")
 		.navigationBarTitleDisplayMode(.inline)
-		.navigationBarBackButtonHidden(true)
-		.toolbarVisibility(.hidden, for: .navigationBar)
+		.toolbar {
+			ToolbarItem(placement: .title) {
+				HStack(spacing: 8) {
+					ZStack {
+						RoundedRectangle(cornerRadius: 7, style: .continuous)
+							.fill(style.iconBackground)
+
+						Image(systemName: style.symbolName)
+							.font(.system(size: 13, weight: .semibold))
+							.foregroundStyle(style.accent)
+					}
+					.frame(width: 22, height: 22)
+
+					Text(viewModel.title)
+						.font(.system(size: 16, weight: .bold, design: .rounded))
+						.foregroundStyle(Color.softPrimaryText)
+				}
+			}
+
+			ToolbarItem(placement: .topBarTrailing) {
+				Button("Done".localized(), action: saveAndDismiss)
+					.font(.system(size: 15.5, weight: .bold, design: .rounded))
+					.foregroundStyle(style.accent)
+			}
+		}
 		.onAppear {
 			viewModel.loadItems()
 		}
@@ -168,52 +180,6 @@ struct RuleFilterScreen: View {
 		case .none:
 			return String(format: "rule.filter.count.default".localized(), count)
 		}
-	}
-}
-
-private struct RuleFilterTopBar: View {
-	let title: String
-	let style: RuleFilterCategoryStyle
-	let onBack: () -> Void
-	let onDone: () -> Void
-
-	var body: some View {
-		ZStack {
-			HStack(spacing: 8) {
-				ZStack {
-					RoundedRectangle(cornerRadius: 7, style: .continuous)
-						.fill(style.iconBackground)
-
-					Image(systemName: style.symbolName)
-						.font(.system(size: 13, weight: .semibold))
-						.foregroundStyle(style.accent)
-				}
-				.frame(width: 22, height: 22)
-
-				Text(title)
-					.font(.system(size: 16, weight: .bold, design: .rounded))
-					.foregroundStyle(Color.softPrimaryText)
-			}
-
-			HStack {
-				Button(action: onBack) {
-					Image(systemName: "chevron.left")
-						.font(.system(size: 16, weight: .bold))
-						.foregroundStyle(Color.softPrimaryText)
-						.frame(width: 36, height: 36)
-						.background(Color.softSurface, in: Circle())
-						.shadow(color: .black.opacity(0.06), radius: 6, x: 0, y: 2)
-				}
-				.accessibilityLabel("Back".localized())
-
-				Spacer()
-
-				Button("Done".localized(), action: onDone)
-					.font(.system(size: 15.5, weight: .bold, design: .rounded))
-					.foregroundStyle(style.accent)
-			}
-		}
-		.frame(height: 36)
 	}
 }
 
