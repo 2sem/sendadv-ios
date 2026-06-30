@@ -128,7 +128,8 @@ Current app file candidates:
 
 Design requirements:
 - Replace the current plain list look with warm background and rounded cards.
-- Use an in-screen custom header instead of the default large navigation title.
+- Use the system Navigation Bar for the screen title/action after the navigation-bar migration.
+- Keep only the status copy inside the content area when filters exist.
 - Prefer `ScrollView` + `LazyVStack` over `List` for this screen to avoid system list insets and to match the prototype spacing.
 - Header copy should communicate status:
   - Example: `Your filters`
@@ -152,14 +153,29 @@ Design requirements:
   - no leading `Spacer()` before the gift button
   - CTA button background should fill the remaining width exactly; avoid adding horizontal padding after `frame(maxWidth: .infinity)`.
 - Empty state should be centered and friendly:
-  - large rounded illustration container
+  - Source reference: `SendAdv Soft Friendly.dc.html` `<!-- L0 Empty state (light) -->` and `<!-- D0 Empty state (dark) -->`
+  - No extra surrounding card around the empty content.
+  - Centered content around mid-screen.
+  - 128×128 rounded-square illustration container, radius 40 pt.
+  - Main icon uses people/contact grouping metaphor with accent color.
+  - Small peach/dark-peach plus badge overlaps top-right of the illustration.
   - title: `No filters yet`
+    - font: 22 pt, weight 700
+    - top margin from icon: 30 pt
   - helper text explaining grouping by job/department/organization
+    - font: 15 pt
+    - secondary color
+    - line height about 1.55
+    - top margin from title: 10 pt
   - primary CTA: `Add your first filter`
+    - plus icon + text
+    - 54 pt height capsule
+    - horizontal padding about 30 pt
+    - top margin from helper: 30 pt
 
 Implementation notes from first-screen iteration:
 - Initial `design.md` interpretation was too chip/card-oriented. The actual first-screen prototype is:
-  - large custom header,
+  - large rule-list title (now implemented using Navigation Bar),
   - large rounded filter cards,
   - left icon tile + title/subtitle + right toggle,
   - bottom fixed reward button + fill-width send pill.
