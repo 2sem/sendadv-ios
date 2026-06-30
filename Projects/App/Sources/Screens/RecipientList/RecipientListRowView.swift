@@ -10,7 +10,9 @@ import SwiftData
 
 struct RecipientRuleRowView: View {
 	let rule: RecipientsRule
+	let isEditing: Bool
 	let onToggle: (Bool) -> Void
+	let onDelete: () -> Void
 
 	var isTitleEmpty: Bool {
 		return rule.title?.isEmpty ?? true;
@@ -81,19 +83,29 @@ struct RecipientRuleRowView: View {
 
 			Spacer(minLength: 8)
 
-			Toggle("", isOn: Binding(
-				get: { rule.enabled },
-				set: { onToggle($0) }
-		))
-		.labelsHidden()
-		.tint(.softAccent)
-		.scaleEffect(1.12)
+			if isEditing {
+				Button(role: .destructive, action: onDelete) {
+					Image(systemName: "minus.circle.fill")
+						.font(.system(size: 30, weight: .semibold))
+						.foregroundStyle(.red)
+				}
+				.buttonStyle(.plain)
+				.accessibilityLabel("Delete".localized())
+			} else {
+				Toggle("", isOn: Binding(
+					get: { rule.enabled },
+					set: { onToggle($0) }
+				))
+				.labelsHidden()
+				.tint(.softAccent)
+				.scaleEffect(1.12)
+			}
 		}
 		.padding(.leading, 24)
 		.padding(.trailing, 20)
 		.padding(.vertical, 18)
 		.softFriendlyCard()
-		.opacity(rule.enabled ? 1 : 0.72)
+		.opacity(rule.enabled || isEditing ? 1 : 0.72)
 		.accessibilityElement(children: .combine)
 	}
 }
@@ -117,7 +129,7 @@ struct RecipientRuleRowView_Previews: PreviewProvider {
 		let rule = RecipientsRule(title: "회사 동료들", enabled: true)
 		container.mainContext.insert(rule)
 
-		return RecipientRuleRowView(rule: rule) { isOn in }
+		return RecipientRuleRowView(rule: rule, isEditing: false, onToggle: { isOn in }, onDelete: {})
 			.previewLayout(.sizeThatFits)
 			.modelContainer(container)
 	}

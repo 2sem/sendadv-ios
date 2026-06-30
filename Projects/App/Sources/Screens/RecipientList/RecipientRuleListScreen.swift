@@ -76,6 +76,9 @@ struct RecipientRuleListScreen: View {
 	@State private var batchProgressText: String = ""
 	@State private var isAdFree: Bool = LSDefaults.isAdFree
 	@State private var showAdFreeToast = false
+	@State private var isEditingRules = false
+	@State private var rulePendingDeletion: RecipientsRule?
+	@State private var showingDeleteRuleConfirmation = false
 	    private let batchSize: Int = 20
 	    private let addFirstFilterTip = AddFirstFilterTip()
 	    @State private var isAddFirstFilterTipVisible = false
@@ -120,17 +123,27 @@ struct RecipientRuleListScreen: View {
 						.padding(.bottom, 0)
 
 					ForEach(rules) { rule in
-						RecipientRuleRowView(rule: rule) { isEnabled in
-							toggleRule(rule, isEnabled: isEnabled)
-						}
+						RecipientRuleRowView(
+							rule: rule,
+							isEditing: isEditingRules,
+							onToggle: { isEnabled in
+								toggleRule(rule, isEnabled: isEnabled)
+							},
+							onDelete: {
+								requestDeleteRule(rule)
+							}
+						)
 						.onTapGesture {
+							guard !isEditingRules else { return }
 							state = .editingRule(rule)
 						}
 						.contextMenu {
-							Button(role: .destructive) {
-								deleteRule(rule)
-							} label: {
-								Label("Delete".localized(), systemImage: "trash")
+							if !isEditingRules {
+								Button(role: .destructive) {
+									requestDeleteRule(rule)
+								} label: {
+									Label("Delete".localized(), systemImage: "trash")
+								}
 							}
 						}
 					}
@@ -154,7 +167,7 @@ struct RecipientRuleListScreen: View {
 			}
 
 			// 전송 버튼
-			if !rules.isEmpty {
+			if !rules.isEmpty && !isEditingRules {
 				VStack {
 					Spacer()
 					HStack(alignment: .center, spacing: 14) {
@@ -193,39 +206,63 @@ struct RecipientRuleListScreen: View {
 		.navigationTitle("rules.header.title".localized())
 		.navigationBarTitleDisplayMode(.large)
 		.toolbar {
-			ToolbarItem(placement: .topBarTrailing) {
-				Button {
-					if isAddFirstFilterTipVisible {
-						addFirstFilterTip.logActionTaken()
+			ToolbarItem(placement: .topBarLeading) {
+				if !rules.isEmpty {
+					Button {
+						withAnimation(.easeInOut(duration: 0.2)) {
+							isEditingRules.toggle()
+						}
+					} label: {
+						if isEditingRules {
+							Image(systemName: "checkmark")
+						} else {
+							Text("Edit".localized())
+						}
 					}
-					state = .creatingRule
-				} label: {
-					Image(systemName: "plus")
+					.font(.headline.weight(.semibold))
+					.foregroundStyle(Color.softAccent)
+					.accessibilityLabel((isEditingRules ? "Done" : "Edit").localized())
 				}
-				.tint(Color.softAccent)
-                .popoverTip(addFirstFilterTip, arrowEdge: .top) { _ in
-                    addFirstFilterTip.logActionTaken()
-                    state = .creatingRule
-                }
-                .task {
-                    var previousShouldDisplay = false
-                    for await shouldDisplay in addFirstFilterTip.shouldDisplayUpdates {
-                        isAddFirstFilterTipVisible = shouldDisplay
-                        if shouldDisplay {
-                            addFirstFilterTip.logShown(isFirstLaunch: launchCount <= 1)
-                        } else if previousShouldDisplay && !shouldDisplay {
-                            // 팁이 표시되었다가 닫힘 (어떤 방식으로든)
-                            AddFirstFilterTip.shownThisLaunch = true
-                        }
-                        previousShouldDisplay = shouldDisplay
-                    }
-                }
-            }
-        }
+			}
+
+			ToolbarItem(placement: .topBarTrailing) {
+				if !isEditingRules {
+					Button {
+						if isAddFirstFilterTipVisible {
+							addFirstFilterTip.logActionTaken()
+						}
+						state = .creatingRule
+					} label: {
+						Image(systemName: "plus")
+					}
+					.tint(Color.softAccent)
+					.popoverTip(addFirstFilterTip, arrowEdge: .top) { _ in
+						addFirstFilterTip.logActionTaken()
+						state = .creatingRule
+					}
+					.task {
+						var previousShouldDisplay = false
+						for await shouldDisplay in addFirstFilterTip.shouldDisplayUpdates {
+							isAddFirstFilterTipVisible = shouldDisplay
+							if shouldDisplay {
+								addFirstFilterTip.logShown(isFirstLaunch: launchCount <= 1)
+							} else if previousShouldDisplay && !shouldDisplay {
+								// 팁이 표시되었다가 닫힘 (어떤 방식으로든)
+								AddFirstFilterTip.shownThisLaunch = true
+							}
+							previousShouldDisplay = shouldDisplay
+						}
+					}
+				}
+			}
+		}
         .tipViewStyle(AccentTipViewStyle())
-        .onChange(of: rules.count) { oldValue, newValue in
-            // 필터 개수에 따라 팁 표시 조건 업데이트
-            Task { @MainActor in
+		.onChange(of: rules.count) { oldValue, newValue in
+			if newValue == 0 {
+				isEditingRules = false
+			}
+			// 필터 개수에 따라 팁 표시 조건 업데이트
+			Task { @MainActor in
                 AddFirstFilterTip.hasFilters = !rules.isEmpty
             }
         }
@@ -387,13 +424,30 @@ struct RecipientRuleListScreen: View {
         } message: {
             Text("Permission required to acess contacts for creating recipients list".localized())
         }
-        .alert("Warning".localized(), isPresented: $showingNoContactsAlert) {
-            Button("OK".localized(), role: .cancel) { }
-        } message: {
-            Text("There is no contact matched to the enabled rules".localized())
-        }
-        .navigationDestination(item: $selectedRule) { rule in
-            RuleDetailScreen(rule: rule)
+		.alert("Warning".localized(), isPresented: $showingNoContactsAlert) {
+			Button("OK".localized(), role: .cancel) { }
+		} message: {
+			Text("There is no contact matched to the enabled rules".localized())
+		}
+		.confirmationDialog(
+			"rule.delete.confirmation.title".localized(),
+			isPresented: $showingDeleteRuleConfirmation,
+			titleVisibility: .visible
+		) {
+			Button("Delete".localized(), role: .destructive) {
+				if let rule = rulePendingDeletion {
+					deleteRule(rule)
+				}
+				rulePendingDeletion = nil
+			}
+			Button("Cancel".localized(), role: .cancel) {
+				rulePendingDeletion = nil
+			}
+		} message: {
+			Text("rule.delete.confirmation.message".localized())
+		}
+		.navigationDestination(item: $selectedRule) { rule in
+			RuleDetailScreen(rule: rule)
         }
     }
 
@@ -402,9 +456,14 @@ struct RecipientRuleListScreen: View {
         try? modelContext.save()
     }
 
-    private func deleteRule(_ rule: RecipientsRule) {
-        viewModel.deleteRule(rule, modelContext: modelContext)
-    }
+	private func deleteRule(_ rule: RecipientsRule) {
+		viewModel.deleteRule(rule, modelContext: modelContext)
+	}
+
+	private func requestDeleteRule(_ rule: RecipientsRule) {
+		rulePendingDeletion = rule
+		showingDeleteRuleConfirmation = true
+	}
 
     private func onSendMessage(allowAll: Bool = false) {
         // 규칙이 설정되었는지 확인
