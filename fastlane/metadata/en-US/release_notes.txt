@@ -1,2 +1,5 @@
-Watch an ad to enjoy 1 hour ad-free.
-Tap the gift button at the bottom of the filter list, watch a short ad, and use the app without ads for 1 hour.
+Thanks for using Group SMS.
+
+This update fixes an issue where a new Contact Filter could appear in your list even if you went back without saving it.
+
+We also made behind-the-scenes updates to improve app reliability and build stability.
