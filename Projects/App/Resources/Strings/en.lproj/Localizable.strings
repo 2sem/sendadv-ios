@@ -45,6 +45,15 @@
 "send.action.with.count" = "Send to %d people";
 "send.warning.batchSending" = "You are about to send message to %d recipients.\nRecipients will be separated into groups of %d for sending.";
 "send.batch.progress" = "(Batch %d/%d — %d recipients)";
+"send.confirmation.title" = "Ready to send?";
+"send.confirmation.message" = "We'll open Messages with these %d recipients from your active filters. You can review before sending.";
+"send.confirmation.message.prefix" = "We'll open Messages with these ";
+"send.confirmation.message.count" = "%d recipients";
+"send.confirmation.message.suffix" = " from your active filters. You can review before sending.";
+"send.confirmation.openMessages" = "Open Messages";
+"send.confirmation.notNow" = "Not now";
+"send.unavailable.title" = "Messages Unavailable";
+"send.unavailable.message" = "This device cannot send SMS messages. Please try again on an iPhone with Messages available.";
 
 // Success popup (review request after 5 sends)
 "success.popup.title" = "Congratulations!";

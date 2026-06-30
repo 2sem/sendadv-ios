@@ -61,6 +61,7 @@ struct RecipientRuleListScreen: View {
     @State private var selectedRule: RecipientsRule?
 
     @State private var showingMessageComposer = false
+    @State private var showingSendConfirmationSheet = false
     @State private var isPreparingMessageView = false
 	@State private var isMessageComposerLoading = false
     @State private var showingAlert = false
@@ -79,6 +80,7 @@ struct RecipientRuleListScreen: View {
 	@State private var isEditingRules = false
 	@State private var rulePendingDeletion: RecipientsRule?
 	@State private var showingDeleteRuleConfirmation = false
+	@State private var showingMessageUnavailableAlert = false
 	    private let batchSize: Int = 20
 	    private let addFirstFilterTip = AddFirstFilterTip()
 	    @State private var isAddFirstFilterTipVisible = false
@@ -311,6 +313,17 @@ struct RecipientRuleListScreen: View {
 				}
 			}
         }
+		.sheet(isPresented: $showingSendConfirmationSheet) {
+			SendConfirmationSheet(
+				recipientCount: viewModel.phoneNumbers.count,
+				batchProgressText: batchProgressText,
+				onCancel: cancelSendConfirmation,
+				onContinue: continueFromSendConfirmation
+			)
+			.presentationDetents([.height(392)])
+			.presentationDragIndicator(.visible)
+			.presentationBackground(Color.softSurface)
+		}
 		.onChange(of: messageComposerState) {
             guard messageComposerState != .unknown else {
                 return
@@ -448,6 +461,11 @@ struct RecipientRuleListScreen: View {
 		} message: {
 			Text("rule.delete.confirmation.message".localized())
 		}
+		.alert("send.unavailable.title".localized(), isPresented: $showingMessageUnavailableAlert) {
+			Button("OK".localized(), role: .cancel) { }
+		} message: {
+			Text("send.unavailable.message".localized())
+		}
 		.navigationDestination(item: $selectedRule) { rule in
 			RuleDetailScreen(rule: rule)
         }
@@ -505,8 +523,7 @@ struct RecipientRuleListScreen: View {
 				} else {
 					// 소량이면 단일 표시
 					viewModel.phoneNumbers = phoneNumbers
-					isMessageComposerLoading = true
-					showingMessageComposer = true
+					presentSendConfirmation()
 				}
             } catch let sendMessageError as SendError {
                 switch sendMessageError {
@@ -538,10 +555,48 @@ struct RecipientRuleListScreen: View {
 		let currentNumber = currentBatchIndex + 1
 		batchProgressText = String(format: "send.batch.progress".localized(), currentNumber, totalBatches, batch.count)
 		viewModel.phoneNumbers = batch
-		isMessageComposerLoading = true
-		showingMessageComposer = true
+		presentSendConfirmation()
 		currentBatchIndex += 1
 		return false
+	}
+
+	private func presentSendConfirmation() {
+		isMessageComposerLoading = false
+		showingMessageComposer = false
+		showingSendConfirmationSheet = true
+	}
+
+	private func cancelSendConfirmation() {
+		showingSendConfirmationSheet = false
+		isBatchSending = false
+		allPhoneNumbers = []
+		currentBatchIndex = 0
+		batchProgressText = ""
+	}
+
+	private func continueFromSendConfirmation() {
+		showingSendConfirmationSheet = false
+		Task { @MainActor in
+			try? await Task.sleep(for: .milliseconds(250))
+			presentMessageComposer()
+		}
+	}
+
+	@discardableResult private func presentMessageComposer() -> Bool {
+		guard MFMessageComposeViewController.canSendText() else {
+			isBatchSending = false
+			allPhoneNumbers = []
+			currentBatchIndex = 0
+			batchProgressText = ""
+			isMessageComposerLoading = false
+			showingMessageComposer = false
+			showingMessageUnavailableAlert = true
+			return false
+		}
+
+		isMessageComposerLoading = true
+		showingMessageComposer = true
+		return true
 	}
 }
 
@@ -554,6 +609,76 @@ private struct RuleListStatusView: View {
 			.font(.title3.weight(.bold))
 			.foregroundStyle(Color.softSecondaryText)
 		.frame(maxWidth: .infinity, alignment: .leading)
+	}
+}
+
+private struct SendConfirmationSheet: View {
+	let recipientCount: Int
+	let batchProgressText: String
+	let onCancel: () -> Void
+	let onContinue: () -> Void
+
+	var body: some View {
+		VStack(alignment: .leading, spacing: 26) {
+			Image(systemName: "bubble.left")
+				.font(.system(size: 42, weight: .regular))
+				.foregroundStyle(Color.softAccent)
+				.frame(width: 104, height: 104)
+				.background(Color.softAccent.opacity(0.11), in: .rect(cornerRadius: 31, style: .continuous))
+
+			VStack(alignment: .leading, spacing: 14) {
+				Text("send.confirmation.title".localized())
+					.font(.system(size: 31, weight: .bold, design: .rounded))
+					.foregroundStyle(Color.softPrimaryText)
+
+				confirmationMessage
+					.font(.system(size: 20, weight: .semibold, design: .rounded))
+					.foregroundStyle(Color.softSecondaryText)
+					.multilineTextAlignment(.leading)
+					.lineSpacing(6)
+					.lineLimit(nil)
+					.fixedSize(horizontal: false, vertical: true)
+
+				if !batchProgressText.isEmpty {
+					Text(batchProgressText)
+						.font(.system(size: 13, weight: .bold, design: .rounded))
+						.foregroundStyle(Color.softAccent)
+						.padding(.horizontal, 14)
+						.padding(.vertical, 8)
+						.background(Color.softAccent.opacity(0.12), in: Capsule())
+				}
+			}
+
+			VStack(spacing: 10) {
+				Button(action: onContinue) {
+					HStack(spacing: 18) {
+						Image(systemName: "paperplane.fill")
+							.font(.system(size: 22, weight: .bold))
+						Text("send.confirmation.openMessages".localized())
+					}
+				}
+				.buttonStyle(SoftFriendlyPrimaryButtonStyle())
+
+				Button("send.confirmation.notNow".localized(), role: .cancel, action: onCancel)
+					.font(.system(size: 17, weight: .bold, design: .rounded))
+					.foregroundStyle(Color.softSecondaryText)
+					.frame(maxWidth: .infinity, minHeight: 44)
+			}
+			.padding(.top, 4)
+		}
+		.padding(.horizontal, 36)
+		.padding(.top, 38)
+		.padding(.bottom, 18)
+		.frame(maxWidth: .infinity, maxHeight: .infinity)
+		.background(Color.softSurface)
+	}
+
+	private var confirmationMessage: Text {
+		Text("send.confirmation.message.prefix".localized())
+			+ Text(String(format: "send.confirmation.message.count".localized(), recipientCount))
+			.foregroundStyle(Color.softAccent)
+			.fontWeight(.bold)
+			+ Text("send.confirmation.message.suffix".localized())
 	}
 }
 
