@@ -49,6 +49,8 @@
 "rules.add" = "새 필터 추가";
 "rules.header.title" = "내 필터";
 "rules.header.summary" = "%d개 켜짐 · 바로 전송 준비됨";
+"rule.delete.confirmation.title" = "이 필터를 삭제할까요?";
+"rule.delete.confirmation.message" = "이 연락처 필터가 삭제됩니다.";
 
 // RuleDetailScreen
 "Rule Title" = "필터 이름";

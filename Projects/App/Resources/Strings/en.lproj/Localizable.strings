@@ -60,6 +60,8 @@
 "rules.add" = "Add New Filter";
 "rules.header.title" = "Your filters";
 "rules.header.summary" = "%d turned on · ready to reach people";
+"rule.delete.confirmation.title" = "Delete this filter?";
+"rule.delete.confirmation.message" = "This contact filter will be removed.";
 
 // RuleDetailScreen
 "Rule Title" = "Filter Title";
