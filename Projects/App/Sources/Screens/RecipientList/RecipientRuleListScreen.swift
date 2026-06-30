@@ -119,8 +119,10 @@ struct RecipientRuleListScreen: View {
 
 			ScrollView {
 				LazyVStack(spacing: 12) {
-					RuleListStatusView(enabledCount: enabledRuleCount)
-						.padding(.bottom, 0)
+					if !rules.isEmpty {
+						RuleListStatusView(enabledCount: enabledRuleCount)
+							.padding(.bottom, 0)
+					}
 
 					ForEach(rules) { rule in
 						RecipientRuleRowView(
