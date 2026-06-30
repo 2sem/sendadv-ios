@@ -116,7 +116,7 @@ struct RecipientRuleListScreen: View {
 
 			ScrollView {
 				LazyVStack(spacing: 12) {
-					RuleListHeaderView(enabledCount: enabledRuleCount)
+					RuleListStatusView(enabledCount: enabledRuleCount)
 						.padding(.bottom, 0)
 
 					ForEach(rules) { rule in
@@ -140,7 +140,7 @@ struct RecipientRuleListScreen: View {
 							.padding(.top, 58)
 					}
 				}
-				.padding(.top, 0)
+				.padding(.top, 12)
 				.padding(.horizontal, 30)
 				.padding(.bottom, 146)
 			}
@@ -190,11 +190,10 @@ struct RecipientRuleListScreen: View {
 				.transition(.opacity.combined(with: .move(edge: .bottom)))
 			}
 		}
-		.navigationTitle("")
-		.toolbarVisibility(.hidden, for: .navigationBar)
-		.navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
+		.navigationTitle("rules.header.title".localized())
+		.navigationBarTitleDisplayMode(.large)
+		.toolbar {
+			ToolbarItem(placement: .topBarTrailing) {
 				Button {
 					if isAddFirstFilterTipVisible {
 						addFirstFilterTip.logActionTaken()
@@ -486,20 +485,13 @@ struct RecipientRuleListScreen: View {
 }
 
 
-private struct RuleListHeaderView: View {
+private struct RuleListStatusView: View {
 	let enabledCount: Int
 
 	var body: some View {
-		VStack(alignment: .leading, spacing: 8) {
-			Text("rules.header.title".localized())
-				.font(.system(size: 40, weight: .bold, design: .rounded))
-				.foregroundStyle(Color.softPrimaryText)
-				.tracking(-1.2)
-
-			Text(String(format: "rules.header.summary".localized(), enabledCount))
-				.font(.title3.weight(.bold))
-				.foregroundStyle(Color.softSecondaryText)
-		}
+		Text(String(format: "rules.header.summary".localized(), enabledCount))
+			.font(.title3.weight(.bold))
+			.foregroundStyle(Color.softSecondaryText)
 		.frame(maxWidth: .infinity, alignment: .leading)
 	}
 }
