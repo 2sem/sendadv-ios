@@ -70,10 +70,12 @@ struct RecipientRuleListScreen: View {
     @State private var showingNoContactsAlert = false
     @State private var viewModel = SARecipientListScreenModel()
     @State private var messageComposerState: MessageComposeState = .unknown
-    @State private var skipPhoneNumberWarning = false
 	@State private var isBatchSending = false
 	@State private var allPhoneNumbers: [String] = []
 	@State private var currentBatchIndex: Int = 0
+	@State private var activeBatchNumber: Int = 1
+	@State private var totalBatchCount: Int = 1
+	@State private var totalRecipientCount: Int = 0
 	@State private var batchProgressText: String = ""
 	@State private var isAdFree: Bool = LSDefaults.isAdFree
 	@State private var showAdFreeToast = false
@@ -81,6 +83,7 @@ struct RecipientRuleListScreen: View {
 	@State private var rulePendingDeletion: RecipientsRule?
 	@State private var showingDeleteRuleConfirmation = false
 	@State private var showingMessageUnavailableAlert = false
+	@State private var sendConfirmationSheetHeight: CGFloat = 428
 	    private let batchSize: Int = 20
 	    private let addFirstFilterTip = AddFirstFilterTip()
 	    @State private var isAddFirstFilterTipVisible = false
@@ -314,15 +317,7 @@ struct RecipientRuleListScreen: View {
 			}
         }
 		.sheet(isPresented: $showingSendConfirmationSheet) {
-			SendConfirmationSheet(
-				recipientCount: viewModel.phoneNumbers.count,
-				batchProgressText: batchProgressText,
-				onCancel: cancelSendConfirmation,
-				onContinue: continueFromSendConfirmation
-			)
-			.presentationDetents([.height(392)])
-			.presentationDragIndicator(.visible)
-			.presentationBackground(Color.softSurface)
+			sendConfirmationSheet
 		}
 		.onChange(of: messageComposerState) {
             guard messageComposerState != .unknown else {
@@ -422,7 +417,6 @@ struct RecipientRuleListScreen: View {
 		}
         .alert("Warning".localized(), isPresented: $showingAlert) {
 			Button("Continue".localized()) {
-				skipPhoneNumberWarning = true
 				onSendMessage(allowAll: true)
 			}
             Button("Cancel".localized(), role: .cancel) { }
@@ -471,6 +465,26 @@ struct RecipientRuleListScreen: View {
         }
     }
 
+	private var sendConfirmationSheet: some View {
+		SendConfirmationSheet(
+			recipientCount: totalRecipientCount,
+			batchRecipientCount: viewModel.phoneNumbers.count,
+			batchSize: batchSize,
+			activeBatchNumber: activeBatchNumber,
+			totalBatchCount: totalBatchCount,
+			onCancel: cancelSendConfirmation,
+			onContinue: continueFromSendConfirmation
+		)
+		.readHeight { height in
+			let measuredHeight = min(max(height + 12, 320), 620)
+			guard abs(sendConfirmationSheetHeight - measuredHeight) > 1 else { return }
+			sendConfirmationSheetHeight = measuredHeight
+		}
+		.presentationDetents([.height(sendConfirmationSheetHeight)])
+		.presentationDragIndicator(.visible)
+		.presentationBackground(Color.softSurface)
+	}
+
     private func toggleRule(_ rule: RecipientsRule, isEnabled: Bool) {
         viewModel.toggleRule(rule, isEnabled: isEnabled)
         try? modelContext.save()
@@ -502,27 +516,20 @@ struct RecipientRuleListScreen: View {
 				let _phoneNumbers = try await viewModel.phoneNumbers(for: rules, allowAll: allowAll)
 				let phoneNumbers = Array(_phoneNumbers)
 
-                // 전화번호가 많으면 경고 표시 (skipPhoneNumberWarning이 false일 때만)
-				if phoneNumbers.count > batchSize && !skipPhoneNumberWarning {
-					alertMessage = String(format: "send.warning.batchSending".localized(), phoneNumbers.count, batchSize)
-					// 경고 표시 후 사용자가 '계속'하면 배치 전송을 시작
-					allPhoneNumbers = phoneNumbers
-					isBatchSending = true
-					currentBatchIndex = 0
-					showingAlert = true
-					return
-				}
-
-				skipPhoneNumberWarning = false
 				if phoneNumbers.count > batchSize {
-					// 바로 배치 전송 시작 (경고를 이미 건너뛴 경우)
 					allPhoneNumbers = phoneNumbers
 					isBatchSending = true
 					currentBatchIndex = 0
+					totalRecipientCount = phoneNumbers.count
+					totalBatchCount = Int(ceil(Double(phoneNumbers.count) / Double(batchSize)))
 					presentNextBatch()
 				} else {
 					// 소량이면 단일 표시
 					viewModel.phoneNumbers = phoneNumbers
+					totalRecipientCount = phoneNumbers.count
+					totalBatchCount = 1
+					activeBatchNumber = 1
+					batchProgressText = ""
 					presentSendConfirmation()
 				}
             } catch let sendMessageError as SendError {
@@ -546,6 +553,9 @@ struct RecipientRuleListScreen: View {
 			isBatchSending = false
 			allPhoneNumbers = []
 			currentBatchIndex = 0
+			activeBatchNumber = 1
+			totalBatchCount = 1
+			totalRecipientCount = 0
 			batchProgressText = ""
 			return true
 		}
@@ -553,6 +563,9 @@ struct RecipientRuleListScreen: View {
 		let batch = Array(allPhoneNumbers[start..<end])
 		let totalBatches = Int(ceil(Double(allPhoneNumbers.count) / Double(batchSize)))
 		let currentNumber = currentBatchIndex + 1
+		totalRecipientCount = allPhoneNumbers.count
+		totalBatchCount = totalBatches
+		activeBatchNumber = currentNumber
 		batchProgressText = String(format: "send.batch.progress".localized(), currentNumber, totalBatches, batch.count)
 		viewModel.phoneNumbers = batch
 		presentSendConfirmation()
@@ -571,6 +584,9 @@ struct RecipientRuleListScreen: View {
 		isBatchSending = false
 		allPhoneNumbers = []
 		currentBatchIndex = 0
+		activeBatchNumber = 1
+		totalBatchCount = 1
+		totalRecipientCount = 0
 		batchProgressText = ""
 	}
 
@@ -587,6 +603,9 @@ struct RecipientRuleListScreen: View {
 			isBatchSending = false
 			allPhoneNumbers = []
 			currentBatchIndex = 0
+			activeBatchNumber = 1
+			totalBatchCount = 1
+			totalRecipientCount = 0
 			batchProgressText = ""
 			isMessageComposerLoading = false
 			showingMessageComposer = false
@@ -614,9 +633,20 @@ private struct RuleListStatusView: View {
 
 private struct SendConfirmationSheet: View {
 	let recipientCount: Int
-	let batchProgressText: String
+	let batchRecipientCount: Int
+	let batchSize: Int
+	let activeBatchNumber: Int
+	let totalBatchCount: Int
 	let onCancel: () -> Void
 	let onContinue: () -> Void
+
+	private var isBatchSending: Bool {
+		totalBatchCount > 1
+	}
+
+	private var isContinuingBatch: Bool {
+		isBatchSending && activeBatchNumber > 1
+	}
 
 	var body: some View {
 		VStack(alignment: .leading, spacing: 26) {
@@ -627,7 +657,7 @@ private struct SendConfirmationSheet: View {
 				.background(Color.softAccent.opacity(0.11), in: .rect(cornerRadius: 31, style: .continuous))
 
 			VStack(alignment: .leading, spacing: 14) {
-				Text("send.confirmation.title".localized())
+				Text((isContinuingBatch ? "send.confirmation.continue.title" : "send.confirmation.title").localized())
 					.font(.system(size: 31, weight: .bold, design: .rounded))
 					.foregroundStyle(Color.softPrimaryText)
 
@@ -639,14 +669,27 @@ private struct SendConfirmationSheet: View {
 					.lineLimit(nil)
 					.fixedSize(horizontal: false, vertical: true)
 
-				if !batchProgressText.isEmpty {
-					Text(batchProgressText)
-						.font(.system(size: 13, weight: .bold, design: .rounded))
-						.foregroundStyle(Color.softAccent)
-						.padding(.horizontal, 14)
-						.padding(.vertical, 8)
-						.background(Color.softAccent.opacity(0.12), in: Capsule())
+				if isBatchSending {
+					VStack(alignment: .leading, spacing: 8) {
+						Text(String(format: "send.confirmation.batch.progress".localized(), activeBatchNumber, totalBatchCount, batchRecipientCount))
+							.font(.system(size: 13, weight: .bold, design: .rounded))
+							.foregroundStyle(Color.softAccent)
+
+						ProgressView(value: Double(activeBatchNumber), total: Double(totalBatchCount))
+							.tint(Color.softAccent)
+					}
+					.padding(.horizontal, 14)
+					.padding(.vertical, 10)
+					.background(Color.softAccent.opacity(0.12), in: .rect(cornerRadius: 16, style: .continuous))
 				}
+
+				Text("send.confirmation.helper".localized())
+					.font(.system(size: 13, weight: .semibold, design: .rounded))
+					.foregroundStyle(Color.softSecondaryText.opacity(0.9))
+					.multilineTextAlignment(.leading)
+					.lineSpacing(3)
+					.lineLimit(nil)
+					.fixedSize(horizontal: false, vertical: true)
 			}
 
 			VStack(spacing: 10) {
@@ -654,12 +697,12 @@ private struct SendConfirmationSheet: View {
 					HStack(spacing: 18) {
 						Image(systemName: "paperplane.fill")
 							.font(.system(size: 22, weight: .bold))
-						Text("send.confirmation.openMessages".localized())
+						Text(primaryButtonTitle)
 					}
 				}
 				.buttonStyle(SoftFriendlyPrimaryButtonStyle())
 
-				Button("send.confirmation.notNow".localized(), role: .cancel, action: onCancel)
+				Button(secondaryButtonTitle, role: .cancel, action: onCancel)
 					.font(.system(size: 17, weight: .bold, design: .rounded))
 					.foregroundStyle(Color.softSecondaryText)
 					.frame(maxWidth: .infinity, minHeight: 44)
@@ -668,17 +711,57 @@ private struct SendConfirmationSheet: View {
 		}
 		.padding(.horizontal, 36)
 		.padding(.top, 38)
-		.padding(.bottom, 18)
-		.frame(maxWidth: .infinity, maxHeight: .infinity)
+		.padding(.bottom, 28)
+		.frame(maxWidth: .infinity, alignment: .topLeading)
 		.background(Color.softSurface)
 	}
 
 	private var confirmationMessage: Text {
-		Text("send.confirmation.message.prefix".localized())
-			+ Text(String(format: "send.confirmation.message.count".localized(), recipientCount))
+		let countText = Text(String(format: "send.confirmation.message.count".localized(), recipientCount))
 			.foregroundStyle(Color.softAccent)
 			.fontWeight(.bold)
+
+		if isBatchSending {
+			return Text("send.confirmation.batch.message.prefix".localized())
+				+ countText
+				+ Text(String(format: "send.confirmation.batch.message.suffix".localized(), totalBatchCount, batchSize))
+		}
+
+		return Text("send.confirmation.message.prefix".localized())
+			+ countText
 			+ Text("send.confirmation.message.suffix".localized())
+	}
+
+	private var primaryButtonTitle: String {
+		"send.confirmation.openMessages".localized()
+	}
+
+	private var secondaryButtonTitle: String {
+		(isContinuingBatch ? "send.confirmation.stop" : "send.confirmation.notNow").localized()
+	}
+}
+
+private struct ViewHeightPreferenceKey: PreferenceKey {
+	static var defaultValue: CGFloat = 0
+
+	static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+		value = max(value, nextValue())
+	}
+}
+
+private extension View {
+	func readHeight(_ onChange: @escaping (CGFloat) -> Void) -> some View {
+		background {
+			GeometryReader { proxy in
+				Color.clear
+					.preference(key: ViewHeightPreferenceKey.self, value: proxy.size.height)
+			}
+		}
+		.onPreferenceChange(ViewHeightPreferenceKey.self) { height in
+			DispatchQueue.main.async {
+				onChange(height)
+			}
+		}
 	}
 }
 
