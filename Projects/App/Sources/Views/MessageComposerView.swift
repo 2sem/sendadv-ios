@@ -14,7 +14,16 @@ struct MessageComposerView: UIViewControllerRepresentable {
     @Binding var composeState: MessageComposeState
     @Binding var isLoading: Bool
     
-    func makeUIViewController(context: Context) -> MFMessageComposeViewController {
+    func makeUIViewController(context: Context) -> UIViewController {
+        guard MFMessageComposeViewController.canSendText() else {
+            let controller = UIViewController()
+            Task { @MainActor in
+                isLoading = false
+                composeState = .failed
+            }
+            return controller
+        }
+
         let controller = MFMessageComposeViewController()
         controller.recipients = recipients
         controller.messageComposeDelegate = context.coordinator
@@ -31,7 +40,7 @@ struct MessageComposerView: UIViewControllerRepresentable {
         return controller
     }
     
-    func updateUIViewController(_ uiViewController: MFMessageComposeViewController, context: Context) {
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
         // No update needed
     }
     
