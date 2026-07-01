@@ -16,11 +16,13 @@ on:
     branches: [ "main" ]
     paths:
       - '**/*.swift'
+      - 'Projects/App/Resources/Strings/**/*.strings'
       - 'mise.toml'
   pull_request:
     branches: [ "main" ]
     paths:
       - '**/*.swift'
+      - 'Projects/App/Resources/Strings/**/*.strings'
       - 'mise.toml'
 
 jobs:

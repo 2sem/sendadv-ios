@@ -69,7 +69,7 @@ class RuleDetailScreenModel {
 			return keywords[0]
 		}
 		
-		return "\(keywords[0]) and \(keywords.count - 1) others".localized()
+		return keywords[0].localized() + String(format: " and %@ others".localized(), "\(keywords.count - 1)")
 	}
 	
 	func getJobFilterText() -> String {

@@ -39,14 +39,14 @@
 
 "Select All" = "모두";
 "New Rule" = "새 필터";
-"send.confirmation.title" = "전송할까요?";
-"send.confirmation.continue.title" = "이어서 발송하기";
+"send.confirmation.title" = "메시지를 열까요?";
+"send.confirmation.continue.title" = "다음 묶음 준비하기";
 "send.confirmation.message" = "활성화된 필터의 수신자 %d명으로 메시지 앱을 엽니다. 보내기 전에 확인할 수 있어요.";
 "send.confirmation.message.prefix" = "활성화된 필터의 ";
 "send.confirmation.message.count" = "%d명의 수신자";
 "send.confirmation.message.suffix" = "로 메시지 앱을 엽니다. 보내기 전에 확인할 수 있어요.";
 "send.confirmation.batch.message.prefix" = "총 ";
-"send.confirmation.batch.message.suffix" = "에게 최대 %2$d명씩 %1$d번에 나누어 메시지를 보냅니다.";
+"send.confirmation.batch.message.suffix" = "에게 최대 %2$d명씩 %1$d번에 나누어 메시지 앱에서 보낼 수 있도록 준비합니다.";
 "send.confirmation.batch.progress" = "%2$d번 중 %1$d번째 · %3$d명";
 "send.confirmation.helper" = "앱이 SMS를 자동으로 보내지는 않습니다. 메시지 앱에서 직접 보내기를 눌러 주세요.";
 "send.confirmation.openMessages" = "메시지 열기";
@@ -63,7 +63,7 @@
 "rules.title" = "연락처 필터 목록";
 "rules.add" = "새 필터 추가";
 "rules.header.title" = "내 필터";
-"rules.header.summary" = "%d개 켜짐 · 바로 전송 준비됨";
+"rules.header.summary" = "%d개 켜짐 · 문자 준비 가능";
 "rule.delete.confirmation.title" = "이 필터를 삭제할까요?";
 "rule.delete.confirmation.message" = "이 연락처 필터가 삭제됩니다.";
 
@@ -110,7 +110,7 @@
 
 // Sending warnings
 "send.action" = "전송";
-"send.action.with.count" = "%d개 필터로 전송";
+"send.action.with.count" = "%d개 필터 확인";
 "send.warning.batchSending" = "메시지를 %d명의 수신자에게 전송하려고 합니다.\n수신자를 %d명씩 나누어 전송합니다.";
 "send.batch.progress" = "(배치 %d/%d — 수신자 %d명)";
 
