@@ -83,12 +83,43 @@ struct RecipientRuleListScreen: View {
 	@State private var showingDeleteRuleConfirmation = false
 	@State private var showingMessageUnavailableAlert = false
 	@State private var sendConfirmationSheetHeight: CGFloat = 428
+	@State private var sendButtonFrame: CGRect = .zero
+	private let sendButtonBottomPadding: CGFloat = 24
+	private let scrollBottomClearance: CGFloat = 16
+	private let screenCoordinateSpace = "RecipientRuleListScreen"
 	    private let batchSize: Int = 20
 	    private let addFirstFilterTip = AddFirstFilterTip()
 	    @State private var isAddFirstFilterTipVisible = false
 
 	private var enabledRuleCount: Int {
 		rules.filter(\.enabled).count
+	}
+
+	private var scrollBottomPadding: CGFloat {
+		guard !isEditingRules, sendButtonFrame != .zero else { return 0 }
+		return sendButtonFrame.height + sendButtonBottomPadding + scrollBottomClearance
+	}
+
+	private var bottomContentFade: some View {
+		GeometryReader { proxy in
+			let buttonBottomLocation = proxy.size.height > 0 ? min(max(sendButtonFrame.height / proxy.size.height, 0), 1) : 0
+			let remainingLocation = 1 - buttonBottomLocation
+
+			LinearGradient(
+				stops: [
+					.init(color: Color.softBackground.opacity(0), location: 0),
+					.init(color: Color.softBackground.opacity(0), location: buttonBottomLocation),
+					.init(color: Color.softBackground.opacity(0.68), location: buttonBottomLocation + remainingLocation * 0.32),
+					.init(color: Color.softBackground.opacity(0.94), location: buttonBottomLocation + remainingLocation * 0.65),
+					.init(color: Color.softBackground, location: 1)
+				],
+				startPoint: .top,
+				endPoint: .bottom
+			)
+		}
+		.ignoresSafeArea(.container, edges: .bottom)
+		.allowsHitTesting(false)
+		.accessibilityHidden(true)
 	}
 
 	    private func presentFullAdThen(_ action: @escaping () -> Void) {
@@ -161,7 +192,7 @@ struct RecipientRuleListScreen: View {
 				}
 				.padding(.top, 12)
 				.padding(.horizontal, 30)
-				.padding(.bottom, 146)
+				.padding(.bottom, scrollBottomPadding)
 			}
 			.scrollIndicators(.hidden)
 			.overlay {
@@ -170,6 +201,19 @@ struct RecipientRuleListScreen: View {
 						state = .creatingRule
 					}
 				}
+			}
+
+			if !rules.isEmpty && !isEditingRules {
+				GeometryReader { proxy in
+					VStack(spacing: 0) {
+						Spacer()
+
+						bottomContentFade
+							.frame(height: sendButtonFrame == .zero ? 0 : max(0, proxy.size.height + proxy.safeAreaInsets.bottom - sendButtonFrame.minY))
+					}
+				}
+				.allowsHitTesting(false)
+				.accessibilityHidden(true)
 			}
 
 			// 전송 버튼
@@ -183,10 +227,12 @@ struct RecipientRuleListScreen: View {
 					}
 					.frame(maxWidth: .infinity)
 					.padding(.horizontal, 30)
-					.padding(.bottom, 24)
+					.readFrame(in: .named(screenCoordinateSpace)) { sendButtonFrame = $0 }
+					.padding(.bottom, sendButtonBottomPadding)
 				}
 			}
 		}
+		.coordinateSpace(name: screenCoordinateSpace)
 		.navigationTitle("rules.header.title".localized())
 		.navigationBarTitleDisplayMode(.large)
 		.toolbar {
@@ -725,6 +771,14 @@ private struct ViewHeightPreferenceKey: PreferenceKey {
 	}
 }
 
+private struct ViewFramePreferenceKey: PreferenceKey {
+	static var defaultValue: CGRect = .zero
+
+	static func reduce(value: inout CGRect, nextValue: () -> CGRect) {
+		value = nextValue()
+	}
+}
+
 private extension View {
 	func readHeight(_ onChange: @escaping (CGFloat) -> Void) -> some View {
 		background {
@@ -736,6 +790,20 @@ private extension View {
 		.onPreferenceChange(ViewHeightPreferenceKey.self) { height in
 			DispatchQueue.main.async {
 				onChange(height)
+			}
+		}
+	}
+
+	func readFrame(in coordinateSpace: CoordinateSpace, _ onChange: @escaping (CGRect) -> Void) -> some View {
+		background {
+			GeometryReader { proxy in
+				Color.clear
+					.preference(key: ViewFramePreferenceKey.self, value: proxy.frame(in: coordinateSpace))
+			}
+		}
+		.onPreferenceChange(ViewFramePreferenceKey.self) { frame in
+			DispatchQueue.main.async {
+				onChange(frame)
 			}
 		}
 	}
