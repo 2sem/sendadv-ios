@@ -26,7 +26,7 @@ struct RecipientRuleRowView: View {
 		let keywords = includes.components(separatedBy: ",").filter { !$0.isEmpty };
 		guard !keywords.isEmpty else { return nil; }
 		if keywords.count == 1 { return keywords[0]; }
-		return "\(keywords[0])".localized() + " and \(keywords.count - 1) others".localized();
+		return keywords[0].localized() + String(format: " and %@ others".localized(), "\(keywords.count - 1)");
 	}
 
 	private var activeFilters: [(rawValue: String, label: String, value: String)] {

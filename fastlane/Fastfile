@@ -126,7 +126,7 @@ platform :ios do
           app_identifier: @package_name,
           submit_for_review: true,
           force: true,
-          skip_screenshots: true,
+          skip_screenshots: false,
           run_precheck_before_submit: false,
         )
         puts "iOS 심사 제출 완료"
