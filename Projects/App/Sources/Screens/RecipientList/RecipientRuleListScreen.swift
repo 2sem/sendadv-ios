@@ -78,7 +78,6 @@ struct RecipientRuleListScreen: View {
 	@State private var totalRecipientCount: Int = 0
 	@State private var batchProgressText: String = ""
 	@State private var isAdFree: Bool = LSDefaults.isAdFree
-	@State private var showAdFreeToast = false
 	@State private var isEditingRules = false
 	@State private var rulePendingDeletion: RecipientsRule?
 	@State private var showingDeleteRuleConfirmation = false
@@ -177,14 +176,7 @@ struct RecipientRuleListScreen: View {
 			if !rules.isEmpty && !isEditingRules {
 				VStack {
 					Spacer()
-					HStack(alignment: .center, spacing: 14) {
-						WatchAdButton(isAdFree: $isAdFree) {
-							showAdFreeToast = true
-							Task {
-								try? await Task.sleep(for: .seconds(2))
-								showAdFreeToast = false
-							}
-						}
+					HStack(alignment: .center) {
 						SendButton(title: String(format: "send.action.with.count".localized(), enabledRuleCount)) {
 							onSendMessage()
 						}
@@ -193,21 +185,6 @@ struct RecipientRuleListScreen: View {
 					.padding(.horizontal, 30)
 					.padding(.bottom, 24)
 				}
-			}
-
-			// 광고 없음 토스트
-			if showAdFreeToast {
-				VStack {
-					Spacer()
-					Text("watch.ad.toast".localized())
-						.font(.subheadline.weight(.medium))
-						.foregroundStyle(Color.softAccentLabel)
-						.padding(.horizontal, 16)
-						.padding(.vertical, 10)
-						.background(Color.softAccent.opacity(0.95), in: Capsule())
-						.padding(.bottom, 90)
-				}
-				.transition(.opacity.combined(with: .move(edge: .bottom)))
 			}
 		}
 		.navigationTitle("rules.header.title".localized())
@@ -283,7 +260,6 @@ struct RecipientRuleListScreen: View {
             isAdFree = LSDefaults.isAdFree
         }
         .animation(.easeInOut(duration: 0.25), value: isAdFree)
-        .animation(.easeInOut(duration: 0.3), value: showAdFreeToast)
         .sheet(isPresented: $showingMessageComposer) {
 			ZStack {
 				MessageComposerView(

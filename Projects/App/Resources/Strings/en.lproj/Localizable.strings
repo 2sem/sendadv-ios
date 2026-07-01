@@ -42,7 +42,7 @@
 
 // Sending warnings
 "send.action" = "Send";
-"send.action.with.count" = "Send to %d people";
+"send.action.with.count" = "Send with %d filters";
 "send.warning.batchSending" = "You are about to send message to %d recipients.\nRecipients will be separated into groups of %d for sending.";
 "send.batch.progress" = "(Batch %d/%d — %d recipients)";
 "send.confirmation.title" = "Ready to send?";
