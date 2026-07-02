@@ -50,6 +50,12 @@ fastlane ios release description:'Change description' isReleasing:false
 fastlane ios release description:'Change description' isReleasing:true
 ```
 
+### Release Merge Safety
+- **NEVER merge release/version bump PRs before App Store submission is approved by the user.**
+- Treat "ready to submit App Store" or "submit to App Store" as approval to run the App Store submission workflow only, not approval to merge release PRs.
+- App Store submission approval and GitHub PR merge approval are separate gates; ask for explicit merge approval after submission/approval status is confirmed.
+- If unsure, stop and ask before running `gh pr merge`, `git merge`, or any equivalent merge operation.
+
 ## Project Architecture
 
 **Send Multi SMS**: An iOS app for sending bulk SMS messages to multiple recipients. Users create contact filters (based on department, position, organization) to organize and manage recipient lists.

@@ -117,6 +117,7 @@ platform :ios do
 
     isReleasing = options[:isReleasing] || false
     changelog = options[:description] || 'build from fastlane'
+    overwriteScreenshots = options[:overwriteScreenshots] || false
 
     if isReleasing
         puts "iOS 심사 업로드 시작"
@@ -127,6 +128,8 @@ platform :ios do
           submit_for_review: true,
           force: true,
           skip_screenshots: false,
+          overwrite_screenshots: overwriteScreenshots,
+          screenshots_path: "./fastlane/screenshots",
           run_precheck_before_submit: false,
         )
         puts "iOS 심사 제출 완료"
