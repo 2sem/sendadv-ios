@@ -1,5 +1,7 @@
 Thanks for using Group SMS.
 
-This update fixes an issue where a new Contact Filter could appear in your list even if you went back without saving it.
+This update brings a softer, friendlier design across the Contact Filter list, filter editing, and filter selection screens.
 
-We also made behind-the-scenes updates to improve app reliability and build stability.
+You can now review your selected filters and message batches more clearly before opening Messages, helping you prepare group texts with more confidence.
+
+We also made filter management and deletion clearer, along with general stability improvements.
