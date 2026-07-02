@@ -12,6 +12,11 @@ on:
             description: 'TestFlight 변경사항'
             required: false
             default: '수정사항'
+        overwriteScreenshots:
+            description: '기존 App Store 스크린샷 삭제 후 새 스크린샷 업로드'
+            type: boolean
+            required: true
+            default: false
 
 concurrency:
   group: ${{ github.ref }}/ios/deploy
@@ -165,4 +170,4 @@ jobs:
           IOS_KEY_PATH: ${{ env.IOS_KEY_PATH }}
           IOS_IPA_PATH: ./Output/IPA/App.ipa
         run: |
-          fastlane ios upload description:'${{ github.event.inputs.body }}' isReleasing:${{ github.event.inputs.isReleasing }}
+          fastlane ios upload description:'${{ github.event.inputs.body }}' isReleasing:${{ github.event.inputs.isReleasing }} overwriteScreenshots:${{ github.event.inputs.overwriteScreenshots }}
