@@ -71,6 +71,21 @@ struct RuleDetailScreen: View {
 					.padding(.bottom, 28)
 				}
 				.scrollIndicators(.hidden)
+
+				if case .available(let count) = viewModel.recipientCountState, count > 0 {
+					RecipientCountBar(count: count)
+				}
+			}
+		}
+		.onAppear {
+			viewModel.loadRecipientCountIfNeeded()
+		}
+		.onDisappear {
+			viewModel.cancelRecipientCountWork()
+		}
+		.onChange(of: selectedFilter) { oldValue, newValue in
+			if oldValue != nil && newValue == nil {
+				viewModel.scheduleRecipientCountRecompute()
 			}
 		}
 		.navigationTitle("rule.detail.title.new".localized())
@@ -140,6 +155,37 @@ struct RuleDetailScreen: View {
 
 	private func detailSubtitle(_ value: String) -> String {
 		value == "All".localized() ? "Anyone".localized() : value
+	}
+}
+
+/// Pinned bar showing the live count of sendable phone numbers (deduped mobiles, not raw
+/// contacts) matched by the rule's current filter conditions. Sits below the scroll content,
+/// above the safe area. Deliberately unlike `RuleFilterCategoryCard` - no corner radius, no
+/// shadow, no chevron - since it isn't tappable.
+private struct RecipientCountBar: View {
+	let count: Int
+
+	var body: some View {
+		HStack {
+			Text("rule.detail.recipient.count.label".localized())
+				.font(.system(size: 12.5, weight: .semibold, design: .rounded))
+				.foregroundStyle(Color.softSecondaryText)
+
+			Spacer()
+
+			Text(String(format: "rule.detail.recipient.count.value".localized(), count))
+				.font(.system(size: 22, weight: .bold, design: .rounded))
+				.foregroundStyle(Color.softAccent)
+				.contentTransition(.numericText())
+		}
+		.padding(.horizontal, 22)
+		.padding(.vertical, 14)
+		.background(Color.softSurface)
+		.overlay(alignment: .top) {
+			Divider()
+				.background(Color.softDivider)
+		}
+		.accessibilityElement(children: .combine)
 	}
 }
 
