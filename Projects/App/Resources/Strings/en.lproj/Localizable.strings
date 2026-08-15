@@ -87,6 +87,8 @@
 "Anyone" = "Anyone";
 "unsaved.changes.title" = "Save Changes?";
 "unsaved.changes.discard" = "Don't Save";
+"rule.detail.recipient.count.label" = "Estimated Recipients";
+"rule.detail.recipient.count.value" = "%d recipients";
 
 // RuleFilterScreen
 "rule.filter.helper.job" = "Pick which job titles this filter includes";

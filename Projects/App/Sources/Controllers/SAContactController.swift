@@ -26,41 +26,34 @@ class SAContactController : NSObject{
         CNContact.localizedString(forKey: CNLabelPhoneNumberMobile);
         
         values = try contactStore.unifiedContacts(matching: predicate, keysToFetch: keys);
-        
+
         return values;
     }
-    
+
+    /// Async wrapper around `loadAllContacts(_:)` that runs the (blocking) address book fetch
+    /// off the main actor, so `@MainActor`-isolated callers (e.g. `RuleDetailScreenModel`) don't
+    /// block the UI thread while `CNContactStore` walks the default container.
+    func loadAllContactsAsync(_ keys: [CNKeyDescriptor] = [CNContactFormatter.descriptorForRequiredKeys(for: .fullName), CNContactNameSuffixKey as CNKeyDescriptor, CNContactDepartmentNameKey as CNKeyDescriptor, CNContactJobTitleKey as CNKeyDescriptor, CNContactOrganizationNameKey as CNKeyDescriptor, CNContactPhoneNumbersKey as CNKeyDescriptor]) async throws -> [CNContact]{
+        try await Task.detached(priority: .userInitiated) { [self] in
+            try self.loadAllContacts(keys);
+        }.value;
+    }
+
     func loadContacts(rules : [RecipientsRule]) -> [String]?{
         var values : [String]! = []
         let rules = rules.filter { (rule) -> Bool in
             return rule.enabled;
         }
-        
+
         do{
             let contacts = try self.loadAllContacts();
-            
+
             NSLog("load contacts. count[\(contacts.count)]");
             for contact in contacts{
-                var mobile = "";
-                
-                //get only one mobile number for a contact
-                for phone in contact.phoneNumbers{
-                    let number = phone.value.stringValue;
-                    guard SAMobileController.Default.isMobile(phone: phone) else{
-//                    guard self.isMobileNumber(number: number, prefixes: mobilePrefixesForKor) else{
-                        continue;
-                    }
-                    
-                    if !values.contains(number){
-                        mobile = number;
-                        break;
-                    }
-                }
-                
-                if mobile.isEmpty{
+                guard let mobile = self.firstUsableMobileNumber(for: contact, excluding: values) else{
                     continue;
                 }
-                
+
                 //filter by rule
                 var needToAdd = true;
                 for rule in rules{
@@ -69,22 +62,65 @@ class SAContactController : NSObject{
                         break;
                     }
                 }
-                
+
                 guard needToAdd else{
                     continue;
                 }
-                
+
                 values.append(mobile);
             }
-            
+
             //            self.generate(contacts);
-            
+
         }catch(let error){
             NSLog("load contacts error[\(error)]");
             values = nil;
         }
-        
+
         return values;
+    }
+
+    /// Counts sendable phone numbers (one deduped mobile per contact) that match the given
+    /// filter conditions, regardless of any rule's `enabled` flag.
+    ///
+    /// Used by the recipient-count preview on `RuleDetailScreen` while a rule is being edited,
+    /// including rules that are currently disabled. Does not fetch contacts itself — pass in a
+    /// previously-loaded `[CNContact]` snapshot so repeated recounts stay in memory.
+    func recipientCount(contacts: [CNContact], filters: [RecipientsFilter]) -> Int{
+        var usedNumbers: [String] = [];
+        var count = 0;
+
+        for contact in contacts{
+            guard let mobile = self.firstUsableMobileNumber(for: contact, excluding: usedNumbers) else{
+                continue;
+            }
+
+            guard self.isMatchedContact(contact: contact, filters: filters) else{
+                continue;
+            }
+
+            usedNumbers.append(mobile);
+            count += 1;
+        }
+
+        return count;
+    }
+
+    /// Returns the first mobile number on `contact` that isn't already present in `usedNumbers`,
+    /// mirroring the dedup behavior `loadContacts(rules:)` has always used.
+    private func firstUsableMobileNumber(for contact: CNContact, excluding usedNumbers: [String]) -> String?{
+        for phone in contact.phoneNumbers{
+            let number = phone.value.stringValue;
+            guard SAMobileController.Default.isMobile(phone: phone) else{
+                continue;
+            }
+
+            if !usedNumbers.contains(number){
+                return number;
+            }
+        }
+
+        return nil;
     }
     
     func loadJobTitles() -> [String]{
@@ -138,21 +174,23 @@ class SAContactController : NSObject{
     }
     
     func isMatchedContact(contact : CNContact, rule : RecipientsRule) -> Bool{
-        var value = true;
-        let filters = rule.filters ?? [];
+        return self.isMatchedContact(contact: contact, filters: rule.filters ?? []);
+    }
 
+    /// Matches `contact` against a raw set of filter conditions, independent of any owning
+    /// rule's `enabled` flag. Shared by `isMatchedContact(contact:rule:)` and `recipientCount`.
+    func isMatchedContact(contact : CNContact, filters : [RecipientsFilter]) -> Bool{
         guard !filters.isEmpty else{
-            return value;
+            return true;
         }
         //name, nickname, jot title, department, company
         for filter in filters{
-            value = value && self.isMatchedContact(contact: contact, filter: filter);
-            if !value {
-                break;
+            guard self.isMatchedContact(contact: contact, filter: filter) else{
+                return false;
             }
         }
-        
-        return value;
+
+        return true;
     }
     
     class FilterTargetNames{
@@ -179,15 +217,12 @@ class SAContactController : NSObject{
                 break;
             case FilterTargetNames.Job:
                 value = self.isMatchedText(text: contact.jobTitle, filter: filter);
-                print("filter contract. name[\(contact.fullName ?? "")] job[\(contact.jobTitle)] => \(value)");
                 break;
             case FilterTargetNames.Department:
                 value = self.isMatchedText(text: contact.departmentName, filter: filter);
-                print("filter contract. name[\(contact.fullName ?? "")] dept[\(contact.departmentName)] => \(value)");
                 break;
             case FilterTargetNames.Organization:
                 value = self.isMatchedText(text: contact.organizationName, filter: filter);
-                print("filter contract. name[\(contact.fullName ?? "")] org[\(contact.organizationName)] => \(value)");
                 break;
             default:
                 break;

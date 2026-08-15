@@ -7,12 +7,30 @@
 
 import SwiftUI
 import SwiftData
+import Contacts
 
+/// State for the pinned recipient-count bar on `RuleDetailScreen`.
+///
+/// Only `.available` is rendered with dedicated UI today. `.loading` and `.permissionDenied`
+/// exist now so the contacts-permission and loading treatments (tracked separately) can be
+/// added later without reshaping this type.
+enum RecipientCountState: Equatable {
+	case loading
+	case available(Int)
+	case permissionDenied
+}
+
+@MainActor
 @Observable
 class RuleDetailScreenModel {
 	var rule: RecipientsRule?
 	var title: String = ""
 	var isSaved: Bool = false
+	private(set) var recipientCountState: RecipientCountState = .loading
+
+	private var cachedContacts: [CNContact]?
+	private var recipientCountLoadTask: Task<Void, Never>?
+	private var recipientCountDebounceTask: Task<Void, Never>?
 
 	var hasChanges: Bool {
 		title != (rule?.title ?? "");
@@ -22,7 +40,7 @@ class RuleDetailScreenModel {
 		self.rule = rule;
 		self.title = rule?.title ?? "";
 	}
-	
+
     func save(using context: ModelContext) {
         if rule?.modelContext == nil, let rule {
             context.insert(rule)
@@ -99,5 +117,74 @@ class RuleDetailScreenModel {
 		let newFilter = RecipientsFilter(target: .init(rawValue: target), includes: nil, excludes: nil, all: true)
 		rule.filters?.append(newFilter)
 		return newFilter
+	}
+
+	// MARK: - Recipient count preview
+
+	/// Fetches the address book once (off the main actor) and computes the initial count.
+	/// Safe to call repeatedly - after the first successful fetch this just recomputes in memory.
+	func loadRecipientCountIfNeeded() {
+		guard cachedContacts == nil else {
+			recomputeRecipientCount()
+			return
+		}
+
+		guard recipientCountLoadTask == nil else {
+			return
+		}
+
+		recipientCountLoadTask = Task { [weak self] in
+			guard let self else { return }
+			do {
+				let contacts = try await SAContactController.Default.loadAllContactsAsync()
+				guard !Task.isCancelled else { return }
+				self.cachedContacts = contacts
+				self.recomputeRecipientCount()
+			} catch {
+				guard !Task.isCancelled else { return }
+				self.recipientCountState = .permissionDenied
+			}
+			self.recipientCountLoadTask = nil
+		}
+	}
+
+	/// Schedules an in-memory recount, coalescing calls that arrive within ~250ms. Filters are
+	/// only mutated by `RuleFilterScreen`, so in practice this fires once per navigation return -
+	/// the coalescing is just a safety net for rapid multi-select. Independent of
+	/// `recipientCountLoadTask` so a recompute scheduled while the initial fetch is still in
+	/// flight doesn't cancel that fetch.
+	func scheduleRecipientCountRecompute() {
+		recipientCountDebounceTask?.cancel()
+
+		recipientCountDebounceTask = Task { [weak self] in
+			try? await Task.sleep(for: .milliseconds(250))
+			guard !Task.isCancelled else { return }
+			self?.recomputeRecipientCount()
+			self?.recipientCountDebounceTask = nil
+		}
+	}
+
+	/// Cancels any in-flight fetch or coalesced recompute. Call from `onDisappear` so a slow
+	/// contacts fetch or pending debounce doesn't outlive the screen.
+	func cancelRecipientCountWork() {
+		recipientCountLoadTask?.cancel()
+		recipientCountLoadTask = nil
+		recipientCountDebounceTask?.cancel()
+		recipientCountDebounceTask = nil
+	}
+
+	/// Re-runs the (cheap, in-memory) match against the cached contacts. Never triggers a
+	/// contacts fetch or a SwiftData save - reads whatever is currently on `rule.filters`,
+	/// including in-progress, unsaved edits, and ignores `rule.enabled` since the preview
+	/// must reflect the rule being edited regardless of its enabled state.
+	private func recomputeRecipientCount() {
+		guard let contacts = cachedContacts else { return }
+
+		let filters = rule?.filters ?? []
+		let count = SAContactController.Default.recipientCount(contacts: contacts, filters: filters)
+
+		withAnimation {
+			recipientCountState = .available(count)
+		}
 	}
 }

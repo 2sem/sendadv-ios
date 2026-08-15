@@ -76,6 +76,8 @@
 "Anyone" = "누구나";
 "unsaved.changes.title" = "변경사항을 저장하시겠습니까?";
 "unsaved.changes.discard" = "저장 안 함";
+"rule.detail.recipient.count.label" = "예상 수신자";
+"rule.detail.recipient.count.value" = "%d명";
 
 // RuleFilterScreen
 "rule.filter.helper.job" = "이 필터에 포함할 직책을 선택하세요";
