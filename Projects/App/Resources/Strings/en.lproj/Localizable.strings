@@ -88,7 +88,9 @@
 "unsaved.changes.title" = "Save Changes?";
 "unsaved.changes.discard" = "Don't Save";
 "rule.detail.recipient.count.label" = "Estimated Recipients";
-"rule.detail.recipient.count.value" = "%d recipients";
+// "rule.detail.recipient.count.value" plural forms live in RecipientCountPlurals.xcstrings.
+"rule.detail.recipient.count.permission_denied" = "Contacts access is required";
+"rule.detail.recipient.count.open_settings" = "Open Settings";
 
 // RuleFilterScreen
 "rule.filter.helper.job" = "Pick which job titles this filter includes";
