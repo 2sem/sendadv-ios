@@ -25,8 +25,10 @@ let project = Project(
         .remote(url: "https://github.com/2sem/GADManager",
                 requirement: .upToNextMajor(from: "1.4.0")),
         // .local(path: "../../../../../pods/GADManager/src/GADManager"),
-//        .remote(url: "https://github.com/firebase/firebase-ios-sdk",
-//                requirement: .upToNextMajor(from: "12.11.0")),
+        // Declared on the app target too: linking Firebase only through the
+        // DynamicThirdParty wrapper drops GoogleAppMeasurement's _APM* symbols
+        // at the app target's link step.
+        .package(id: "firebase.firebase-ios-sdk", exact: "12.17.0"),
     ],
     settings: .settings(configurations: [
         .debug(
@@ -91,16 +93,36 @@ let project = Project(
             dependencies: [
                 .Projects.ThirdParty,
                 .Projects.DynamicThirdParty,
-                .package(product: "GADManager", type: .runtime)
+                .package(product: "GADManager", type: .runtime),
+                .package(product: "FirebaseCrashlytics", type: .runtime),
+                .package(product: "FirebaseAnalytics", type: .runtime),
+                .package(product: "FirebaseMessaging", type: .runtime),
+                .package(product: "FirebaseRemoteConfig", type: .runtime),
+                // Transitive chain that does not propagate through the dynamic
+                // wrapper: FirebaseCore/Installations, GoogleUtilities submodules
+                // and nanopb all fail to resolve at the app target's link step.
+                .package(product: "FirebaseCore", type: .runtime),
+                .package(product: "FirebaseInstallations", type: .runtime),
+                .package(product: "GULAppDelegateSwizzler", type: .runtime),
+                .package(product: "GULMethodSwizzler", type: .runtime),
+                .package(product: "GULEnvironment", type: .runtime),
+                .package(product: "GULLogger", type: .runtime),
+                .package(product: "GULNSData", type: .runtime),
+                .package(product: "GULNetwork", type: .runtime),
+                .package(product: "nanopb", type: .runtime)
             ],
-            settings: .settings(configurations: [
-                .debug(
-                    name: "Debug",
-                    xcconfig: "Configs/app.debug.xcconfig"),
-                .release(
-                    name: "Release",
-                    xcconfig: "Configs/app.release.xcconfig")
-            ])
+            settings: .settings(
+                base: [
+                    "OTHER_LDFLAGS": "$(inherited) -framework GoogleAppMeasurement -framework GoogleAppMeasurementIdentitySupport"
+                ],
+                configurations: [
+                    .debug(
+                        name: "Debug",
+                        xcconfig: "Configs/app.debug.xcconfig"),
+                    .release(
+                        name: "Release",
+                        xcconfig: "Configs/app.release.xcconfig")
+                ])
         ),
         .target(
             name: "AppTests",
