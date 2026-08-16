@@ -11,13 +11,14 @@ import Contacts
 
 /// State for the pinned recipient-count bar on `RuleDetailScreen`.
 ///
-/// Only `.available` is rendered with dedicated UI today. `.loading` and `.permissionDenied`
-/// exist now so the contacts-permission and loading treatments (tracked separately) can be
-/// added later without reshaping this type.
+/// `.available` and `.permissionDenied` are rendered with dedicated UI. `.loading` and
+/// `.failed` render nothing today - the loading and generic-failure treatments (tracked
+/// separately) can be added later without reshaping this type.
 enum RecipientCountState: Equatable {
 	case loading
 	case available(Int)
 	case permissionDenied
+	case failed
 }
 
 @MainActor
@@ -135,16 +136,57 @@ class RuleDetailScreenModel {
 
 		recipientCountLoadTask = Task { [weak self] in
 			guard let self else { return }
-			do {
-				let contacts = try await SAContactController.Default.loadAllContactsAsync()
-				guard !Task.isCancelled else { return }
-				self.cachedContacts = contacts
-				self.recomputeRecipientCount()
-			} catch {
-				guard !Task.isCancelled else { return }
-				self.recipientCountState = .permissionDenied
-			}
+			await self.fetchAndComputeRecipientCount()
 			self.recipientCountLoadTask = nil
+		}
+	}
+
+	/// Resolves contacts authorization - requesting access if it hasn't been determined yet -
+	/// then fetches and computes the count. Only a genuine authorization failure (`.denied` /
+	/// `.restricted` status, a declined access request, or a `CNError.authorizationDenied` from
+	/// the fetch itself) produces `.permissionDenied`. Any other failure produces `.failed` so
+	/// it isn't mislabeled as a permission problem.
+	private func fetchAndComputeRecipientCount() async {
+		switch CNContactStore.authorizationStatus(for: .contacts) {
+		case .denied, .restricted:
+			recipientCountState = .permissionDenied
+			return
+		case .notDetermined:
+			let granted = await SAContactController.Default.requestContactsAccess()
+			guard !Task.isCancelled else { return }
+			guard granted else {
+				recipientCountState = .permissionDenied
+				return
+			}
+		default:
+			break
+		}
+
+		guard !Task.isCancelled else { return }
+
+		do {
+			let contacts = try await SAContactController.Default.loadAllContactsAsync()
+			guard !Task.isCancelled else { return }
+			cachedContacts = contacts
+			recomputeRecipientCount()
+		} catch {
+			guard !Task.isCancelled else { return }
+			recipientCountState = isAuthorizationFailure(error) ? .permissionDenied : .failed
+		}
+	}
+
+	/// Distinguishes a genuine contacts-authorization failure from any other fetch error, so a
+	/// transient or unexpected failure isn't surfaced to the user as "grant contacts access."
+	private func isAuthorizationFailure(_ error: Error) -> Bool {
+		if let cnError = error as? CNError, cnError.code == .authorizationDenied {
+			return true
+		}
+
+		switch CNContactStore.authorizationStatus(for: .contacts) {
+		case .denied, .restricted:
+			return true
+		default:
+			return false
 		}
 	}
 

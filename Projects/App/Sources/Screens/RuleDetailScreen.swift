@@ -72,8 +72,13 @@ struct RuleDetailScreen: View {
 				}
 				.scrollIndicators(.hidden)
 
-				if case .available(let count) = viewModel.recipientCountState, count > 0 {
+				switch viewModel.recipientCountState {
+				case .available(let count) where count > 0:
 					RecipientCountBar(count: count)
+				case .permissionDenied:
+					RecipientCountPermissionDeniedBar()
+				default:
+					EmptyView()
 				}
 			}
 		}
@@ -173,7 +178,10 @@ private struct RecipientCountBar: View {
 
 			Spacer()
 
-			Text(String(format: "rule.detail.recipient.count.value".localized(), count))
+			// Plural: SwiftUI derives the LocalizedStringKey "%lld recipients" from this Int
+			// interpolation and resolves it against `Localizable.stringsdict` (en one/other,
+			// ko other-only) - no `.localized()` or manual `String(format:)` involved.
+			Text("\(count) recipients")
 				.font(.system(size: 22, weight: .bold, design: .rounded))
 				.foregroundStyle(Color.softAccent)
 				.contentTransition(.numericText())
@@ -186,6 +194,44 @@ private struct RecipientCountBar: View {
 				.background(Color.softDivider)
 		}
 		.accessibilityElement(children: .combine)
+	}
+}
+
+/// Pinned bar shown when contacts access is denied or restricted. Same placement, `Color
+/// .softSurface` background and hairline top divider as `RecipientCountBar` - but unlike that
+/// bar, this one is deliberately tappable: it opens the app's own Settings page so the user can
+/// grant access. The trailing text is styled with `Color.softAccent` so it reads as a button
+/// even though the whole row shares one flat, cardless treatment.
+private struct RecipientCountPermissionDeniedBar: View {
+	var body: some View {
+		Button(action: openSettings) {
+			HStack {
+				Text("rule.detail.recipient.count.permission_denied")
+					.font(.system(size: 12.5, weight: .semibold, design: .rounded))
+					.foregroundStyle(Color.softSecondaryText)
+
+				Spacer()
+
+				Text("rule.detail.recipient.count.open_settings")
+					.font(.system(size: 13, weight: .bold, design: .rounded))
+					.foregroundStyle(Color.softAccent)
+			}
+			.padding(.horizontal, 22)
+			.padding(.vertical, 14)
+			.background(Color.softSurface)
+			.overlay(alignment: .top) {
+				Divider()
+					.background(Color.softDivider)
+			}
+			.contentShape(Rectangle())
+		}
+		.buttonStyle(.plain)
+		.accessibilityElement(children: .combine)
+	}
+
+	private func openSettings() {
+		guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+		UIApplication.shared.open(url)
 	}
 }
 

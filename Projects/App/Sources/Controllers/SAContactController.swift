@@ -39,6 +39,14 @@ class SAContactController : NSObject{
         }.value;
     }
 
+    /// Requests the user's permission to access Contacts. Intended for the `.notDetermined`
+    /// case - calling this once authorization is already decided just re-reports that decision.
+    /// Returns `false` (rather than throwing) on any failure, since callers only care about the
+    /// granted/denied outcome.
+    func requestContactsAccess() async -> Bool {
+        (try? await contactStore.requestAccess(for: .contacts)) ?? false;
+    }
+
     func loadContacts(rules : [RecipientsRule]) -> [String]?{
         var values : [String]! = []
         let rules = rules.filter { (rule) -> Bool in
