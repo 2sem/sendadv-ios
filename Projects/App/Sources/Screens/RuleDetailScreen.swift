@@ -73,7 +73,7 @@ struct RuleDetailScreen: View {
 				.scrollIndicators(.hidden)
 
 				switch viewModel.recipientCountState {
-				case .available(let count) where count > 0:
+				case .available(let count):
 					RecipientCountBar(count: count)
 				case .permissionDenied:
 					RecipientCountPermissionDeniedBar()
@@ -167,24 +167,40 @@ struct RuleDetailScreen: View {
 /// contacts) matched by the rule's current filter conditions. Sits below the scroll content,
 /// above the safe area. Deliberately unlike `RuleFilterCategoryCard` - no corner radius, no
 /// shadow, no chevron - since it isn't tappable.
+///
+/// A zero count is rendered by this same view, not a separate one - it's a warning state of the
+/// same component, not a different component. The number switches from `Color.softAccent` to the
+/// muted `Color.softWarning` tone and a supporting line explains the rule currently matches
+/// nobody, since an empty bar would otherwise be indistinguishable from the feature not existing.
 private struct RecipientCountBar: View {
 	let count: Int
 
+	private var isZero: Bool { count == 0 }
+
 	var body: some View {
-		HStack {
-			Text("rule.detail.recipient.count.label".localized())
-				.font(.system(size: 12.5, weight: .semibold, design: .rounded))
-				.foregroundStyle(Color.softSecondaryText)
+		VStack(alignment: .leading, spacing: 4) {
+			HStack {
+				Text("rule.detail.recipient.count.label".localized())
+					.font(.system(size: 12.5, weight: .semibold, design: .rounded))
+					.foregroundStyle(Color.softSecondaryText)
 
-			Spacer()
+				Spacer()
 
-			// Plural: SwiftUI derives the LocalizedStringKey "%lld recipients" from this Int
-			// interpolation and resolves it against `Localizable.stringsdict` (en one/other,
-			// ko other-only) - no `.localized()` or manual `String(format:)` involved.
-			Text("\(count) recipients")
-				.font(.system(size: 22, weight: .bold, design: .rounded))
-				.foregroundStyle(Color.softAccent)
-				.contentTransition(.numericText())
+				// Plural: SwiftUI derives the LocalizedStringKey "%lld recipients" from this Int
+				// interpolation and resolves it against `Plural.xcstrings` (en one/other, ko
+				// other-only) - no `.localized()` or manual `String(format:)` involved. Zero
+				// resolves through the "other" rule, same as any count that isn't exactly one.
+				Text("\(count) recipients", tableName: "Plural")
+					.font(.system(size: 22, weight: .bold, design: .rounded))
+					.foregroundStyle(isZero ? Color.softWarning : Color.softAccent)
+					.contentTransition(.numericText())
+			}
+
+			if isZero {
+				Text("rule.detail.recipient.count.zero")
+					.font(.system(size: 12, weight: .medium, design: .rounded))
+					.foregroundStyle(Color.softWarning)
+			}
 		}
 		.padding(.horizontal, 22)
 		.padding(.vertical, 14)

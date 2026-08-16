@@ -88,10 +88,11 @@
 "unsaved.changes.title" = "Save Changes?";
 "unsaved.changes.discard" = "Don't Save";
 "rule.detail.recipient.count.label" = "Estimated Recipients";
-// The plural "%lld recipients" key (derived by SwiftUI from the Text("\(count) recipients")
-// literal in RecipientCountBar) lives in Localizable.stringsdict, not here.
+// The plural "%lld recipients" key (derived by SwiftUI from the Text("\(count) recipients",
+// tableName: "Plural") literal in RecipientCountBar) lives in Plural.xcstrings, not here.
 "rule.detail.recipient.count.permission_denied" = "Contacts access is required";
 "rule.detail.recipient.count.open_settings" = "Open Settings";
+"rule.detail.recipient.count.zero" = "No recipients match these conditions";
 
 // RuleFilterScreen
 "rule.filter.helper.job" = "Pick which job titles this filter includes";

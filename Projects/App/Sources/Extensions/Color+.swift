@@ -22,6 +22,10 @@ extension Color {
 	static let softPrimaryText = Color.dynamic(light: "#2A2438", dark: "#F3F0F8")
 	static let softSecondaryText = Color.dynamic(light: "#746B82", dark: "#C8C1D4")
 	static let softAccent = Color.dynamic(light: "#5B5BD6", dark: "#7C6BF0")
+	// Same orange already used for the department-filter tint on `RuleDetailScreen` - reused here
+	// as the muted/warning tone so a zero recipient count reads as "pay attention" without
+	// inventing a new hardcoded color.
+	static let softWarning = Color.dynamic(light: "#E8895B", dark: "#E8A07B")
 	static let softAccentLabel = Color.dynamic(light: "#FFFFFF", dark: "#F7F4FF")
 	static let softJobTint = Color.dynamic(light: "#E9E7FF", dark: "#38315E")
 	static let softDepartmentTint = Color.dynamic(light: "#FFE8DA", dark: "#553527")
