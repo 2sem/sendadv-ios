@@ -178,13 +178,10 @@ private struct RecipientCountBar: View {
 
 			Spacer()
 
-			// Plural: resolved via Foundation's `String(localized:defaultValue:)` against the
-			// scoped `RecipientCountPlurals` String Catalog - NOT `.localized()` +
-			// `String(format:)` - so the catalog's en one/other rule is actually applied
-			// (Korean has no plural distinction and only defines "other"). The explicit key
-			// keeps this stable and matching the catalog exactly, rather than relying on a
-			// key Xcode derives from a plain interpolated `Text` literal.
-			Text(Self.localizedCount(count))
+			// Plural: SwiftUI derives the LocalizedStringKey "%lld recipients" from this Int
+			// interpolation and resolves it against `Localizable.stringsdict` (en one/other,
+			// ko other-only) - no `.localized()` or manual `String(format:)` involved.
+			Text("\(count) recipients")
 				.font(.system(size: 22, weight: .bold, design: .rounded))
 				.foregroundStyle(Color.softAccent)
 				.contentTransition(.numericText())
@@ -197,16 +194,6 @@ private struct RecipientCountBar: View {
 				.background(Color.softDivider)
 		}
 		.accessibilityElement(children: .combine)
-	}
-
-	private static func localizedCount(_ count: Int) -> String {
-		String(
-			localized: "rule.detail.recipient.count.value",
-			defaultValue: "\(count) recipients",
-			table: "RecipientCountPlurals",
-			bundle: .main,
-			comment: "Pinned recipient-count bar value on RuleDetailScreen."
-		)
 	}
 }
 
