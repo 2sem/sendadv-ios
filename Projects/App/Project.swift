@@ -23,7 +23,7 @@ let project = Project(
                      developmentRegion: "en"),
     packages: [
         .remote(url: "https://github.com/2sem/GADManager",
-                requirement: .upToNextMajor(from: "1.4.0")),
+                requirement: .upToNextMajor(from: "1.5.0")),
         // .local(path: "../../../../../pods/GADManager/src/GADManager"),
         // Declared on the app target too: linking Firebase only through the
         // DynamicThirdParty wrapper drops GoogleAppMeasurement's _APM* symbols
