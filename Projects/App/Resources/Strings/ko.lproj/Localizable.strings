@@ -77,10 +77,11 @@
 "unsaved.changes.title" = "변경사항을 저장하시겠습니까?";
 "unsaved.changes.discard" = "저장 안 함";
 "rule.detail.recipient.count.label" = "예상 수신자";
-// The plural "%lld recipients" key (derived by SwiftUI from the Text("\(count) recipients")
-// literal in RecipientCountBar) lives in Localizable.stringsdict, not here.
+// The plural "%lld recipients" key (derived by SwiftUI from the Text("\(count) recipients",
+// tableName: "Plural") literal in RecipientCountBar) lives in Plural.xcstrings, not here.
 "rule.detail.recipient.count.permission_denied" = "연락처 권한이 필요합니다";
 "rule.detail.recipient.count.open_settings" = "설정 열기";
+"rule.detail.recipient.count.zero" = "조건에 맞는 수신자가 없습니다";
 
 // RuleFilterScreen
 "rule.filter.helper.job" = "이 필터에 포함할 직책을 선택하세요";

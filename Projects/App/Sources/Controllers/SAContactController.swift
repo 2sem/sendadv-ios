@@ -49,6 +49,11 @@ class SAContactController : NSObject{
 
     func loadContacts(rules : [RecipientsRule]) -> [String]?{
         var values : [String]! = []
+        // Membership-only accumulator for dedup - `values` stays the ordered, insertion-order
+        // result this method has always returned (its caller, `RecipientListScreenModel
+        // .phoneNumbers`, depends on that order). The `Set` just makes the per-contact
+        // "already used?" check O(1) instead of an O(n) array scan.
+        var usedNumbers: Set<String> = [];
         let rules = rules.filter { (rule) -> Bool in
             return rule.enabled;
         }
@@ -58,7 +63,7 @@ class SAContactController : NSObject{
 
             NSLog("load contacts. count[\(contacts.count)]");
             for contact in contacts{
-                guard let mobile = self.firstUsableMobileNumber(for: contact, excluding: values) else{
+                guard let mobile = self.firstUsableMobileNumber(for: contact, excluding: usedNumbers) else{
                     continue;
                 }
 
@@ -75,6 +80,7 @@ class SAContactController : NSObject{
                     continue;
                 }
 
+                usedNumbers.insert(mobile);
                 values.append(mobile);
             }
 
@@ -95,7 +101,7 @@ class SAContactController : NSObject{
     /// including rules that are currently disabled. Does not fetch contacts itself — pass in a
     /// previously-loaded `[CNContact]` snapshot so repeated recounts stay in memory.
     func recipientCount(contacts: [CNContact], filters: [RecipientsFilter]) -> Int{
-        var usedNumbers: [String] = [];
+        var usedNumbers: Set<String> = [];
         var count = 0;
 
         for contact in contacts{
@@ -107,7 +113,7 @@ class SAContactController : NSObject{
                 continue;
             }
 
-            usedNumbers.append(mobile);
+            usedNumbers.insert(mobile);
             count += 1;
         }
 
@@ -115,8 +121,10 @@ class SAContactController : NSObject{
     }
 
     /// Returns the first mobile number on `contact` that isn't already present in `usedNumbers`,
-    /// mirroring the dedup behavior `loadContacts(rules:)` has always used.
-    private func firstUsableMobileNumber(for contact: CNContact, excluding usedNumbers: [String]) -> String?{
+    /// mirroring the dedup behavior `loadContacts(rules:)` has always used. `usedNumbers` is a
+    /// `Set` so this membership check is O(1) per phone number instead of an O(n) array scan -
+    /// this runs per-contact on every recount, so an array scan here made the whole pass O(n^2).
+    private func firstUsableMobileNumber(for contact: CNContact, excluding usedNumbers: Set<String>) -> String?{
         for phone in contact.phoneNumbers{
             let number = phone.value.stringValue;
             guard SAMobileController.Default.isMobile(phone: phone) else{
