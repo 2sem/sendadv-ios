@@ -28,7 +28,7 @@ let project = Project(
         // Declared on the app target too: linking Firebase only through the
         // DynamicThirdParty wrapper drops GoogleAppMeasurement's _APM* symbols
         // at the app target's link step.
-        .package(id: "firebase.firebase-ios-sdk", exact: "12.17.0"),
+        .package(id: "firebase.firebase-ios-sdk", exact: "12.19.2"),
     ],
     settings: .settings(configurations: [
         .debug(
