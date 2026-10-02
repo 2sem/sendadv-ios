@@ -22,8 +22,6 @@ let project = Project(
     options: .options(defaultKnownRegions: ["en"],
                      developmentRegion: "en"),
     packages: [
-        .remote(url: "https://github.com/2sem/GADManager",
-                requirement: .upToNextMajor(from: "1.5.0")),
         // .local(path: "../../../../../pods/GADManager/src/GADManager"),
         // Declared on the app target too: linking Firebase only through the
         // DynamicThirdParty wrapper drops GoogleAppMeasurement's _APM* symbols
@@ -93,7 +91,7 @@ let project = Project(
             dependencies: [
                 .Projects.ThirdParty,
                 .Projects.DynamicThirdParty,
-                .package(product: "GADManager", type: .runtime),
+                .external(name: "GADManager"),
                 .package(product: "FirebaseCrashlytics", type: .runtime),
                 .package(product: "FirebaseAnalytics", type: .runtime),
                 .package(product: "FirebaseMessaging", type: .runtime),

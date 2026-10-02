@@ -15,8 +15,8 @@ import PackageDescription
 let package = Package(
     name: "sendadv",
     dependencies: [
-        // Add your own dependencies here:
-        // .package(url: "https://github.com/Alamofire/Alamofire", from: "5.0.0"),
-        // You can read more about dependencies here: https://docs.tuist.io/documentation/tuist/dependencies
+        // Migrating from Project.swift `packages:` one package at a time;
+        // consumed via `.external(name:)`.
+        .package(url: "https://github.com/2sem/GADManager", from: "1.5.0"),
     ]
 )
