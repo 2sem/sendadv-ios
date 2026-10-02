@@ -94,6 +94,6 @@ let package = Package(
         .package(url: "https://github.com/2sem/GADManager", from: "1.5.0"),
         .package(url: "https://github.com/kakao/kakao-ios-sdk", from: "2.28.0"),
         .package(url: "https://github.com/2sem/LSExtensions", exact: "0.1.24"),
-        .package(url: "https://github.com/firebase/firebase-ios-sdk", .upToNextMinor(from: "12.17.0")),
+        .package(url: "https://github.com/firebase/firebase-ios-sdk", .upToNextMinor(from: "12.19.2")),
     ]
 )
