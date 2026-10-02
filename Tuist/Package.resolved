@@ -1,6 +1,15 @@
 {
-  "originHash" : "a2188164172d45a8538c726d5393014835d05791ccf72d40f96c533e305cbf00",
+  "originHash" : "31e7a313e609742e6b434d5bb02cd647d0c09cd4ec96ef22432d66b5738a9a66",
   "pins" : [
+    {
+      "identity" : "alamofire",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Alamofire/Alamofire",
+      "state" : {
+        "revision" : "bda9ed57d72988a3a2ada33d824583541f86eac6",
+        "version" : "5.12.2"
+      }
+    },
     {
       "identity" : "gadmanager",
       "kind" : "remoteSourceControl",
@@ -8,6 +17,15 @@
       "state" : {
         "revision" : "6e9ef344041e891188af8a42b9f090fbfeefa2f9",
         "version" : "1.5.0"
+      }
+    },
+    {
+      "identity" : "kakao-ios-sdk",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kakao/kakao-ios-sdk",
+      "state" : {
+        "revision" : "8627646b7430bcadc5a2f726b21ea25db70cd189",
+        "version" : "2.29.0"
       }
     },
     {
@@ -22,7 +40,7 @@
     {
       "identity" : "swift-package-manager-google-user-messaging-platform",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/googleads/swift-package-manager-google-user-messaging-platform.git",
+      "location" : "https://github.com/googleads/swift-package-manager-google-user-messaging-platform",
       "state" : {
         "revision" : "13b248eaa73b7826f0efb1bcf455e251d65ecb1b",
         "version" : "3.1.0"

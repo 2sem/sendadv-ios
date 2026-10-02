@@ -18,5 +18,6 @@ let package = Package(
         // Migrating from Project.swift `packages:` one package at a time;
         // consumed via `.external(name:)`.
         .package(url: "https://github.com/2sem/GADManager", from: "1.5.0"),
+        .package(url: "https://github.com/kakao/kakao-ios-sdk", from: "2.28.0"),
     ]
 )
