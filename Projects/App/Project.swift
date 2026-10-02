@@ -23,10 +23,6 @@ let project = Project(
                      developmentRegion: "en"),
     packages: [
         // .local(path: "../../../../../pods/GADManager/src/GADManager"),
-        // Declared on the app target too: linking Firebase only through the
-        // DynamicThirdParty wrapper drops GoogleAppMeasurement's _APM* symbols
-        // at the app target's link step.
-        .package(id: "firebase.firebase-ios-sdk", exact: "12.17.0"),
     ],
     settings: .settings(configurations: [
         .debug(
@@ -80,38 +76,43 @@ let project = Project(
                      name: "Merge SKAdNetworkItems",
                      inputPaths: ["$(SRCROOT)/Resources/skNetworks.plist"],
                      basedOnDependencyAnalysis: false),
-                .post(script: "CRASHLYTICS_RUN=$(find \"${BUILD_DIR%/Build/*}/SourcePackages\" -name run -path \"*/Crashlytics/run\" | head -1); \"$CRASHLYTICS_RUN\"",
-                            name: "Upload dSYM for Crashlytics",
-                            inputPaths: ["${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}",
-                                         "${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${PRODUCT_NAME}",
-                                         "${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist",
-                                         "$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/GoogleService-Info.plist",
-                                         "$(TARGET_BUILD_DIR)/$(EXECUTABLE_PATH)"],
-                            runForInstallBuildsOnly: true)],
+                .post(
+                    script: """
+                        # Firebase is a Tuist-integrated dependency (Tuist/Package.swift),
+                        # so its checkout lives under Tuist/.build. Path is relative to
+                        # $(SRCROOT) (Projects/App).
+                        CRASHLYTICS_RUN_SCRIPT="${SRCROOT}/../../Tuist/.build/checkouts/firebase-ios-sdk/Crashlytics/run"
+
+                        if [ ! -f "$CRASHLYTICS_RUN_SCRIPT" ]; then
+                          echo "error: Firebase Crashlytics run script not found at $CRASHLYTICS_RUN_SCRIPT - run 'tuist install' first"
+                          exit 1
+                        fi
+
+                        "$CRASHLYTICS_RUN_SCRIPT"
+                        """,
+                    name: "Upload dSYM for Crashlytics",
+                    inputPaths: ["${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}",
+                                 "${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${PRODUCT_NAME}",
+                                 "${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist",
+                                 "$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/GoogleService-Info.plist",
+                                 "$(TARGET_BUILD_DIR)/$(EXECUTABLE_PATH)"],
+                    runForInstallBuildsOnly: true)],
             dependencies: [
                 .Projects.ThirdParty,
-                .Projects.DynamicThirdParty,
                 .external(name: "GADManager"),
-                .package(product: "FirebaseCrashlytics", type: .runtime),
-                .package(product: "FirebaseAnalytics", type: .runtime),
-                .package(product: "FirebaseMessaging", type: .runtime),
-                .package(product: "FirebaseRemoteConfig", type: .runtime),
-                // Transitive chain that does not propagate through the dynamic
-                // wrapper: FirebaseCore/Installations, GoogleUtilities submodules
-                // and nanopb all fail to resolve at the app target's link step.
-                .package(product: "FirebaseCore", type: .runtime),
-                .package(product: "FirebaseInstallations", type: .runtime),
-                .package(product: "GULAppDelegateSwizzler", type: .runtime),
-                .package(product: "GULMethodSwizzler", type: .runtime),
-                .package(product: "GULEnvironment", type: .runtime),
-                .package(product: "GULLogger", type: .runtime),
-                .package(product: "GULNSData", type: .runtime),
-                .package(product: "GULNetwork", type: .runtime),
-                .package(product: "nanopb", type: .runtime)
+                // Firebase links directly into App rather than through an intermediate
+                // dynamic wrapper framework: Tuist's SPM integration doesn't reliably
+                // propagate Firebase's binary XCFrameworks through such a wrapper.
+                .external(name: "FirebaseCrashlytics"),
+                .external(name: "FirebaseAnalytics"),
+                .external(name: "FirebaseMessaging"),
+                .external(name: "FirebaseRemoteConfig"),
             ],
             settings: .settings(
                 base: [
-                    "OTHER_LDFLAGS": "$(inherited) -framework GoogleAppMeasurement -framework GoogleAppMeasurementIdentitySupport"
+                    // The Crashlytics "run" tool lives under Tuist/.build/checkouts,
+                    // outside $(SRCROOT), so User Script Sandboxing would block it.
+                    "ENABLE_USER_SCRIPT_SANDBOXING": "NO",
                 ],
                 configurations: [
                     .debug(
