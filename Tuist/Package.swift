@@ -48,8 +48,8 @@ import PackageDescription
     let packageSettings = PackageSettings(
         // Customize the product types for specific package product
         // Default is .staticFramework
-        productTypes: Dictionary(uniqueKeysWithValues: dynamicTargets.map { ($0, .framework) })
-            .merging(staticBinaryWrappers.map { ($0, .staticFramework) }) { $1 },
+        productTypes: Dictionary(uniqueKeysWithValues: dynamicTargets.map { ($0, .framework) }),
+            // .merging(staticBinaryWrappers.map { ($0, .staticFramework) }) { $1 },
         baseSettings: .settings(
             // Firebase links dynamically here (see productTypes above), so each
             // framework is embedded in the app and Crashlytics needs a dSYM of its
