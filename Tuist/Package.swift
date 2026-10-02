@@ -4,36 +4,38 @@ import PackageDescription
 #if TUIST
     import ProjectDescription
 
-    // SwiftUI previews (ENABLE_DEBUG_DYLIB) crash with static ObjC frameworks
-    // (duplicate/unrealized classes), so link every external target dynamically.
-    let dynamicTargets = [
-        "Firebase",
-        "FirebaseCore",
-        "FirebaseCoreExtension",
-        "FirebaseCoreInternal",
-        "FirebaseInstallations",
-        "FirebaseCrashlytics",
-        "FirebaseCrashlyticsSwift",
-        "FirebaseSessions",
-        "FirebaseSessionsObjC",
-        "FirebaseRemoteConfigInterop",
-        "FirebaseRemoteConfig",
-        "FirebaseRemoteConfigInternal",
-        "FirebaseABTesting",
-        "FirebaseSharedSwift",
-        "FirebaseMessaging",
-        "GoogleDataTransport",
-        "FBLPromises",
-        "nanopb",
-        "GoogleUtilities-AppDelegateSwizzler",
-        "GoogleUtilities-Environment",
-        "GoogleUtilities-Logger",
-        "GoogleUtilities-MethodSwizzler",
-        "GoogleUtilities-Network",
-        "GoogleUtilities-NSData",
-        "GoogleUtilities-Reachability",
-        "GoogleUtilities-UserDefaults",
-        "third-party-IsAppEncrypted",
+    // Every external target links statically (Tuist default). Static ObjC libraries drop
+    // category methods (e.g. GoogleUtilities' gul_dataByGzippingData), which crashed
+    // SwiftUI previews until the App target started linking with -ObjC (Project.swift).
+    // Add a target name here only if it must be a dynamic framework again.
+    let dynamicTargets: [String] = [
+        // "Firebase",
+        // "FirebaseCore",
+        // "FirebaseCoreExtension",
+        // "FirebaseCoreInternal",
+        // "FirebaseInstallations",
+        // "FirebaseCrashlytics",
+        // "FirebaseCrashlyticsSwift",
+        // "FirebaseSessions",
+        // "FirebaseSessionsObjC",
+        // "FirebaseRemoteConfigInterop",
+        // "FirebaseRemoteConfig",
+        // "FirebaseRemoteConfigInternal",
+        // "FirebaseABTesting",
+        // "FirebaseSharedSwift",
+        // "FirebaseMessaging",
+        // "GoogleDataTransport",
+        // "FBLPromises",
+        // "nanopb",
+        // "GoogleUtilities-AppDelegateSwizzler",
+        // "GoogleUtilities-Environment",
+        // "GoogleUtilities-Logger",
+        // "GoogleUtilities-MethodSwizzler",
+        // "GoogleUtilities-Network",
+        // "GoogleUtilities-NSData",
+        // "GoogleUtilities-Reachability",
+        // "GoogleUtilities-UserDefaults",
+        // "third-party-IsAppEncrypted",
     ]
 
     // Wrappers around prebuilt static XCFrameworks have no sources of their own;
