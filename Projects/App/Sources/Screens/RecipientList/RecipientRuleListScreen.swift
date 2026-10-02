@@ -84,6 +84,12 @@ struct RecipientRuleListScreen: View {
 	@State private var showingMessageUnavailableAlert = false
 	@State private var sendConfirmationSheetHeight: CGFloat = 428
 	@State private var sendButtonFrame: CGRect = .zero
+	@Query(sort: \MessageTemplate.createdAt, order: .reverse) private var messageTemplates: [MessageTemplate]
+	@State private var selectedTemplateID: PersistentIdentifier?
+	@State private var showingTemplates = false
+	@State private var showingTemplateManager = false
+	@State private var templateManagerStartsWithEditor = false
+	@State private var templateCountBeforeManager = 0
 	private let sendButtonBottomPadding: CGFloat = 24
 	private let scrollBottomClearance: CGFloat = 16
 	private let screenCoordinateSpace = "RecipientRuleListScreen"
@@ -255,7 +261,18 @@ struct RecipientRuleListScreen: View {
 				}
 			}
 
-			ToolbarItem(placement: .topBarTrailing) {
+			ToolbarItemGroup(placement: .topBarTrailing) {
+				Button {
+					showingTemplates = true
+				} label: {
+					Image(systemName: "text.bubble")
+						.frame(minWidth: 44, minHeight: 44)
+						.contentShape(Rectangle())
+				}
+				.tint(Color.softAccent)
+				.accessibilityLabel("template.toolbar.label".localized())
+				.accessibilityHint("template.toolbar.hint".localized())
+
 				if !isEditingRules {
 					Button {
 						if isAddFirstFilterTipVisible {
@@ -310,6 +327,7 @@ struct RecipientRuleListScreen: View {
 			ZStack {
 				MessageComposerView(
 					recipients: viewModel.phoneNumbers,
+					messageBody: selectedTemplate?.body,
 					composeState: $messageComposerState,
 					isLoading: $isMessageComposerLoading
 				)
@@ -421,6 +439,9 @@ struct RecipientRuleListScreen: View {
 		.navigationDestination(item: $selectedRule) { rule in
 			RuleDetailScreen(rule: rule)
         }
+		.navigationDestination(isPresented: $showingTemplates) {
+			MessageTemplatesScreen()
+		}
     }
 
 	private func handleMessageComposerStateChange() {
@@ -500,6 +521,11 @@ struct RecipientRuleListScreen: View {
             }
 	}
 
+	private var selectedTemplate: MessageTemplate? {
+		guard let selectedTemplateID else { return nil }
+		return messageTemplates.first { $0.persistentModelID == selectedTemplateID }
+	}
+
 	private var sendConfirmationSheet: some View {
 		SendConfirmationSheet(
 			recipientCount: totalRecipientCount,
@@ -507,6 +533,10 @@ struct RecipientRuleListScreen: View {
 			batchSize: batchSize,
 			activeBatchNumber: activeBatchNumber,
 			totalBatchCount: totalBatchCount,
+			templates: messageTemplates,
+			selectedTemplateID: $selectedTemplateID,
+			onManageTemplates: { presentTemplateManager(startsWithEditor: false) },
+			onCreateTemplate: { presentTemplateManager(startsWithEditor: true) },
 			onCancel: cancelSendConfirmation,
 			onContinue: continueFromSendConfirmation
 		)
@@ -518,6 +548,27 @@ struct RecipientRuleListScreen: View {
 		.presentationDetents([.height(sendConfirmationSheetHeight)])
 		.presentationDragIndicator(.visible)
 		.presentationBackground(Color.softSurface)
+		.sheet(isPresented: $showingTemplateManager, onDismiss: handleTemplateManagerDismiss) {
+			NavigationStack {
+				MessageTemplatesScreen(showsDoneButton: true, startsWithNewEditor: templateManagerStartsWithEditor)
+			}
+		}
+	}
+
+	private func presentTemplateManager(startsWithEditor: Bool) {
+		templateCountBeforeManager = messageTemplates.count
+		templateManagerStartsWithEditor = startsWithEditor
+		showingTemplateManager = true
+	}
+
+	private func handleTemplateManagerDismiss() {
+		if let selectedTemplateID, !messageTemplates.contains(where: { $0.persistentModelID == selectedTemplateID }) {
+			self.selectedTemplateID = nil
+		}
+		// First template created from the empty state is selected automatically.
+		if templateCountBeforeManager == 0, selectedTemplateID == nil, let first = messageTemplates.first {
+			selectedTemplateID = first.persistentModelID
+		}
 	}
 
     private func toggleRule(_ rule: RecipientsRule, isEnabled: Bool) {
@@ -544,6 +595,7 @@ struct RecipientRuleListScreen: View {
         }
 
         isPreparingMessageView = true
+        selectedTemplateID = nil
 
         Task { @MainActor in
             defer { isPreparingMessageView = false }
@@ -672,8 +724,24 @@ private struct SendConfirmationSheet: View {
 	let batchSize: Int
 	let activeBatchNumber: Int
 	let totalBatchCount: Int
+	let templates: [MessageTemplate]
+	@Binding var selectedTemplateID: PersistentIdentifier?
+	let onManageTemplates: () -> Void
+	let onCreateTemplate: () -> Void
 	let onCancel: () -> Void
 	let onContinue: () -> Void
+
+	@Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+	private var hasSelectedTemplate: Bool {
+		guard let selectedTemplateID else { return false }
+		return templates.contains { $0.persistentModelID == selectedTemplateID }
+	}
+
+	private var helperTextKey: String {
+		guard hasSelectedTemplate else { return "send.confirmation.helper" }
+		return isContinuingBatch ? "template.send.helper.batch" : "template.send.helper.applied"
+	}
 
 	private var isBatchSending: Bool {
 		totalBatchCount > 1
@@ -683,7 +751,43 @@ private struct SendConfirmationSheet: View {
 		isBatchSending && activeBatchNumber > 1
 	}
 
+	private var usesScrollLayout: Bool {
+		dynamicTypeSize >= .xxxLarge
+	}
+
 	var body: some View {
+		Group {
+			if usesScrollLayout {
+				ScrollView {
+					messageContent
+						.padding(.horizontal, 36)
+						.padding(.top, 38)
+						.padding(.bottom, 16)
+				}
+				.scrollBounceBehavior(.basedOnSize)
+				.safeAreaInset(edge: .bottom, spacing: 0) {
+					actionButtons
+						.padding(.horizontal, 36)
+						.padding(.top, 12)
+						.padding(.bottom, 28)
+						.background(Color.softSurface)
+				}
+			} else {
+				VStack(alignment: .leading, spacing: 26) {
+					messageContent
+					actionButtons
+						.padding(.top, 4)
+				}
+				.padding(.horizontal, 36)
+				.padding(.top, 38)
+				.padding(.bottom, 28)
+				.frame(maxWidth: .infinity, alignment: .topLeading)
+			}
+		}
+		.background(Color.softSurface)
+	}
+
+	private var messageContent: some View {
 		VStack(alignment: .leading, spacing: 26) {
 			Image(systemName: "bubble.left")
 				.font(.system(size: 42, weight: .regular))
@@ -718,7 +822,15 @@ private struct SendConfirmationSheet: View {
 					.background(Color.softAccent.opacity(0.12), in: .rect(cornerRadius: 16, style: .continuous))
 				}
 
-				Text("send.confirmation.helper".localized())
+				TemplatePickerRow(
+					templates: templates,
+					selectedID: $selectedTemplateID,
+					onManage: onManageTemplates,
+					onCreate: onCreateTemplate
+				)
+				.padding(.top, 6)
+
+				Text(helperTextKey.localized())
 					.font(.system(size: 13, weight: .semibold, design: .rounded))
 					.foregroundStyle(Color.softSecondaryText.opacity(0.9))
 					.multilineTextAlignment(.leading)
@@ -726,29 +838,25 @@ private struct SendConfirmationSheet: View {
 					.lineLimit(nil)
 					.fixedSize(horizontal: false, vertical: true)
 			}
-
-			VStack(spacing: 10) {
-				Button(action: onContinue) {
-					HStack(spacing: 18) {
-						Image(systemName: "paperplane.fill")
-							.font(.system(size: 22, weight: .bold))
-						Text(primaryButtonTitle)
-					}
-				}
-				.buttonStyle(SoftFriendlyPrimaryButtonStyle())
-
-				Button(secondaryButtonTitle, role: .cancel, action: onCancel)
-					.font(.system(size: 17, weight: .bold, design: .rounded))
-					.foregroundStyle(Color.softSecondaryText)
-					.frame(maxWidth: .infinity, minHeight: 44)
-			}
-			.padding(.top, 4)
 		}
-		.padding(.horizontal, 36)
-		.padding(.top, 38)
-		.padding(.bottom, 28)
-		.frame(maxWidth: .infinity, alignment: .topLeading)
-		.background(Color.softSurface)
+	}
+
+	private var actionButtons: some View {
+		VStack(spacing: 10) {
+			Button(action: onContinue) {
+				HStack(spacing: 18) {
+					Image(systemName: "paperplane.fill")
+						.font(.system(size: 22, weight: .bold))
+					Text(primaryButtonTitle)
+				}
+			}
+			.buttonStyle(SoftFriendlyPrimaryButtonStyle())
+
+			Button(secondaryButtonTitle, role: .cancel, action: onCancel)
+				.font(.system(size: 17, weight: .bold, design: .rounded))
+				.foregroundStyle(Color.softSecondaryText)
+				.frame(maxWidth: .infinity, minHeight: 44)
+		}
 	}
 
 	private var confirmationMessage: Text {
@@ -827,7 +935,7 @@ private extension View {
 
 #Preview {
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
-    let container = try! ModelContainer(for: RecipientsRule.self, configurations: config)
+    let container = try! ModelContainer(for: RecipientsRule.self, MessageTemplate.self, configurations: config)
 
     // 샘플 규칙 추가
     let rule1 = RecipientsRule(title: "회사 동료들", enabled: true, order: 1)
