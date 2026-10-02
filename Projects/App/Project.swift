@@ -118,6 +118,12 @@ let project = Project(
                 configurations: [
                     .debug(
                         name: "Debug",
+                        settings: [
+                            // Tuist's compilation cache (CAS) rewrites source paths to
+                            // /^src/... which SwiftUI preview thunk compiles can't resolve
+                            // ("error opening input file '/^src/Sources/...'").
+                            "COMPILATION_CACHE_ENABLE_CACHING": "NO",
+                        ],
                         xcconfig: "Configs/app.debug.xcconfig"),
                     .release(
                         name: "Release",
