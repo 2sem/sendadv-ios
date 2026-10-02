@@ -6,8 +6,6 @@ let project = Project(
     packages: [
         .remote(url: "https://github.com/2sem/LSExtensions",
                 requirement: .exact("0.1.24")),
-        .remote(url: "https://github.com/CosmicMind/Material",
-                requirement: .upToNextMajor(from: "3.1.8")),
         .remote(url: "https://github.com/devxoul/UITextView-Placeholder",
                 requirement: .upToNextMajor(from: "1.5.0")),
 //        .remote(url: "https://github.com/SDWebImage/SDWebImage",
@@ -22,8 +20,7 @@ let project = Project(
             bundleId: .appBundleId.appending(".thirdparty"),
             deploymentTargets: .iOS("18.0"),
             dependencies: [.external(name: "KakaoSDK"),
-                           .package(product: "LSExtensions", type: .runtime),
-                           .package(product: "Material", type: .runtime)
+                           .package(product: "LSExtensions", type: .runtime)
             ]
         ),
     ]
