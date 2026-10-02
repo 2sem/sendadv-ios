@@ -98,7 +98,8 @@ let project = Project(
                                  "$(TARGET_BUILD_DIR)/$(EXECUTABLE_PATH)"],
                     runForInstallBuildsOnly: true)],
             dependencies: [
-                .Projects.ThirdParty,
+                .external(name: "KakaoSDK"),
+                .external(name: "LSExtensions"),
                 .external(name: "GADManager"),
                 // Firebase links directly into App rather than through an intermediate
                 // dynamic wrapper framework: Tuist's SPM integration doesn't reliably
