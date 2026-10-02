@@ -4,8 +4,6 @@ import ProjectDescriptionHelpers
 let project = Project(
     name: "ThirdParty",
     packages: [
-        .remote(url: "https://github.com/kakao/kakao-ios-sdk",
-                requirement: .upToNextMajor(from: "2.28.0")),
         .remote(url: "https://github.com/jdg/MBProgressHUD.git",
                 requirement: .upToNextMajor(from: "1.2.0")),
         .remote(url: "https://github.com/2sem/LSExtensions",
@@ -25,7 +23,7 @@ let project = Project(
             product: .staticFramework,
             bundleId: .appBundleId.appending(".thirdparty"),
             deploymentTargets: .iOS("18.0"),
-            dependencies: [.package(product: "KakaoSDK", type: .runtime),
+            dependencies: [.external(name: "KakaoSDK"),
                            .package(product: "MBProgressHUD", type: .runtime),
                            .package(product: "LSExtensions", type: .runtime),
                            .package(product: "Material", type: .runtime)
