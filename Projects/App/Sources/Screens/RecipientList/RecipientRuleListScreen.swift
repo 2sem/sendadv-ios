@@ -147,7 +147,7 @@ struct RecipientRuleListScreen: View {
         }
     }
 
-	var body: some View {
+	private var primaryContent: some View {
 		ZStack {
 			Color.softBackground
 				.ignoresSafeArea()
@@ -338,82 +338,18 @@ struct RecipientRuleListScreen: View {
 				}
 			}
         }
+	}
+
+	var body: some View {
+		primaryContent
 		.sheet(isPresented: $showingSendConfirmationSheet) {
 			sendConfirmationSheet
 		}
 		.onChange(of: messageComposerState) {
-            guard messageComposerState != .unknown else {
-                return
-            }
-
-			print("rule list screen detect message composer dismission. state[\(messageComposerState)]")
-			// 배치 전송 처리: 사용자가 취소하지 않은 경우 다음 배치를 자동 진행
-			if isBatchSending {
-				let isCancelled: Bool = {
-		#if DEBUG
-					// 시뮬레이터는 .sent를 반환하지 못하므로 .cancelled를 성공으로 간주
-					return false
-		#else
-					return messageComposerState == .cancelled
-		#endif
-				}()
-
-				if isCancelled {
-					// 사용자가 취소하면 배치 전송 중단
-					isBatchSending = false
-					allPhoneNumbers = []
-					currentBatchIndex = 0
-				} else {
-					let isBatchComplete = presentNextBatch()
-					// 배치 마지막 전송 완료 시에만 카운트 증가 + 리뷰 요청 + 전면 광고
-					if isBatchComplete {
-						LSDefaults.increaseMessageSentCount()
-						if reviewManager.canShow {
-							reviewManager.show()
-						}
-						presentFullAdThen {}
-					}
-				}
-
-                messageComposerState = .unknown
-                return
-			}
-
-			// 발송 성공 시 카운트 증가 후 5회째에서 성공 팝업 + 리뷰 요청
-			let isSent: Bool = {
-		#if DEBUG
-				if case .cancelled = messageComposerState { return true }
-				return false
-		#else
-				if case .sent = messageComposerState { return true }
-				return false
-		#endif
-			}()
-
-			if isSent {
-				LSDefaults.increaseMessageSentCount()
-				// 5회 성공 시에만 App Store 리뷰 요청
-				if reviewManager.canShow {
-					reviewManager.show()
-				}
-				presentFullAdThen {}
-			}
-			messageComposerState = .unknown
+			handleMessageComposerStateChange()
 		}
         .onChange(of: state, { _, newState in
-            switch newState {
-            case .creatingRule:
-                // 새 규칙 생성
-                guard let newRule = viewModel.createRule(modelContext: modelContext, undoManager: undoManager) else {
-                    return
-                }
-
-                state = .editingRule(newRule)
-            case .editingRule(let newRule):
-                selectedRule = newRule
-            case .idle:
-                break
-            }
+            handleStateChange(newState)
         })
         .onChange(of: selectedRule, { _, newSelectedRule in
             if newSelectedRule != nil {
@@ -486,6 +422,83 @@ struct RecipientRuleListScreen: View {
 			RuleDetailScreen(rule: rule)
         }
     }
+
+	private func handleMessageComposerStateChange() {
+            guard messageComposerState != .unknown else {
+                return
+            }
+
+			print("rule list screen detect message composer dismission. state[\(messageComposerState)]")
+			// 배치 전송 처리: 사용자가 취소하지 않은 경우 다음 배치를 자동 진행
+			if isBatchSending {
+				let isCancelled: Bool = {
+		#if DEBUG
+					// 시뮬레이터는 .sent를 반환하지 못하므로 .cancelled를 성공으로 간주
+					return false
+		#else
+					return messageComposerState == .cancelled
+		#endif
+				}()
+
+				if isCancelled {
+					// 사용자가 취소하면 배치 전송 중단
+					isBatchSending = false
+					allPhoneNumbers = []
+					currentBatchIndex = 0
+				} else {
+					let isBatchComplete = presentNextBatch()
+					// 배치 마지막 전송 완료 시에만 카운트 증가 + 리뷰 요청 + 전면 광고
+					if isBatchComplete {
+						LSDefaults.increaseMessageSentCount()
+						if reviewManager.canShow {
+							reviewManager.show()
+						}
+						presentFullAdThen {}
+					}
+				}
+
+                messageComposerState = .unknown
+                return
+			}
+
+			// 발송 성공 시 카운트 증가 후 5회째에서 성공 팝업 + 리뷰 요청
+			let isSent: Bool = {
+		#if DEBUG
+				if case .cancelled = messageComposerState { return true }
+				return false
+		#else
+				if case .sent = messageComposerState { return true }
+				return false
+		#endif
+			}()
+
+			if isSent {
+				LSDefaults.increaseMessageSentCount()
+				// 5회 성공 시에만 App Store 리뷰 요청
+				if reviewManager.canShow {
+					reviewManager.show()
+				}
+				presentFullAdThen {}
+			}
+			messageComposerState = .unknown
+		
+	}
+
+	private func handleStateChange(_ newState: SARecipientListScreenModel.State) {
+            switch newState {
+            case .creatingRule:
+                // 새 규칙 생성
+                guard let newRule = viewModel.createRule(modelContext: modelContext, undoManager: undoManager) else {
+                    return
+                }
+
+                state = .editingRule(newRule)
+            case .editingRule(let newRule):
+                selectedRule = newRule
+            case .idle:
+                break
+            }
+	}
 
 	private var sendConfirmationSheet: some View {
 		SendConfirmationSheet(
