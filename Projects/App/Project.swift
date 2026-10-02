@@ -114,6 +114,9 @@ let project = Project(
                     // The Crashlytics "run" tool lives under Tuist/.build/checkouts,
                     // outside $(SRCROOT), so User Script Sandboxing would block it.
                     "ENABLE_USER_SCRIPT_SANDBOXING": "NO",
+                    // Static ObjC libraries drop category methods (e.g. GoogleUtilities'
+                    // gul_dataByGzippingData) unless the app links with -ObjC.
+                    "OTHER_LDFLAGS": "$(inherited) -ObjC",
                 ],
                 configurations: [
                     .debug(
