@@ -61,11 +61,10 @@ fastlane ios release description:'Change description' isReleasing:true
 **Send Multi SMS**: An iOS app for sending bulk SMS messages to multiple recipients. Users create contact filters (based on department, position, organization) to organize and manage recipient lists.
 
 ### Tuist Multi-Project Workspace
-This is a Tuist-managed workspace with three separate projects:
+This is a Tuist-managed workspace with two projects (third-party packages without a wrapper, e.g. Firebase, GADManager, are integrated via `Tuist/Package.swift` + `.external(name:)`):
 
 1. **App** (`Projects/App/`): Main application with all business logic and UI
-2. **ThirdParty** (`Projects/ThirdParty/`): Static framework with KakaoSDK, MBProgressHUD, LSExtensions, Material
-3. **DynamicThirdParty** (`Projects/DynamicThirdParty/`): Dynamic framework with Firebase and SDWebImage
+2. **ThirdParty** (`Projects/ThirdParty/`): Static framework with KakaoSDK, LSExtensions
 
 **CRITICAL**: Don't regenerate Xcode projects manually without file insert/delete. Always use `mise x -- tuist generate` instead of direct Xcode operations.
 
@@ -153,7 +152,7 @@ Ad manager setup is in `SendadvApp.setupAds()` with different intervals for debu
 ### Firebase
 - Crashlytics: dSYM upload via post-build script
 - Analytics, Messaging, RemoteConfig available
-- Framework: DynamicThirdParty
+- Integrated via Tuist SPM (`Tuist/Package.swift`)
 
 ### Kakao SDK
 - **App Key**: `c7ebdb09664b7c7bd73eeab5ccd48589`
