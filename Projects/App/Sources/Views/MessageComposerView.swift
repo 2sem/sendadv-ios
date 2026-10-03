@@ -11,6 +11,7 @@ public enum MessageComposeState {
 
 struct MessageComposerView: UIViewControllerRepresentable {
     let recipients: [String]
+    var messageBody: String? = nil
     @Binding var composeState: MessageComposeState
     @Binding var isLoading: Bool
     
@@ -26,6 +27,9 @@ struct MessageComposerView: UIViewControllerRepresentable {
 
         let controller = MFMessageComposeViewController()
         controller.recipients = recipients
+        if let messageBody, !messageBody.isEmpty {
+            controller.body = messageBody
+        }
         controller.messageComposeDelegate = context.coordinator
         
         // Combine Publisher로 키보드 이벤트 구독
