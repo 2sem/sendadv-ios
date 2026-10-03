@@ -107,8 +107,10 @@ struct MessageTemplatesScreen: View {
 				editor = .new
 			} label: {
 				Text("template.empty.action".localized())
+					.padding(.horizontal, 28)
 			}
 			.buttonStyle(SoftFriendlyPrimaryButtonStyle())
+			.frame(maxWidth: 286)
 			.padding(.horizontal, 36)
 		}
 	}

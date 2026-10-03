@@ -60,7 +60,7 @@ struct RecipientRuleListScreen: View {
     @State private var state: SARecipientListScreenModel.State = .idle
     @State private var selectedRule: RecipientsRule?
 
-    @State private var showingMessageComposer = false
+    @State private var composerRequest: MessageComposerRequest?
     @State private var showingSendConfirmationSheet = false
     @State private var isPreparingMessageView = false
 	@State private var isMessageComposerLoading = false
@@ -86,6 +86,8 @@ struct RecipientRuleListScreen: View {
 	@State private var sendButtonFrame: CGRect = .zero
 	@Query(sort: \MessageTemplate.createdAt, order: .reverse) private var messageTemplates: [MessageTemplate]
 	@State private var selectedTemplateID: PersistentIdentifier?
+	/// Body captured when the user taps Continue; carried into the composer through the sheet item.
+	@State private var pendingComposerBody: String?
 	@State private var showingTemplates = false
 	@State private var showingTemplateManager = false
 	@State private var templateManagerStartsWithEditor = false
@@ -323,11 +325,11 @@ struct RecipientRuleListScreen: View {
             isAdFree = LSDefaults.isAdFree
         }
         .animation(.easeInOut(duration: 0.25), value: isAdFree)
-        .sheet(isPresented: $showingMessageComposer) {
+        .sheet(item: $composerRequest) { request in
 			ZStack {
 				MessageComposerView(
-					recipients: viewModel.phoneNumbers,
-					messageBody: selectedTemplate?.body,
+					recipients: request.recipients,
+					messageBody: request.messageBody,
 					composeState: $messageComposerState,
 					isLoading: $isMessageComposerLoading
 				)
@@ -662,7 +664,7 @@ struct RecipientRuleListScreen: View {
 
 	private func presentSendConfirmation() {
 		isMessageComposerLoading = false
-		showingMessageComposer = false
+		composerRequest = nil
 		showingSendConfirmationSheet = true
 	}
 
@@ -678,6 +680,7 @@ struct RecipientRuleListScreen: View {
 	}
 
 	private func continueFromSendConfirmation() {
+		pendingComposerBody = selectedTemplate?.body
 		showingSendConfirmationSheet = false
 		Task { @MainActor in
 			try? await Task.sleep(for: .milliseconds(250))
@@ -695,13 +698,13 @@ struct RecipientRuleListScreen: View {
 			totalRecipientCount = 0
 			batchProgressText = ""
 			isMessageComposerLoading = false
-			showingMessageComposer = false
+			composerRequest = nil
 			showingMessageUnavailableAlert = true
 			return false
 		}
 
 		isMessageComposerLoading = true
-		showingMessageComposer = true
+		composerRequest = MessageComposerRequest(recipients: viewModel.phoneNumbers, messageBody: pendingComposerBody)
 		return true
 	}
 }
@@ -952,4 +955,10 @@ private extension View {
     }
     .modelContainer(container)
     .environmentObject(adManager)
+}
+
+private struct MessageComposerRequest: Identifiable {
+	let id = UUID()
+	let recipients: [String]
+	let messageBody: String?
 }

@@ -61,6 +61,7 @@ struct TemplateEditorSheet: View {
 			.scrollContentBackground(.hidden)
 			.background(Color.softBackground)
 			.scrollDismissesKeyboard(.interactively)
+			.onTapGesture { focusedField = nil }
 			.navigationTitle((template == nil ? "template.editor.new.title" : "template.editor.edit.title").localized())
 			.navigationBarTitleDisplayMode(.inline)
 			.toolbar {
@@ -76,12 +77,6 @@ struct TemplateEditorSheet: View {
 						Text("Save".localized()).bold()
 					}
 					.disabled(!canSave)
-				}
-				ToolbarItemGroup(placement: .keyboard) {
-					Spacer()
-					Button("Done".localized()) {
-						focusedField = nil
-					}
 				}
 			}
 			.confirmationDialog(
