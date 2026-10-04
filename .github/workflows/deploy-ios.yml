@@ -37,14 +37,14 @@ jobs:
         GPG_PRIVATE_KEY_PATH: 'private.gpg'
     steps:
       - name: Checkout project
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Select Xcode
         run: |
           sudo xcode-select -s /Applications/Xcode_26.5.app
 
       - name: Install Mise
-        uses: jdx/mise-action@v2
+        uses: jdx/mise-action@v5
 
       - name: Install Dependencies
         run: |
