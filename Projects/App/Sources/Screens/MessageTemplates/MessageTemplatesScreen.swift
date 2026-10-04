@@ -17,7 +17,7 @@ struct MessageTemplatesScreen: View {
 	/// Opens the new-template editor as soon as the screen appears.
 	var startsWithNewEditor = false
 
-	private enum Editor: Identifiable {
+	private enum EditorMode: Identifiable {
 		case new
 		case edit(MessageTemplate)
 
@@ -29,7 +29,7 @@ struct MessageTemplatesScreen: View {
 		}
 	}
 
-	@State private var editor: Editor?
+	@State private var editorMode: EditorMode?
 	@State private var templatePendingDeletion: MessageTemplate?
 	@State private var showingDeleteConfirmation = false
 	@State private var saveFeedbackCount = 0
@@ -39,7 +39,7 @@ struct MessageTemplatesScreen: View {
 	var body: some View {
 		Group {
 			if templates.isEmpty {
-				emptyState
+				emptyView
 			} else {
 				templateList
 			}
@@ -55,7 +55,7 @@ struct MessageTemplatesScreen: View {
 			}
 			ToolbarItem(placement: .topBarTrailing) {
 				Button {
-					editor = .new
+					editorMode = .new
 				} label: {
 					Image(systemName: "plus")
 				}
@@ -63,8 +63,8 @@ struct MessageTemplatesScreen: View {
 				.accessibilityLabel("template.add".localized())
 			}
 		}
-		.sheet(item: $editor) { editor in
-			switch editor {
+		.sheet(item: $editorMode) { mode in
+			switch mode {
 			case .new:
 				TemplateEditorSheet(template: nil) { _ in saveFeedbackCount += 1 }
 			case .edit(let template):
@@ -91,20 +91,20 @@ struct MessageTemplatesScreen: View {
 		.onAppear {
 			guard startsWithNewEditor, !didAutoOpen else { return }
 			didAutoOpen = true
-			editor = .new
+			editorMode = .new
 		}
 	}
 
 	// MARK: - Subviews
 
-	private var emptyState: some View {
+	private var emptyView: some View {
 		ContentUnavailableView {
 			Label("template.empty.title".localized(), systemImage: "text.bubble")
 		} description: {
 			Text("template.empty.message".localized())
 		} actions: {
 			Button {
-				editor = .new
+				editorMode = .new
 			} label: {
 				Text("template.empty.action".localized())
 					.padding(.horizontal, 28)
@@ -143,7 +143,7 @@ struct MessageTemplatesScreen: View {
 		.padding(.vertical, 8)
 		.contentShape(Rectangle())
 		.onTapGesture {
-			editor = .edit(template)
+			editorMode = .edit(template)
 		}
 		.swipeActions(edge: .trailing, allowsFullSwipe: false) {
 			Button(role: .destructive) {
@@ -152,7 +152,7 @@ struct MessageTemplatesScreen: View {
 				Label("template.delete".localized(), systemImage: "trash")
 			}
 			Button {
-				editor = .edit(template)
+				editorMode = .edit(template)
 			} label: {
 				Label("template.edit".localized(), systemImage: "pencil")
 			}
@@ -160,7 +160,7 @@ struct MessageTemplatesScreen: View {
 		}
 		.contextMenu {
 			Button {
-				editor = .edit(template)
+				editorMode = .edit(template)
 			} label: {
 				Label("template.edit".localized(), systemImage: "pencil")
 			}
@@ -174,7 +174,7 @@ struct MessageTemplatesScreen: View {
 		.accessibilityLabel("\(template.title), \(template.body)")
 		.accessibilityAddTraits(.isButton)
 		.accessibilityAction(named: Text("template.edit".localized())) {
-			editor = .edit(template)
+			editorMode = .edit(template)
 		}
 		.accessibilityAction(named: Text("template.delete".localized())) {
 			requestDelete(template)
