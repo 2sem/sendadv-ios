@@ -15,6 +15,8 @@ final class RecipientsRule: Identifiable {
 	var enabled: Bool
     @Relationship(deleteRule: .cascade) var filters: [RecipientsFilter]?
 	@Attribute var order: Int
+	/// Stable identity used by send history. Optional so existing stores migrate; assigned lazily.
+	var uuid: UUID?
 
 	init(title: String? = nil, enabled: Bool = true, order: Int? = nil) {
 		self.title = title
@@ -25,6 +27,15 @@ final class RecipientsRule: Identifiable {
 		} else {
 			self.order = Self.nextOrder()
 		}
+	}
+
+	/// Returns the stable id, assigning one on first use.
+	@discardableResult
+	func ensureUUID() -> UUID {
+		if let uuid { return uuid }
+		let newID = UUID()
+		uuid = newID
+		return newID
 	}
 
 	private static func nextOrder() -> Int {
