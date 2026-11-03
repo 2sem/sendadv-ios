@@ -69,3 +69,6 @@ Derived/
 Tuist/.build
 ### Claude Design handoff bundles ###
 design/
+
+### Claude local settings ###
+.claude/settings.local.json
