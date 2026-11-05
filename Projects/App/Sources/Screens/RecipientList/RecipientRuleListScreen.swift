@@ -92,6 +92,14 @@ struct RecipientRuleListScreen: View {
 	@State private var showingTemplateManager = false
 	@State private var templateManagerStartsWithEditor = false
 	@State private var templateCountBeforeManager = 0
+	@Query(sort: \SendHistory.date, order: .reverse) private var histories: [SendHistory]
+	@State private var showingHistory = false
+	/// Record of the send session in progress; created when the first composer is presented.
+	@State private var currentHistory: SendHistory?
+	/// Message body carried over from a resend; used when no template is picked.
+	@State private var resendBody: String?
+	@State private var resendSkippedCount = 0
+	@State private var duplicateSentDate: Date?
 	private let sendButtonBottomPadding: CGFloat = 24
 	private let scrollBottomClearance: CGFloat = 16
 	private let screenCoordinateSpace = "RecipientRuleListScreen"
@@ -101,6 +109,10 @@ struct RecipientRuleListScreen: View {
 
 	private var enabledRuleCount: Int {
 		rules.filter(\.enabled).count
+	}
+
+	private var lastSentRecord: SendHistory? {
+		histories.first { $0.sentCount > 0 }
 	}
 
 	private var scrollBottomPadding: CGFloat {
@@ -165,6 +177,12 @@ struct RecipientRuleListScreen: View {
 					if !rules.isEmpty {
 						RuleListStatusView(enabledCount: enabledRuleCount)
 							.padding(.bottom, 0)
+
+							if let last = lastSentRecord {
+								LastSentChip(date: last.date, recipientCount: last.sentCount) {
+									showingHistory = true
+								}
+							}
 					}
 
 					ForEach(rules) { rule in
@@ -444,6 +462,11 @@ struct RecipientRuleListScreen: View {
 		.navigationDestination(isPresented: $showingTemplates) {
 			MessageTemplatesScreen()
 		}
+		.navigationDestination(isPresented: $showingHistory) {
+			SendHistoryScreen { record in
+				resend(record)
+			}
+		}
     }
 
 	private func handleMessageComposerStateChange() {
@@ -453,15 +476,11 @@ struct RecipientRuleListScreen: View {
 
 			print("rule list screen detect message composer dismission. state[\(messageComposerState)]")
 			// 배치 전송 처리: 사용자가 취소하지 않은 경우 다음 배치를 자동 진행
+			let outcome = composerOutcome()
+			let sentBatchCount = viewModel.phoneNumbers.count
 			if isBatchSending {
-				let isCancelled: Bool = {
-		#if DEBUG
-					// 시뮬레이터는 .sent를 반환하지 못하므로 .cancelled를 성공으로 간주
-					return false
-		#else
-					return messageComposerState == .cancelled
-		#endif
-				}()
+				recordHistoryOutcome(outcome, batchCount: sentBatchCount)
+				let isCancelled = outcome != .sent
 
 				if isCancelled {
 					// 사용자가 취소하면 배치 전송 중단
@@ -485,15 +504,8 @@ struct RecipientRuleListScreen: View {
 			}
 
 			// 발송 성공 시 카운트 증가 후 5회째에서 성공 팝업 + 리뷰 요청
-			let isSent: Bool = {
-		#if DEBUG
-				if case .cancelled = messageComposerState { return true }
-				return false
-		#else
-				if case .sent = messageComposerState { return true }
-				return false
-		#endif
-			}()
+			recordHistoryOutcome(outcome, batchCount: sentBatchCount)
+			let isSent = outcome == .sent
 
 			if isSent {
 				LSDefaults.increaseMessageSentCount()
@@ -505,6 +517,75 @@ struct RecipientRuleListScreen: View {
 			}
 			messageComposerState = .unknown
 		
+	}
+
+	/// Maps the composer result to a history outcome. The simulator cannot return .sent, so DEBUG treats .cancelled as sent.
+	private func composerOutcome() -> SendHistoryRules.BatchOutcome {
+		switch messageComposerState {
+		case .sent:
+			return .sent
+		case .failed:
+			return .failed
+		case .cancelled:
+#if DEBUG
+			return .sent
+#else
+			return .cancelled
+#endif
+		case .unknown:
+			return .cancelled
+		}
+	}
+
+	private func enabledFilterIDs() -> Set<UUID> {
+		Set(rules.filter(\.enabled).map { $0.ensureUUID() })
+	}
+
+	private func beginHistoryRecordIfNeeded() {
+		guard currentHistory == nil else { return }
+		let enabled = rules.filter(\.enabled)
+		let record = SendHistory(
+			filterNames: enabled.map { $0.title ?? "" },
+			filterIDs: enabled.map { $0.ensureUUID() },
+			totalCount: totalRecipientCount > 0 ? totalRecipientCount : viewModel.phoneNumbers.count,
+			body: pendingComposerBody ?? ""
+		)
+		modelContext.insert(record)
+		for stale in SendHistoryRules.overflow(histories.filter { $0.id != record.id }.sorted { $0.date > $1.date }, cap: SendHistoryRules.maxRecords - 1) {
+			modelContext.delete(stale)
+		}
+		try? modelContext.save()
+		currentHistory = record
+	}
+
+	private func recordHistoryOutcome(_ outcome: SendHistoryRules.BatchOutcome, batchCount: Int) {
+		guard let record = currentHistory else { return }
+		record.sentCount = SendHistoryRules.updatedSentCount(
+			current: record.sentCount,
+			batchCount: batchCount,
+			totalCount: record.totalCount,
+			outcome: outcome
+		)
+		record.status = SendHistoryRules.status(sentCount: record.sentCount, totalCount: record.totalCount, outcome: outcome)
+		try? modelContext.save()
+		if SendHistoryRules.isSessionFinished(sentCount: record.sentCount, totalCount: record.totalCount, outcome: outcome) {
+			currentHistory = nil
+		}
+	}
+
+	private func resend(_ record: SendHistory) {
+		let ids = Set(rules.map { $0.ensureUUID() })
+		let result = SendHistoryRules.survivors(of: record.filterIDs, existing: ids)
+		guard !result.kept.isEmpty else { return }
+		for rule in rules {
+			viewModel.toggleRule(rule, isEnabled: result.kept.contains(rule.ensureUUID()))
+		}
+		try? modelContext.save()
+		showingHistory = false
+		Task { @MainActor in
+			try? await Task.sleep(for: .milliseconds(400))
+			onSendMessage(resendBody: record.body, skippedCount: result.skipped)
+		}
 	}
 
 	private func handleStateChange(_ newState: SARecipientListScreenModel.State) {
@@ -536,6 +617,8 @@ struct RecipientRuleListScreen: View {
 			activeBatchNumber: activeBatchNumber,
 			totalBatchCount: totalBatchCount,
 			templates: messageTemplates,
+			duplicateSentDate: duplicateSentDate,
+			skippedFilterCount: activeBatchNumber == 1 ? resendSkippedCount : 0,
 			selectedTemplateID: $selectedTemplateID,
 			onManageTemplates: { presentTemplateManager(startsWithEditor: false) },
 			onCreateTemplate: { presentTemplateManager(startsWithEditor: true) },
@@ -587,7 +670,13 @@ struct RecipientRuleListScreen: View {
 		showingDeleteRuleConfirmation = true
 	}
 
-    private func onSendMessage(allowAll: Bool = false) {
+    private func onSendMessage(allowAll: Bool = false, resendBody resendMessage: String? = nil, skippedCount: Int = 0) {
+
+        resendBody = resendMessage
+
+        resendSkippedCount = skippedCount
+
+        currentHistory = nil
         // 규칙이 설정되었는지 확인
         let enabledRules = rules.filter { $0.enabled }
         if enabledRules.isEmpty && !allowAll {
@@ -665,11 +754,21 @@ struct RecipientRuleListScreen: View {
 	private func presentSendConfirmation() {
 		isMessageComposerLoading = false
 		composerRequest = nil
+		duplicateSentDate = activeBatchNumber == 1
+			? SendHistoryRules.duplicateDate(
+				in: histories.map { (date: $0.date, filterIDs: $0.filterIDs, sentCount: $0.sentCount) },
+				enabledFilterIDs: enabledFilterIDs()
+			)
+			: nil
 		showingSendConfirmationSheet = true
 	}
 
 	private func cancelSendConfirmation() {
 		showingSendConfirmationSheet = false
+		currentHistory = nil
+		resendBody = nil
+		resendSkippedCount = 0
+		duplicateSentDate = nil
 		isBatchSending = false
 		allPhoneNumbers = []
 		currentBatchIndex = 0
@@ -680,7 +779,7 @@ struct RecipientRuleListScreen: View {
 	}
 
 	private func continueFromSendConfirmation() {
-		pendingComposerBody = selectedTemplate?.body
+		pendingComposerBody = selectedTemplate?.body ?? resendBody
 		showingSendConfirmationSheet = false
 		Task { @MainActor in
 			try? await Task.sleep(for: .milliseconds(250))
@@ -703,6 +802,7 @@ struct RecipientRuleListScreen: View {
 			return false
 		}
 
+		beginHistoryRecordIfNeeded()
 		isMessageComposerLoading = true
 		composerRequest = MessageComposerRequest(recipients: viewModel.phoneNumbers, messageBody: pendingComposerBody)
 		return true
@@ -728,6 +828,8 @@ private struct SendConfirmationSheet: View {
 	let activeBatchNumber: Int
 	let totalBatchCount: Int
 	let templates: [MessageTemplate]
+	let duplicateSentDate: Date?
+	let skippedFilterCount: Int
 	@Binding var selectedTemplateID: PersistentIdentifier?
 	let onManageTemplates: () -> Void
 	let onCreateTemplate: () -> Void
@@ -735,6 +837,12 @@ private struct SendConfirmationSheet: View {
 	let onContinue: () -> Void
 
 	@Environment(\.dynamicTypeSize) private var dynamicTypeSize
+	@State private var duplicateFeedbackCount = 0
+
+	private var duplicateWarningText: String? {
+		guard let duplicateSentDate else { return nil }
+		return String(format: "history.duplicate.warning".localized(), SendHistoryFormat.relative(duplicateSentDate))
+	}
 
 	private var hasSelectedTemplate: Bool {
 		guard let selectedTemplateID else { return false }
@@ -788,10 +896,30 @@ private struct SendConfirmationSheet: View {
 			}
 		}
 		.background(Color.softSurface)
+		.sensoryFeedback(.warning, trigger: duplicateFeedbackCount)
+		.onAppear {
+			guard let duplicateWarningText else { return }
+			duplicateFeedbackCount += 1
+			AccessibilityNotification.Announcement(duplicateWarningText).post()
+		}
 	}
 
 	private var messageContent: some View {
 		VStack(alignment: .leading, spacing: 26) {
+			if skippedFilterCount > 0 || duplicateWarningText != nil {
+				VStack(spacing: 8) {
+					if skippedFilterCount > 0 {
+						SendWarningRow(
+							text: String(format: "history.resend.skipped".localized(), skippedFilterCount),
+							symbolName: "info.circle"
+						)
+					}
+					if let duplicateWarningText {
+						SendWarningRow(text: duplicateWarningText)
+					}
+				}
+			}
+
 			Image(systemName: "bubble.left")
 				.font(.system(size: 42, weight: .regular))
 				.foregroundStyle(Color.softAccent)
