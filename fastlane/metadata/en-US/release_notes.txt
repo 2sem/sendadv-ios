@@ -1,7 +1,5 @@
 Thanks for using Group SMS.
 
-This update brings a softer, friendlier design across the Contact Filter list, filter editing, and filter selection screens.
+This update adds Send History. After you send a message, you can see when it was sent, which contact filters it went to, and how many people received it. Open it from the "Last sent" button on the main screen, and resend to the same contact filters from any record. If you already sent to the same contact filters within the last 24 hours, you will be reminded before you send again. Phone numbers are never saved.
 
-You can now review your selected filters and message batches more clearly before opening Messages, helping you prepare group texts with more confidence.
-
-We also made filter management and deletion clearer, along with general stability improvements.
+We also made behind-the-scenes improvements for better stability.
