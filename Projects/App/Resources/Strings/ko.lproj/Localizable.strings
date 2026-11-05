@@ -186,7 +186,6 @@
 "template.send.row.a11y.hint" = "두 번 탭하여 템플릿을 선택해요";
 "history.title" = "발송 이력";
 "history.detail.title" = "발송 상세";
-"history.menu.label" = "더 보기";
 "history.last.sent" = "마지막 발송 %@";
 "history.chip.a11y" = "마지막 발송 %1$@, %2$@. 발송 이력을 엽니다.";
 "history.empty.title" = "발송 이력이 없어요";

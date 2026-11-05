@@ -191,7 +191,6 @@
 "template.send.row.a11y.hint" = "Double-tap to choose a template";
 "history.title" = "Send History";
 "history.detail.title" = "Send Details";
-"history.menu.label" = "More";
 "history.last.sent" = "Last sent %@";
 "history.chip.a11y" = "Last sent %1$@ to %2$@. Opens send history.";
 "history.empty.title" = "No send history yet";

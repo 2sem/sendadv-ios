@@ -282,26 +282,16 @@ struct RecipientRuleListScreen: View {
 			}
 
 			ToolbarItemGroup(placement: .topBarTrailing) {
-					if !isEditingRules {
-						Menu {
-							Button {
-								showingHistory = true
-							} label: {
-								Label("history.title".localized(), systemImage: "clock.arrow.circlepath")
-							}
-							Button {
-								showingTemplates = true
-							} label: {
-								Label("template.toolbar.label".localized(), systemImage: "text.bubble")
-							}
-						} label: {
-							Image(systemName: "ellipsis.circle")
-								.frame(minWidth: 44, minHeight: 44)
-								.contentShape(Rectangle())
-						}
-						.tint(Color.softAccent)
-						.accessibilityLabel("history.menu.label".localized())
-					}
+				Button {
+					showingTemplates = true
+				} label: {
+					Image(systemName: "text.bubble")
+						.frame(minWidth: 44, minHeight: 44)
+						.contentShape(Rectangle())
+				}
+				.tint(Color.softAccent)
+				.accessibilityLabel("template.toolbar.label".localized())
+				.accessibilityHint("template.toolbar.hint".localized())
 
 				if !isEditingRules {
 					Button {
